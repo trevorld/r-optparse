@@ -1,0 +1,20 @@
+optparse 1.0.2
+==============
+* We now replace all occurrences of %prog in usage message (including description and epilogue).
+  Previously we would only replace one occurrence and didn't make replacements in description and epilogue.
+* Fix bug in ``parse_args`` when we have options with no short flag and positional_arguments=TRUE.
+  Thanks Miroslav Posta for bug report.
+
+optparse 1.0.0
+==============
+* Added `description` and `epilogue` arguments to `OptionParser` to allow
+  users to add more information to generated help messages
+* Slightly alters the generated usage string 
+  to match more closely what the Python module does
+* No longer exports S4 classes that represent OptionParser and OptionParserOption
+* Now requires package getopt (>= 1.19) which has also been moved to 
+  Imports field from Depends field in DESCRIPTION
+* Now also Suggests stringr package in DESCRIPTION
+
+
+

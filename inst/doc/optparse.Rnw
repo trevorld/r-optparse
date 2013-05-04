@@ -1,0 +1,122 @@
+%\VignetteIndexEntry{optparse Command Line Option Parsing}
+\documentclass[a4paper]{article}
+\usepackage{listings}
+\title{optparse Command Line Option Parsing}
+\begin{document}
+\maketitle
+\setlength{\hoffset}{-0.5in}
+optparse is a command line option parser inspired by Python's ``optparse'' library.  Use this with Rscript to write ``\#!''-shebang scripts that accept short and long flags/options, generate a usage statement, and set default values for options that are not specified on the command line.
+
+<<echo=FALSE>>=
+Rscript_executable <- file.path(R.home(), "bin", "Rscript")
+setwd(system.file("exec", package="optparse")) # to access the "Rscript files"
+list_file_command <- "ls"
+chmod_command <- "chmod ug+x display_file.R example.R"
+path_command <- "export PATH=$PATH:`pwd`"
+@
+
+In our working directory we have two example R scripts, named ``example.R'' and ``display\_file.R'' illustrating the use of the optparse package.
+\newline\newline
+\noindent\verb|\Sexpr{paste("bash$", list_file_command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s", list_file_command), intern=TRUE), sep="\n")
+command <- "display_file.R example.R" # to show file
+@
+
+In order for a *nix system to recognize a ``\#!''-shebang line you need to mark the file executable with the ``chmod'' command, it also helps to add the directory containing your Rscripts to your path:
+\newline\newline
+\noindent\verb|\Sexpr{paste("bash$", chmod_command)}|
+\newline
+\noindent\verb|\Sexpr{paste("bash$", path_command)}|
+
+\newpage
+
+Here is what ``example.R'' contains:
+\newline\newline
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+@
+
+\newpage
+<<echo=FALSE>>=
+command <- "example.R --help" # same as system("Rscript example.R -h")
+@
+
+By default \emph{optparse} will generate a help message if it encounters \verb|--help| or \verb|-h| on the command line.  Note how \verb|%default| in the example program was replaced by the actual default values in the help statement that \emph{optparse} generated.  
+\newline\newline
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+command <- "example.R" # rely only on defaults
+@
+
+If you specify default values when creating your \verb|OptionParser| then \emph{optparse} will use them as expected.
+\newline\newline
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+command <- "example.R --mean=10 --sd=10 --count=3" 
+@
+
+\begin{samepage}
+Or you can specify your own values.
+\newline\newline
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+command <- "example.R --quiet -c 4 --generator=\"runif\"" #  same as above but "quiet"
+@
+\end{samepage}
+
+If you remember from the example program that \verb|--quiet| had \verb|action="store_false"| and 
+\verb|dest="verbose"|.  This means that \verb|--quiet| is a switch that turns the \verb|verbose| option from its default value of \verb|TRUE| to \verb|FALSE|.  Note how the \verb|verbose| and \verb|quiet| options store their value in the exact same variable.
+\newline\newline
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+command <- "example.R --silent -m 5" #  same as above but "quiet"
+@
+
+If you specify an illegal flag then \emph{optparse} will throw an error.  
+\newline\newline
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+command <- "example.R -c 100 -c 2 -c 1000 -c 7" #  same as above but "quiet"
+@
+
+If you specify the same option multiple times then \emph{optparse} will use the value of the last option specified. 
+\newline\newline
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+@
+
+\emph{optparse} can also recognize positional arguments if \verb|parse_args| is given the option \verb|positional_arguments = TRUE|.  Below we give an example program \emph{display\_file.R}, which is a program that prints out the contents of a single file (the required positional argument, not an optional argument) and which accepts the normal help option as well as an option to add line numbers to the output.  Note that the positional arguments need to be placed \emph{after} the optional arguments.
+\newpage
+<<echo=FALSE>>=
+command <- "display_file.R --help" 
+@
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+command <- "display_file.R --add_numbers display_file.R" 
+@
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+command <- "display_file.R non_existent_file.txt" 
+@
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+command <- "display_file.R"
+@
+\newpage
+\noindent\verb|\Sexpr{paste("bash$", command)}|
+<<echo=FALSE>>=
+cat(system(sprintf("%s %s 2>&1", Rscript_executable, command),  intern=TRUE), sep="\n")   
+@
+
+\end{document}

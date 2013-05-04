@@ -1,0 +1,31 @@
+Package: optparse
+Type: Package
+Title: Command line option parser.
+Version: 1.0.2
+Author: Trevor L Davis. Some documentation and examples ported from Allen Day's
+    getopt package. Some documentation from the optparse Python module by
+    the Python Software Foundation. Contributions from Steve Lianoglou and Jim
+    Nikelski.
+Copyright: Copyright (c) 2010-2013 Trevor L Davis
+    Copyright (c) 2011 Jim Nikelski
+    Copyright (c) 2010 Steve Lianoglou
+    Copyright (c) 2008 Allen Day
+    Copyright (c) 2001-2009 Python Software Foundation; All Rights Reserved
+Maintainer: Trevor L Davis <trevor.l.davis@stanford.edu>
+Description: A command line parser inspired by Python's 'optparse' library to
+    be used with Rscript to write "#!" shebang scripts that accept short and
+    long flag/options.
+License: GPL (>= 2)
+URL: http://r-forge.r-project.org/projects/optparse
+LazyLoad: yes
+Depends:
+    R (>= 2.9.0)
+Imports:
+    methods,
+    getopt (>= 1.19)
+Suggests:
+    testthat,
+    stringr
+Collate:
+    'optparse-package.R'
+    'optparse.R'
