@@ -25,8 +25,10 @@ Imports:
     methods,
     getopt (>= 1.19)
 Suggests:
-    testthat,
-    stringr
+    knitr,
+    stringr,
+    testthat
+VignetteBuilder: knitr
 Collate:
     'optparse-package.R'
     'optparse.R'
