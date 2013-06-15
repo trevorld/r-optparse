@@ -1,5 +1,6 @@
 optparse 1.0.2
 ==============
+* Project website moved to https://github.com/trevorld/optparse
 * We now replace all occurrences of %prog in usage message (including description and epilogue).
   Previously we would only replace one occurrence and didn't make replacements in description and epilogue.
 * Fix bug in ``parse_args`` when we have options with no short flag and positional_arguments=TRUE.
