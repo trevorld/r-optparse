@@ -1,4 +1,4 @@
-The optparse package overall is licensed under the terms of the GNU Public License (GPL), version 2 or greater.  See file COPYING for full text of GNU Public License version 2.   Since the package also incorporates code from Python 2.6.2 it must also obey its license terms below (which the Free Software Foundation and Python Software Foundation believe to be compatible with the GPL).  In particular, derivative works must include the text of this license as well as the text for the GPL license(s).
+The optparse package overall is licensed under the terms of the GNU Public License (GPL), version 2 or greater.  See file COPYING for full text of GNU Public License version 2.   Since the package also incorporates code from Python 2.6.2 it must also obey its license terms below (which the Free Software Foundation and Python Software Foundation believe to be compatible with the GPL).  In particular, derivative works must include the text of Python license stack as well as the text for the GPL license(s).
 
 PSF LICENSE AGREEMENT FOR PYTHON 2.6.2
 ======================================
