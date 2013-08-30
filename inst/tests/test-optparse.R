@@ -1,4 +1,5 @@
-# Copyright (c) 2010-2013 Trevor L Davis <trevor.l.davis@stanford.edu>
+# Copyright 2010-2013 Trevor L Davis <trevor.l.davis@stanford.edu>
+# Copyright 2008 Allen Day
 #  
 #  This file is free software: you may copy, redistribute and/or modify it  
 #  under the terms of the GNU General Public License as published by the  
