@@ -1,7 +1,7 @@
 Package: optparse
 Type: Package
 Title: Command line option parser.
-Version: 1.0.3
+Version: 1.1.0
 Author: Trevor L Davis. Some documentation and examples ported from Allen Day's
     getopt package. Some documentation from the optparse Python module by the
     Python Software Foundation. Contributions from Steve Lianoglou and Jim

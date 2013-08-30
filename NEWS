@@ -1,6 +1,8 @@
-optparse 1.0.3
+optparse 1.1.0
 ==============
 * In ``make_option`` argument ``type="numeric"`` automatically cast to ``double``.
+  Previously users might have received an error passing negative numbers if they
+  accidentally specified "numeric" instead of "double".
 
 optparse 1.0.2
 ==============
