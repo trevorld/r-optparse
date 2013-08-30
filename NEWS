@@ -1,5 +1,6 @@
 optparse 1.0.3
 ==============
+* In ``make_option`` argument ``type="numeric"`` automatically cast to ``double``.
 
 optparse 1.0.2
 ==============

@@ -28,14 +28,6 @@ option_list <- list(
     make_option("--sd", default=1, metavar="standard deviation",
         help="Standard deviation if generator == \"rnorm\" [default \\%default]")
     )
-sort_list <- function(unsorted_list) {
-    for(ii in seq(along=unsorted_list)) {
-        if(is.list(unsorted_list[[ii]])) {
-            unsorted_list[[ii]] <- sort_list(unsorted_list[[ii]])
-        }
-    }
-    unsorted_list[sort(names(unsorted_list))] 
-}
 
 context("Testing make_option")
 test_that("make_option works as expected", {
@@ -81,6 +73,13 @@ test_that("parse_args works as expected", {
                              args = c("-add_numbers", "example.txt"))))
     expect_that(parse_args(parser, args = c("-add_numbers", "example.txt")), throws_error())
 })
+# Bug found by Miroslav Posta
+test_that("test using numeric instead of double", {
+option_list_neg <- list( make_option(c("-m", "--mean"), default=0, type="numeric") )
+    parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list_neg)
+    parse_args(parser, args = c("-m", "-5.0")) 
+})
+
 
 # Bug found by Juan Carlos Borrás
 test_that("test bug of multiple '=' signs", {

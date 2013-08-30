@@ -109,28 +109,29 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #' @rdname add_make_option
 #' @param object An instance of the \code{OptionParser} class
 #' @param opt_str A character vector containing the string of the desired long
-#'       flag comprised of \dQuote{--} followed by a letter and then a sequence of
-#'       alphanumeric characters and optionally a string of the desired short flag
-#'       comprised of the \dQuote{-} followed by a letter.
+#'     flag comprised of \dQuote{--} followed by a letter and then a sequence of
+#'     alphanumeric characters and optionally a string of the desired short flag
+#'     comprised of the \dQuote{-} followed by a letter.
 #' @param action A character string that describes the action \code{optparse}
-#'       should take when it encounters an option, either \dQuote{store},
-#'       \dQuote{store_true}, or \dQuote{store_false}.  The default is \dQuote{store}
-#'       which signifies that \code{optparse} should store the specified following
-#'       value if the option is found on the command string.  \dQuote{store_true}
-#'       stores \code{TRUE} if the option is found and \dQuote{store_false} stores
-#'       \code{FALSE} if the option is found.
-#'  @param type A character string that describes specifies which data type
-#'       should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
-#'       \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
-#'       \code{action %in% c("store_true", store_false)}, \code{typeof(default)} if
-#'       \code{action == "store"} and default is not \code{NULL} and
-#'       \dQuote{character} if \code{action == "store"} and default is \code{NULL}.
-#'       @param dest A character string that specifies what field in the list returned
-#'       by \code{parse_args} should \code{optparse} store option values.  Default is
-#'       derived from the long flag in \code{opt_str}.
-#'       @param default The default value \code{optparse} should use if it does not
-#'       find the option on the command line.  Default is derived from the long flag
-#'       in \code{opt_str}.
+#'     should take when it encounters an option, either \dQuote{store},
+#'     \dQuote{store_true}, or \dQuote{store_false}.  The default is \dQuote{store}
+#'     which signifies that \code{optparse} should store the specified following
+#'     value if the option is found on the command string.  \dQuote{store_true}
+#'     stores \code{TRUE} if the option is found and \dQuote{store_false} stores
+#'     \code{FALSE} if the option is found.
+#' @param type A character string that describes specifies which data type
+#'     should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
+#'     \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
+#'     \code{action %in% c("store_true", store_false)}, \code{typeof(default)} if
+#'     \code{action == "store"} and default is not \code{NULL} and
+#'     \dQuote{character} if \code{action == "store"} and default is \code{NULL}.
+#'     \dQuote{numeric} will be converted to \dQuote{double}.
+#' @param dest A character string that specifies what field in the list returned
+#'     by \code{parse_args} should \code{optparse} store option values.  Default is
+#'     derived from the long flag in \code{opt_str}.
+#' @param default The default value \code{optparse} should use if it does not
+#'     find the option on the command line.  Default is derived from the long flag
+#'     in \code{opt_str}.
 #' @param help A character string describing the option to be used by
 #'     \code{print_help} in generating a usage message.  \code{\%default} will be
 #'     substituted by the value of \code{default}.
@@ -166,11 +167,13 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #' @export
 make_option <- function(opt_str, action="store", type=NULL,
                      dest=NULL, default=NULL, help="", metavar=NULL) {
+    # flags
     short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
     if(length(short_flag)) {} else { short_flag <- as.character(NA) }
     long_flag <- opt_str[grepl("^--[[:alpha:]]", opt_str)]
     if(length(long_flag)) {} else {stop("We require a long flag option")}
 
+    # type
     if(is.null(type)) {
         if( action %in% c("store_true", "store_false") ) {
             type <- "logical"
@@ -185,10 +188,14 @@ make_option <- function(opt_str, action="store", type=NULL,
             }
         }
     }
+    if (type == "numeric") { type <- "double" }
+    # default
     if((type != typeof(default)) & !is.null(default)) {
         storage.mode(default) <- type
     }
+    # dest
     if(is.null(dest)) { dest <- sub("^--", "", long_flag) }
+    # metavar
     if(is.null(metavar)) {
         if(action == "store") { 
             metavar <- sub("^--", "", long_flag)

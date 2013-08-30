@@ -39,7 +39,8 @@ options.}
   store_false)}, \code{typeof(default)} if \code{action ==
   "store"} and default is not \code{NULL} and
   \dQuote{character} if \code{action == "store"} and
-  default is \code{NULL}.}
+  default is \code{NULL}.  \dQuote{numeric} will be
+  converted to \dQuote{double}.}
 
   \item{dest}{A character string that specifies what field
   in the list returned by \code{parse_args} should
