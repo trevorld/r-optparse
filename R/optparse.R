@@ -262,6 +262,7 @@ print_help <- function(object) {
         cat("\n\t\t")
         default <- as.character(option@default)
         default_str <- ifelse(length(default), default, "NULL")
+        if(is.na(default_str)) { default_str <- "NA" }
         cat(sub("%default", default_str, option@help))
         cat("\n\n")
     }
