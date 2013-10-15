@@ -164,6 +164,24 @@ test_that("description and epilogue work as expected", {
                 capture.output(print_help(OptionParser("usage: foo bar")))[1],
                 "[Uu]sage"), 1)
 
+    # bug found by Stefan Seemayer for NA default
+    optlist <- list(
+        make_option(c("--na"), type="character", default=NA, help="NA default is %default"),
+        make_option(c("--null"), type="character", default=NULL, help="NULL default is %default"),
+        make_option(c("--str"), type="character", default="str", help="str default is %default"),
+        make_option(c("--bool"), type="logical", default=TRUE, help="bool default is %default"),
+        make_option(c("--int"), type="integer", default=42, help="int default is %default"),
+        make_option(c("--int"), type="double", default=11.11, help="double default is %default")
+    )
+    parser <- OptionParser(option_list=optlist)
+    expect_output(print_help(parser), "NA default is NA")
+    expect_output(print_help(parser), "NULL default is NULL")
+    expect_output(print_help(parser), "str default is str")
+    expect_output(print_help(parser), "bool default is TRUE")
+    expect_output(print_help(parser), "int default is 42")
+    expect_output(print_help(parser), "double default is 11.11")
+
+
     # bug / feature request by Miroslav Posta
     parser = OptionParser(usage="test %prog test %prog", epilog="epilog test %prog %prog", 
                 description="description %prog test %prog", prog="unit_test.r")

@@ -3,6 +3,9 @@ optparse 1.1.0
 * In ``make_option`` argument ``type="numeric"`` automatically cast to ``double``.
   Previously users might have received an error passing negative numbers if they
   accidentally specified "numeric" instead of "double".
+* Bug fixed in printing usage message for options with default value of NA 
+  and a help string including "%default".
+  Thanks Stefan Seemayer for bug report and patch.
 
 optparse 1.0.2
 ==============

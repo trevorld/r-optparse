@@ -260,13 +260,22 @@ print_help <- function(object) {
             }
         }
         cat("\n\t\t")
-        default <- as.character(option@default)
-        default_str <- ifelse(length(default), default, "NULL")
-        cat(sub("%default", default_str, option@help))
+        cat(sub("%default", .as_string(option@default), option@help))
         cat("\n\n")
     }
     cat(object@epilogue, fill=TRUE)
     return(invisible(NULL))
+}
+
+# Turn default values into a string we can cat, handles NA's and NULL's 
+.as_string <- function(default) {
+    if(is.null(default)) {
+        default_str <- "NULL"
+    } else if(is.na(default)) {
+        default_str <- "NA"
+    } else {
+        default_str <- as.character(default)
+    }
 }
 
 #' Parse command line options.
@@ -294,7 +303,8 @@ print_help <- function(object) {
 #'     Juan Carlos \enc{Borrás}{Borras} for a bug report; 
 #'     Jim Nikelski for a bug report and patch; 
 #'     Ino de Brujin and Benjamin Tyner for a bug report;
-#'     Jonas Zimmermann for bug report; Miroslav Posta for bug reports.
+#'     Jonas Zimmermann for bug report; Miroslav Posta for bug reports;
+#'     Stefan Seemayer for bug report and patch.
 #' @author Trevor Davis.
 #'
 #' @seealso \code{\link{OptionParser}} \code{\link{print_help}}
