@@ -400,7 +400,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
     }
     if(options_list[["help"]] & print_help_and_exit) {
         print_help(object)
-        quit(status=1)
+        stop("help requested")
     }
     if(positional_arguments) {
         return(list(options = options_list, args = arguments_positional))
