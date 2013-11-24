@@ -72,6 +72,7 @@ test_that("parse_args works as expected", {
                 sort_list(list(options = list(add_numbers = FALSE, help = FALSE), 
                              args = c("-add_numbers", "example.txt"))))
     expect_that(parse_args(parser, args = c("-add_numbers", "example.txt")), throws_error())
+    expect_that(parse_args(parser, args = c("--help")), throws_error())
 })
 # Bug found by Miroslav Posta
 test_that("test using numeric instead of double", {
