@@ -291,15 +291,18 @@ print_help <- function(object) {
 #' @param print_help_and_exit Whether \code{parse_args} should call
 #'     \code{print_help} to print out a usage message and exit the program.  Default
 #'     is \code{TRUE}.
-#' @param positional_arguments Whether \code{parse_args} should look for and
-#'     return a character vector of \emph{positional} arguments.  Default is
-#'     \code{FALSE}.  Can also be a numeric denoting the exact number of
-#'     supported arguments, or a numeric vector of length two denoting the
-#'     minimum and maximum number of arguments (\code{Inf} for no limit).
-#' @return Returns a list containing option values if
-#'     \code{positional_arguments} is \code{FALSE} (the default).  Otherwise returns
-#'     a list with field \code{options} containing our option values as well as
-#'     another field \code{args} which contains a vector of positional arguments.
+#' @param positional_arguments Number of \emph{positional} arguments.  A numeric
+#'     denoting the exact number of supported arguments, or a numeric vector of
+#'     length two denoting the minimum and maximum number of arguments
+#'     (\code{Inf} for no limit).  The value \code{TRUE} is equivalent to
+#'     \code{c(0, Inf)}.  Default is \code{0}.  Passing \code{FALSE} is
+#'     supported for backward compatibility only, as it alters
+#'     the format of the return value.
+#' @return Returns a list with field \code{options} containing our option values
+#'     as well as another field \code{args} which contains a vector of
+#'     positional arguments.  For backward compatibility, if and only if
+#'     \code{positional_arguments} is \code{FALSE}, returns a list containing
+#'     option values.
 #' @section Acknowledgement: 
 #'     A big thanks to Steve Lianoglou for a bug report and patch;
 #'     Juan Carlos \enc{Borrás}{Borras} for a bug report; 
@@ -355,8 +358,14 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
         spec[ii, ] <- .convert_to_getopt( object@options[[ii]] )
     }
 
+    retval_list <- TRUE
     if(is.logical(positional_arguments)) {
-        positional_arguments <- if(positional_arguments) c(0, Inf) else 0L
+        positional_arguments <- if(positional_arguments) {
+            c(0, Inf)
+        } else {
+            retval_list <- FALSE
+            0L
+        }
     } else if(is.numeric(positional_arguments)) {
         if(!(length(positional_arguments) %in% 1L:2L))
             stop("positional_arguments must have length 1 or 2")
@@ -423,7 +432,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
       stop(sprintf("required at most %g positional arguments, got %g",
                    max(positional_arguments), length(arguments_positional)))
     }
-    if(max(positional_arguments) > 0) {
+    if(retval_list) {
         return(list(options = options_list, args = arguments_positional))
     } else {    
         return(options_list)
