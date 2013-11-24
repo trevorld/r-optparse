@@ -21,16 +21,9 @@ option_list <- list(
     )
 parser <- OptionParser(usage = "%prog [options] file", option_list=option_list)
 
-arguments <- parse_args(parser, positional_arguments = TRUE)
+arguments <- parse_args(parser, positional_arguments = 1)
 opt <- arguments$options
-
-if(length(arguments$args) != 1) {
-    cat("Incorrect number of required positional arguments\n\n")
-    print_help(parser)
-    stop()
-} else {
-    file <- arguments$args
-}
+file <- arguments$args
 
 if( file.access(file) == -1) {
     stop(sprintf("Specified file ( %s ) does not exist", file))

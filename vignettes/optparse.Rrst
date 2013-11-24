@@ -92,7 +92,7 @@ If you specify the same option multiple times then *optparse* will use the value
 .. run_command(sprintf("%s %s 2>&1", Rscript_executable, command))
 .. ..
 
-*optparse* can also recognize positional arguments if ``parse_args`` is given the option ``positional_arguments = TRUE``.  Below we give an example program *display_file.R*, which is a program that prints out the contents of a single file (the required positional argument, not an optional argument) and which accepts the normal help option as well as an option to add line numbers to the output.  Note that the positional arguments need to be placed *after* the optional arguments.
+*optparse* can also recognize positional arguments if ``parse_args`` is given the option ``positional_arguments = c(min_pa, max_pa)`` where ``min_pa`` is the minimum and ``max_pa`` is the maximum number of supported positional arguments.  (A single numeric corresponds to ``min_pa == max_pa``, ``TRUE`` is equivalent to ``c(0, Inf)``, and ``FALSE``, the default, is equivalent to ``0``.)  Below we give an example program *display_file.R*, which is a program that prints out the contents of a single file (the required positional argument, not an optional argument) and which accepts the normal help option as well as an option to add line numbers to the output.  Note that the positional arguments need to be placed *after* the optional arguments.
 
 .. {r}
 .. command <- "display_file.R --help" 
