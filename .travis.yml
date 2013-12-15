@@ -1,0 +1,24 @@
+# Sample .travis.yml for R projects.
+#
+# See README.md for instructions, or for more configuration options,
+# see the wiki:
+#   https://github.com/craigcitro/r-travis/wiki
+
+language: c
+script: ./travis-tool.sh run_tests
+env:
+  global:
+    - R_BUILD_ARGS="--no-manual"
+    - R_CHECK_ARGS="--no-manual --as-cran"
+    - WARNINGS_ARE_ERRORS=1
+before_install:
+  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+  - chmod 755 ./travis-tool.sh
+  - ./travis-tool.sh bootstrap
+  - ./travis-tool.sh install_aptget rst2pdf
+install:
+  - ./travis-tool.sh install_deps
+notifications:
+  email:
+    on_success: change
+    on_failure: change
