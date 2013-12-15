@@ -1,3 +1,8 @@
+* Parameter ``positional_arguments`` of function ``parse_args`` now accepts one
+  or two numeric values that denote the minimum and maximum number of supported
+  positional arguments.
+  Thanks Kirill Müller for patch.
+
 optparse 1.1.0
 ==============
 * In ``make_option`` argument ``type="numeric"`` automatically cast to ``double``.
