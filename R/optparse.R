@@ -1,4 +1,5 @@
 # Copyright (c) 2010-2013 Trevor L. Davis <trevor.l.davis@stanford.edu>  
+# Copyright (c) 2013 Kirill Müller https://github.com/krlmlr
 # Copyright (c) 2011 Jim Nikelski <nikelski@bic.mni.mcgill.ca>
 # Copyright (c) 2010 Steve Lianoglou <lianos@cbio.mskcc.org> 
 #  
@@ -286,7 +287,7 @@ print_help <- function(object) {
 #' @param object An \code{OptionParser} instance.
 #' @param args A character vector containing command line options to be parsed.
 #'     Default is everything after the Rscript program in the command line. If
-#'     \code{positional_arguments} is \code{TRUE} then \code{parse_args} will only
+#'     \code{positional_arguments} is not \code{FALSE} then \code{parse_args} will 
 #'     look for positional arguments at the end of this vector.
 #' @param print_help_and_exit Whether \code{parse_args} should call
 #'     \code{print_help} to print out a usage message and exit the program.  Default
@@ -295,7 +296,7 @@ print_help <- function(object) {
 #'     denoting the exact number of supported arguments, or a numeric vector of
 #'     length two denoting the minimum and maximum number of arguments
 #'     (\code{Inf} for no limit).  The value \code{TRUE} is equivalent to
-#'     \code{c(0, Inf)}.  Default is \code{0}.  Passing \code{FALSE} is
+#'     \code{c(0, Inf)}.  The default \code{FALSE} is
 #'     supported for backward compatibility only, as it alters
 #'     the format of the return value.
 #' @return Returns a list with field \code{options} containing our option values
@@ -309,7 +310,8 @@ print_help <- function(object) {
 #'     Jim Nikelski for a bug report and patch; 
 #'     Ino de Brujin and Benjamin Tyner for a bug report;
 #'     Jonas Zimmermann for bug report; Miroslav Posta for bug reports;
-#'     Stefan Seemayer for bug report and patch.
+#'     Stefan Seemayer for bug report and patch;
+#'     Kirill \enc{Müller}{Muller} for patches.
 #' @author Trevor Davis.
 #'
 #' @seealso \code{\link{OptionParser}} \code{\link{print_help}}
@@ -350,6 +352,7 @@ print_help <- function(object) {
 #' @export 
 parse_args <- function(object, args = commandArgs(trailingOnly = TRUE), 
                     print_help_and_exit = TRUE, positional_arguments = FALSE) {
+
     n_options <- length( object@options )
 
     # Convert our option specification into ``getopt`` format
@@ -358,22 +361,23 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
         spec[ii, ] <- .convert_to_getopt( object@options[[ii]] )
     }
 
-    retval_list <- TRUE
-    if(is.logical(positional_arguments)) {
-        positional_arguments <- if(positional_arguments) {
-            c(0, Inf)
-        } else {
-            retval_list <- FALSE
-            0L
-        }
-    } else if(is.numeric(positional_arguments)) {
-        if(!(length(positional_arguments) %in% 1L:2L))
-            stop("positional_arguments must have length 1 or 2")
-    } else
-        stop("positional_arguments must be logical or numeric")
-
     # pull out positional arguments if ``positional_arguments`` was set to TRUE
     # or not 0 or c(0, 0)
+    if(!(length(positional_arguments) %in% 1L:2L))
+        stop("positional_arguments must have length 1 or 2")
+    if(is.logical(positional_arguments)) {
+        if(positional_arguments) {
+            positional_arguments <- c(0, Inf)
+            include_any_args <- TRUE
+        } else {
+            include_any_args <- FALSE
+        }
+    } else if(is.numeric(positional_arguments)) {
+        include_any_args <- TRUE
+    } else {
+        stop("positional_arguments must be logical or numeric")
+    }
+
     arguments_positional <- character(0)
     if(max(positional_arguments) > 0) {
         os_and_n_arg <- .get_option_strings_and_n_arguments(object)
@@ -420,19 +424,17 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
     }
     if(options_list[["help"]] & print_help_and_exit) {
         print_help(object)
-        stop("help requested")
+        quit(status=1)
     }
     if (length(arguments_positional) < min(positional_arguments)) {
-      print_help(object)
       stop(sprintf("required at least %g positional arguments, got %g",
                    min(positional_arguments), length(arguments_positional)))
     }
     if (length(arguments_positional) > max(positional_arguments)) {
-      print_help(object)
       stop(sprintf("required at most %g positional arguments, got %g",
                    max(positional_arguments), length(arguments_positional)))
     }
-    if(retval_list) {
+    if(include_any_args) {
         return(list(options = options_list, args = arguments_positional))
     } else {    
         return(options_list)

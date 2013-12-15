@@ -1,3 +1,5 @@
+optparse 1.2.0
+==============
 * Parameter ``positional_arguments`` of function ``parse_args`` now accepts one
   or two numeric values that denote the minimum and maximum number of supported
   positional arguments.

@@ -14,25 +14,29 @@
   \item{args}{A character vector containing command line
   options to be parsed.  Default is everything after the
   Rscript program in the command line. If
-  \code{positional_arguments} is \code{TRUE} then
-  \code{parse_args} will only look for positional arguments
-  at the end of this vector.}
+  \code{positional_arguments} is not \code{FALSE} then
+  \code{parse_args} will look for positional arguments at
+  the end of this vector.}
 
   \item{print_help_and_exit}{Whether \code{parse_args}
   should call \code{print_help} to print out a usage
   message and exit the program.  Default is \code{TRUE}.}
 
-  \item{positional_arguments}{Whether \code{parse_args}
-  should look for and return a character vector of
-  \emph{positional} arguments.  Default is \code{FALSE}.}
+  \item{positional_arguments}{Number of \emph{positional}
+  arguments.  A numeric denoting the exact number of
+  supported arguments, or a numeric vector of length two
+  denoting the minimum and maximum number of arguments
+  (\code{Inf} for no limit).  The value \code{TRUE} is
+  equivalent to \code{c(0, Inf)}.  The default \code{FALSE}
+  is supported for backward compatibility only, as it
+  alters the format of the return value.}
 }
 \value{
-  Returns a list containing option values if
-  \code{positional_arguments} is \code{FALSE} (the
-  default).  Otherwise returns a list with field
-  \code{options} containing our option values as well as
-  another field \code{args} which contains a vector of
-  positional arguments.
+  Returns a list with field \code{options} containing our
+  option values as well as another field \code{args} which
+  contains a vector of positional arguments.  For backward
+  compatibility, if and only if \code{positional_arguments}
+  is \code{FALSE}, returns a list containing option values.
 }
 \description{
   \code{parse_args} parses command line options using an
@@ -44,7 +48,8 @@
   Jim Nikelski for a bug report and patch; Ino de Brujin
   and Benjamin Tyner for a bug report; Jonas Zimmermann for
   bug report; Miroslav Posta for bug reports; Stefan
-  Seemayer for bug report and patch.
+  Seemayer for bug report and patch; Kirill
+  \enc{Müller}{Muller} for patches.
 }
 \examples{
 # example from vignette

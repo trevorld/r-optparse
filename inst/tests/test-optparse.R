@@ -1,4 +1,5 @@
 # Copyright 2010-2013 Trevor L Davis <trevor.l.davis@stanford.edu>
+# Copyright 2013 Kirill Müller
 # Copyright 2008 Allen Day
 #  
 #  This file is free software: you may copy, redistribute and/or modify it  
@@ -72,7 +73,6 @@ test_that("parse_args works as expected", {
                 sort_list(list(options = list(add_numbers = FALSE, help = FALSE), 
                              args = c("-add_numbers", "example.txt"))))
     expect_that(parse_args(parser, args = c("-add_numbers", "example.txt")), throws_error())
-    expect_that(parse_args(parser, args = c("--help")), throws_error("help requested"))
     expect_equal(sort_list(parse_args(parser, args = c("-add_numbers", "example.txt"),
                                       positional_arguments = c(1,3))),
                  sort_list(list(options = list(add_numbers = FALSE, help = FALSE),
@@ -95,7 +95,6 @@ test_that("parse_args works as expected", {
                            positional_arguments="any"), throws_error("must be logical or numeric"))
     expect_that(parse_args(parser, args = c("example.txt"),
                            positional_arguments=1:3), throws_error("must have length 1 or 2"))
-    expect_that(parse_args(parser, args = c("--help"), positional_arguments=c(1, 2)), throws_error("help requested"))
 })
 # Bug found by Miroslav Posta
 test_that("test using numeric instead of double", {
