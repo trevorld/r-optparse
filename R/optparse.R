@@ -424,7 +424,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
     }
     if(options_list[["help"]] & print_help_and_exit) {
         print_help(object)
-        quit(status=1)
+        if(interactive()) stop("help requested") else quit(status=1) 
     }
     if (length(arguments_positional) < min(positional_arguments)) {
       stop(sprintf("required at least %g positional arguments, got %g",

@@ -1,3 +1,4 @@
+Encoding: UTF-8
 Package: optparse
 Type: Package
 Title: Command line option parser.
