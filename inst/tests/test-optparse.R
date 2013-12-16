@@ -95,6 +95,10 @@ test_that("parse_args works as expected", {
                            positional_arguments="any"), throws_error("must be logical or numeric"))
     expect_that(parse_args(parser, args = c("example.txt"),
                            positional_arguments=1:3), throws_error("must have length 1 or 2"))
+    if(interactive()) {
+        expect_that(capture.output(parse_args(parser, args = c("--help"))), throws_error("help requested"))
+        expect_that(capture.output(parse_args(parser, args = c("--help"), positional_arguments=c(1, 2))), throws_error("help requested"))
+    }
 })
 # Bug found by Miroslav Posta
 test_that("test using numeric instead of double", {
