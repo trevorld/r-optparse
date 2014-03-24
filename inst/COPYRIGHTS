@@ -46,7 +46,7 @@ Comment: The FSF considers recent Python licenses (post Python version 2.1.1) to
   (https://www.gnu.org/licenses/license-list.html#PythonOld, 
   http://directory.fsf.org/wiki/License:Python1.6b1) because it had an overly
   strong "governed in Virginia" clause but later Python license stacks have a version
-  of the CNRI license which has weakened that clause enough to satisify the FSF
+  of the CNRI license with a weakened enough clause to satisify the FSF
   lawyers as being GPL-compatible.
 
 License: GPL-2+
