@@ -36,6 +36,18 @@ Copyright: 1990-2009 Python Software Foundation
            2010 Steve Lianoglou
            2013 Kirill Müller
 License:  GPL-2+ and Python-2.6.2
+Comment: The FSF considers recent Python licenses (post Python version 2.1.1) to be
+  GPL-compatible (http://www.gnu.org/licenses/license-list.html#Python).  Note
+  that the "Python License" the FSF has on their website
+  (http://directory.fsf.org/wiki?title=License:Python2.0.1) is the full Python
+  license stack which includes the historical modified CNRI and BEOPEN licenses
+  and not merely the PSF License Agreement at the top.  In 2001 ago the FSF
+  negotiated with CNRI to change the wording of an earlier Python license
+  (https://www.gnu.org/licenses/license-list.html#PythonOld, 
+  http://directory.fsf.org/wiki/License:Python1.6b1) because it had an overly
+  strong "governed in Virginia" clause but later Python license stacks have a version
+  of the CNRI license which has weakened that clause enough to satisify the FSF
+  lawyers as being GPL-compatible.
 
 License: GPL-2+
   This program is free software; you can redistribute it and/or modify it under
