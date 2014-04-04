@@ -5,6 +5,10 @@ optparse 1.2.0
   positional arguments.
   Thanks Kirill Müller for patch.
 
+* If ``interactive() == TRUE`` then ``parse_args`` will no longer ``quit(status=1)`` after printing a help message
+  but will instead throw an error.  ``argparse`` will continue to ``quit(status=1)`` after printing a help message
+  for non-interactive Rscripts unless ``print_help_and_exit == FALSE``.
+
 optparse 1.1.0
 ==============
 * In ``make_option`` argument ``type="numeric"`` automatically cast to ``double``.

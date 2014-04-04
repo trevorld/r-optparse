@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
 Files: *
-Copyright: 2010-2013 Trevor L Davis 
+Copyright: 2010-2014 Trevor L Davis 
 License: GPL-2+
 
 File: exec/example.R
