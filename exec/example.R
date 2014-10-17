@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License  
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
 suppressPackageStartupMessages(library("optparse"))
+suppressPackageStartupMessages(library("stats"))
 
 # specify our desired options in a list
 # by default OptionParser will add an help option equivalent to 
