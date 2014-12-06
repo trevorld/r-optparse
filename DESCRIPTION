@@ -26,6 +26,3 @@ Suggests:
     stringr,
     testthat
 VignetteBuilder: knitr
-Collate:
-    'optparse-package.R'
-    'optparse.R'

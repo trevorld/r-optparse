@@ -123,7 +123,7 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #' @param type A character string that describes specifies which data type
 #'     should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
 #'     \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
-#'     \code{action %in% c("store_true", store_false)}, \code{typeof(default)} if
+#'     \code{action \%in\% c("store_true", store_false)}, \code{typeof(default)} if
 #'     \code{action == "store"} and default is not \code{NULL} and
 #'     \dQuote{character} if \code{action == "store"} and default is \code{NULL}.
 #'     \dQuote{numeric} will be converted to \dQuote{double}.
