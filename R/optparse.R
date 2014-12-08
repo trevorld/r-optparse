@@ -30,7 +30,10 @@
 setClass("OptionParser", representation(usage = "character", options = "list", 
                 description="character", epilogue="character"))
 
-setClass("OptionParserOption", representation(short_flag="character", 
+
+#' @exportClass OptionParserOption
+#' @export OptionParserOption
+OptionParserOption <- setClass("OptionParserOption", representation(short_flag="character", 
                                     long_flag="character",
                                     action="character",
                                     type="character",
