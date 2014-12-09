@@ -3,9 +3,9 @@
 \name{OptionParserOption-class}
 \alias{OptionParserOption}
 \alias{OptionParserOption-class}
-\title{Calss to hold information about command-line options}
+\title{Class to hold information about command-line options}
 \description{
-Calss to hold information about command-line options
+Class to hold information about command-line options
 }
 \section{Slots}{
 
