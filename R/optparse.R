@@ -26,11 +26,59 @@
 # As mentioned above, this file incorporates some patches by Steve Lianoglou (c) 2010
 # He explicitly gave me a non-exclusive unlimited license to code in his patches
 
+#' Option Parser
+#' 
+#'  @slot usage The program usage message that will printed out if
+#'     \code{parse_args} finds a help option, \code{\%prog} is substituted with the
+#'     value of the \code{prog} argument.
+#' @slot options A list of of \code{OptionParserOption} instances that will
+#'     define how \code{parse_args} reacts to command line options.
+#'     \code{OptionParserOption} instances are usually created by \code{make_option}
+#'     and can also be added to an existing \code{OptionParser} instance via the
+#'     \code{add_option} function.
+#' @slot description  Additional text for \code{print_help} to print out between
+#'     usage statement and options statement
+#' @slot epilogue  Additional text for \code{print_help} to print out after
+#'     the options statement
+#' @author Trevor Davis.
+#' @seealso \code{\link{OptionParserOption}}
 #' @import methods
+#' @exportClass OptionParser
 setClass("OptionParser", representation(usage = "character", options = "list", 
                 description="character", epilogue="character"))
 
-
+#' Class to hold information about command-line options
+#' 
+#' @slot short_flag String of the desired short flag
+#'     comprised of the \dQuote{-} followed by a letter.
+#' @slot long_flag String of the desired long flag comprised of \dQuote{--} 
+#'     followed by a letter and then a sequence of alphanumeric characters.
+#' @slot action A character string that describes the action \code{optparse}
+#'     should take when it encounters an option, either \dQuote{store},
+#'     \dQuote{store_true}, or \dQuote{store_false}.  The default is \dQuote{store}
+#'     which signifies that \code{optparse} should store the specified following
+#'     value if the option is found on the command string.  \dQuote{store_true}
+#'     stores \code{TRUE} if the option is found and \dQuote{store_false} stores
+#'     \code{FALSE} if the option is found.
+#' @slot type A character string that describes specifies which data type
+#'     should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
+#'     \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
+#'     \code{action \%in\% c("store_true", store_false)}, \code{typeof(default)} if
+#'     \code{action == "store"} and default is not \code{NULL} and
+#'     \dQuote{character} if \code{action == "store"} and default is \code{NULL}.
+#'     \dQuote{numeric} will be converted to \dQuote{double}.
+#' @slot dest A character string that specifies what field in the list returned
+#'     by \code{parse_args} should \code{optparse} store option values.  Default is
+#'     derived from the long flag in \code{opt_str}.
+#' @slot default The default value \code{optparse} should use if it does not
+#'     find the option on the command line.  Default is derived from the long flag
+#'     in \code{opt_str}.
+#' @slot help A character string describing the option to be used by
+#'     \code{print_help} in generating a usage message.  \code{\%default} will be
+#'     substituted by the value of \code{default}.
+#' @slot metavar A character string that stands in for the option argument when
+#'     printing help text.  Default is the value of \code{dest}.
+#' @seealso \code{\link{make_option}}
 #' @exportClass OptionParserOption
 #' @export OptionParserOption
 OptionParserOption <- setClass("OptionParserOption", representation(short_flag="character", 
