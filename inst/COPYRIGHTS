@@ -31,10 +31,11 @@ License: GPL-2+
 
 File: R/optparse.R 
 Copyright: 1990-2009 Python Software Foundation
-           2012-2013 Trevor L Davis 
-           2011 Jim Nikelski
+           2011-2014 Trevor L Davis 
            2010 Steve Lianoglou
+           2011 Jim Nikelski
            2013 Kirill Müller
+           2014 Peter Humburg
 License:  GPL-2+ and Python-2.6.2
 Comment: The FSF considers recent Python licenses (post Python version 2.1.1) to be
   GPL-compatible (http://www.gnu.org/licenses/license-list.html#Python).  Note
