@@ -47,7 +47,7 @@ instance for guidance.
     Ino de Brujin and Benjamin Tyner for a bug report;
     Jonas Zimmermann for bug report; Miroslav Posta for bug reports;
     Stefan Seemayer for bug report and patch;
-    Kirill \enc{Müller}{Muller} for patches.
+    Kirill \enc{Müller}{Muller} for patches; Steve Humburg for patch.
 }
 \examples{
 # example from vignette
