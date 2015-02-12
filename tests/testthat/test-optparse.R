@@ -131,7 +131,7 @@ test_that("test bug of multiple '=' signs", {
 # Bug found by Jim Nikelski 
 test_that("test bug when multiple short flag options '-abc' with positional_arguments = TRUE", {
     sort_list <- function(unsorted_list) {
-        for(ii in seq(along=unsorted_list)) {
+        for(ii in seq_along(unsorted_list)) {
             if(is.list(unsorted_list[[ii]])) {
                 unsorted_list[[ii]] <- sort_list(unsorted_list[[ii]])
             }
@@ -215,4 +215,18 @@ test_that("description and epilogue work as expected", {
     expect_output(print_help(parser), 'Usage:.*unit_test.r.*unit_test.r')
     expect_output(print_help(parser), 'description unit_test.r test unit_test.r')
     expect_output(print_help(parser), 'epilog test unit_test.r unit_test.r')
+})
+
+test_that("Avoid partial matching of arguments", {
+  oo <- options(warnPartialMatchArgs=TRUE)
+  on.exit(options(oo))
+  ## here's the problem:
+  expect_that(seq(along=1:10), gives_warning("partial argument match"))
+  ## which would go away when using full names:
+  expect_that(seq_along(1:10), not(gives_warning()))
+  ## This used to give a warning:
+  expect_that(print_help(OptionParser()), not(gives_warning()))
+  ## Similar issues would arise with parse_args, .requires_argument,
+  ## .get_long_options, .get_short_options,
+  ## .get_option_strings_and_n_arguments.
 })
