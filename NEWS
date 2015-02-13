@@ -1,5 +1,7 @@
-optparse 1.2.1
+optparse 1.3.1
 ==============
+* optparse should no longer give any warnings when options(warnPartialMatchArgs=TRUE).  Thanks Rich FitzJohn for patch.
+
 optparse 1.3.0
 ==============
 * OptionParser and OptionParserOption are now exported.  Thanks Peter Humburg for patch.

@@ -295,7 +295,7 @@ print_help <- function(object) {
     cat("Options:", sep="\n")    
 
     options_list <- object@options
-    for(ii in seq(along=options_list)) {
+    for(ii in seq_along(options_list)) {
         option <- options_list[[ii]]
         cat("\t")
         if(!is.na(option@short_flag)) {
@@ -408,7 +408,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
 
     # Convert our option specification into ``getopt`` format
     spec <- matrix(NA, nrow = n_options, ncol = 5)
-    for (ii in seq(along = object@options)) {
+    for (ii in seq_along(object@options)) {
         spec[ii, ] <- .convert_to_getopt( object@options[[ii]] )
     }
 
@@ -458,7 +458,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
         opt <- list()
     }
 
-    for (ii in seq(along = object@options)) {
+    for (ii in seq_along(object@options)) {
         option <- object@options[[ii]]
         option_value <- opt[[sub("^--", "", option@long_flag)]] 
         if( !is.null(option_value) ) {
@@ -511,7 +511,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
         if(grepl("=", argument)) {
             return(FALSE)
         } else {
-            for (ii in seq(along = object@options)) {
+            for (ii in seq_along(object@options)) {
                 option <- object@options[[ii]]
                 if(option@long_flag == argument)
                     return(option@action == "store") 
@@ -519,7 +519,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
         }
     } else { # is a short flag
         last_flag <- tail(.expand_short_option(argument), 1)
-        for (ii in seq(along = object@options)) {
+        for (ii in seq_along(object@options)) {
             option <- object@options[[ii]]
             if(!is.na(option@short_flag) && option@short_flag == last_flag)
                 return(option@action == "store") 
@@ -531,14 +531,14 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
 .is_short_flag <- function(argument) { return(grepl("^-[^-]", argument)) }
 .get_long_options <- function(object) {
     long_options <- vector("character")
-    for(ii in seq(along = object@options)) {
+    for(ii in seq_along(object@options)) {
         long_options <- c(long_options, object@options[[ii]]@long_flag)
     }
     return(long_options)
 }
 .get_short_options <- function(object) {
     short_options <- vector("character")
-    for(ii in seq(along = object@options)) {
+    for(ii in seq_along(object@options)) {
         short_options <- c(short_options, object@options[[ii]]@short_flag)
     }
     return(short_options)
@@ -561,7 +561,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
 .get_option_strings_and_n_arguments <- function(object) {
     option_strings <- vector("character")
     n_arguments <- vector("numeric")
-    for (ii in seq(along = object@options)) {
+    for (ii in seq_along(object@options)) {
         option <- object@options[[ii]]
         option_strings <- c(option_strings, option@short_flag)
         option_strings <- c(option_strings, option@long_flag)

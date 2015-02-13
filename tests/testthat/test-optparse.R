@@ -14,6 +14,8 @@
 #  
 #  You should have received a copy of the GNU General Public License  
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+
 option_list <- list( 
     make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
         help="Print extra output [default]"),
@@ -131,7 +133,7 @@ test_that("test bug of multiple '=' signs", {
 # Bug found by Jim Nikelski 
 test_that("test bug when multiple short flag options '-abc' with positional_arguments = TRUE", {
     sort_list <- function(unsorted_list) {
-        for(ii in seq(along=unsorted_list)) {
+        for(ii in seq_along(unsorted_list)) {
             if(is.list(unsorted_list[[ii]])) {
                 unsorted_list[[ii]] <- sort_list(unsorted_list[[ii]])
             }
@@ -215,4 +217,15 @@ test_that("description and epilogue work as expected", {
     expect_output(print_help(parser), 'Usage:.*unit_test.r.*unit_test.r')
     expect_output(print_help(parser), 'description unit_test.r test unit_test.r')
     expect_output(print_help(parser), 'epilog test unit_test.r unit_test.r')
+})
+
+# Bug found by Rich FitzJohn 
+oo <- options(warnPartialMatchArgs=TRUE)
+on.exit(options(oo))
+test_that("Avoid partial matching of arguments", {
+    expect_that(seq(along=1:10), gives_warning("partial argument match"))
+    expect_that(seq_along(1:10), not(gives_warning()))
+    expect_that(parse_args(args=c("-h", "foo"), parser, positional_arguments=TRUE, print_help_and_exit=FALSE),
+                not(gives_warning()))
+    expect_that(print_help(OptionParser()), not(gives_warning()))
 })
