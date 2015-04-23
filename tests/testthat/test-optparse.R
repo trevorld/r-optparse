@@ -212,7 +212,7 @@ test_that("description and epilogue work as expected", {
 
 
     # bug / feature request by Miroslav Posta
-    parser = OptionParser(usage="test %prog test %prog", epilog="epilog test %prog %prog", 
+    parser = OptionParser(usage="test %prog test %prog", epilogue="epilog test %prog %prog", 
                 description="description %prog test %prog", prog="unit_test.r")
     expect_output(print_help(parser), 'Usage:.*unit_test.r.*unit_test.r')
     expect_output(print_help(parser), 'description unit_test.r test unit_test.r')
@@ -220,8 +220,9 @@ test_that("description and epilogue work as expected", {
 })
 
 # Bug found by Rich FitzJohn 
-oo <- options(warnPartialMatchArgs=TRUE)
+oo <- options()
 on.exit(options(oo))
+options(warnPartialMatchArgs=TRUE)
 test_that("Avoid partial matching of arguments", {
     expect_that(seq(along=1:10), gives_warning("partial argument match"))
     expect_that(seq_along(1:10), not(gives_warning()))
