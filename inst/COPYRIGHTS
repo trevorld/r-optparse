@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
 Files: *
-Copyright: 2010-2014 Trevor L Davis 
+Copyright: 2010-2015 Trevor L Davis 
 License: GPL-2+
 
 File: exec/example.R
@@ -22,6 +22,7 @@ File: inst/tests/test-optparse.R
 Copyright: 2008 Allen Day  
            2010-2013 Trevor L Davis 
            2013 Kirill Müller
+           2015 Rich FitzJohn
 License: GPL-2+
 
 File: R/optparse-package.R
@@ -36,6 +37,7 @@ Copyright: 1990-2009 Python Software Foundation
            2011 Jim Nikelski
            2013 Kirill Müller
            2014 Peter Humburg
+           2015 Rich FitzJohn
 License:  GPL-2+ and Python-2.6.2
 Comment: The FSF considers recent Python licenses (post Python version 2.1.1) to be
   GPL-compatible (http://www.gnu.org/licenses/license-list.html#Python).  Note

@@ -1,4 +1,5 @@
-# Copyright (c) 2010-2013 Trevor L. Davis <trevor.l.davis@stanford.edu>  
+# Copyright (c) 2010-2015 Trevor L. Davis <trevor.l.davis@stanford.edu>  
+# Copyright (c) 2015 Rick FitzJohn https://github.com/richfitz
 # Copyright (c) 2013 Kirill Müller https://github.com/krlmlr
 # Copyright (c) 2011 Jim Nikelski <nikelski@bic.mni.mcgill.ca>
 # Copyright (c) 2010 Steve Lianoglou <lianos@cbio.mskcc.org> 
@@ -323,6 +324,8 @@ print_help <- function(object) {
 .as_string <- function(default) {
     if(is.null(default)) {
         default_str <- "NULL"
+    } else if(!length(default)) {
+        default_str <- paste0(typeof(default), "(0)")
     } else if(is.na(default)) {
         default_str <- "NA"
     } else {

@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Trevor L Davis <trevor.l.davis@stanford.edu>
+# Copyright 2010-2015 Trevor L Davis <trevor.l.davis@stanford.edu>
 # Copyright 2013 Kirill Müller
 # Copyright 2008 Allen Day
 #  
@@ -104,7 +104,7 @@ test_that("parse_args works as expected", {
 })
 # Bug found by Miroslav Posta
 test_that("test using numeric instead of double", {
-option_list_neg <- list( make_option(c("-m", "--mean"), default=0, type="numeric") )
+    option_list_neg <- list( make_option(c("-m", "--mean"), default=0, type="numeric") )
     parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list_neg)
     parse_args(parser, args = c("-m", "-5.0")) 
 })
@@ -210,7 +210,6 @@ test_that("description and epilogue work as expected", {
     expect_output(print_help(parser), "int default is 42")
     expect_output(print_help(parser), "double default is 11.11")
 
-
     # bug / feature request by Miroslav Posta
     parser = OptionParser(usage="test %prog test %prog", epilogue="epilog test %prog %prog", 
                 description="description %prog test %prog", prog="unit_test.r")
@@ -219,14 +218,27 @@ test_that("description and epilogue work as expected", {
     expect_output(print_help(parser), 'epilog test unit_test.r unit_test.r')
 })
 
-# Bug found by Rich FitzJohn 
-oo <- options()
-on.exit(options(oo))
-options(warnPartialMatchArgs=TRUE)
-test_that("Avoid partial matching of arguments", {
-    expect_that(seq(along=1:10), gives_warning("partial argument match"))
-    expect_that(seq_along(1:10), not(gives_warning()))
-    expect_that(parse_args(args=c("-h", "foo"), parser, positional_arguments=TRUE, print_help_and_exit=FALSE),
-                not(gives_warning()))
-    expect_that(print_help(OptionParser()), not(gives_warning()))
+# Bug found by Benjamin Tyner
+test_that("Can set zero length default options", {
+    option_list_neg <- list( make_option(c("-m", "--mean"), default=numeric(0),
+                                         type="numeric", help = "Default %default") )
+    parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list_neg)
+    expect_equal(sort_list( parse_args(parser, args = c("-m", "-5.0"))) ,
+                sort_list(list(mean=-5, help=FALSE)))
+    expect_equal(sort_list( parse_args(parser)) ,
+                sort_list(list(mean=numeric(0), help=FALSE)))
+    expect_output(print_help(parser), "Default double")
 })
+
+# # Bug found by Rich FitzJohn 
+# oo <- options()
+# on.exit(options(oo))
+# options(warnPartialMatchArgs=TRUE)
+# test_that("Avoid partial matching of arguments", {
+#     expect_that(seq(along=1:10), gives_warning("partial argument match"))
+#     expect_that(seq_along(1:10), not(gives_warning()))
+#     expect_that(parse_args(args=c("-h", "foo"), parser, positional_arguments=TRUE, print_help_and_exit=FALSE),
+#                 not(gives_warning()))
+#     expect_that(print_help(OptionParser()), not(gives_warning()))
+# })
+# 
