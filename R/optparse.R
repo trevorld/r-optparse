@@ -405,6 +405,7 @@ print_help <- function(object) {
 #'parse_args(parser, args = c("-add_numbers", "example.txt"), positional_arguments = TRUE)
 #'
 #' @import getopt
+#' @importFrom utils tail
 #' @export 
 parse_args <- function(object, args = commandArgs(trailingOnly = TRUE), 
                     print_help_and_exit = TRUE, positional_arguments = FALSE) {
