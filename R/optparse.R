@@ -207,6 +207,8 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'    # examples from package vignette
 #'    make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
 #'        help="Print extra output [default]")
+#'    make_option(c("-q", "--quietly"), action="store_false",
+#'      dest="verbose", help="Print little output")
 #'    make_option(c("-c", "--count"), type="integer", default=5, 
 #'        help="Number of random normals to generate [default %default]",
 #'        metavar="number")
