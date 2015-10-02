@@ -7,7 +7,7 @@ Author: Trevor L Davis. Some documentation and examples ported from Allen Day's
     getopt package. Some documentation from the optparse Python module by the
     Python Software Foundation. Contributions from Steve Lianoglou, Jim
     Nikelski, Kirill Müller, Peter Humburg, and Rich FitzJohn.
-Maintainer: Trevor L Davis <trevor.l.davis@stanford.edu>
+Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: A command line parser inspired by Python's 'optparse' library to
     be used with Rscript to write "#!" shebang scripts that accept short and
     long flag/options.
