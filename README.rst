@@ -16,7 +16,10 @@ This package depends on the R package ``getopt``.
 
 To run the unit tests you will need the suggested R package ``testthat`` and in
 order to build the vignette you will need the suggested R package ``knitr``
-(and ``knitr`` probably requires the system tool ``rst2pdf``).
+(and ``knitr`` probably requires the system tool ``rst2pdf``).  
+That latter should be installable via `pip <https://pypi.python.org/pypi/pip>`_.::
+
+    sudo pip install rst2pdf
 
 examples
 ========
