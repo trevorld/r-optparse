@@ -1,7 +1,7 @@
 optparse
 ========
 
-.. image:: https://www.r-pkg.org/badges/version/optparse
+.. image:: http://www.r-pkg.org/badges/version/optparse
     :target: http://cran.r-project.org/package=optparse
     :alt: CRAN Status Badge
 
