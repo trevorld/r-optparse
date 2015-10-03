@@ -4,9 +4,11 @@ optparse
 .. image:: https://www.r-pkg.org/badges/version/optparse
     :target: http://cran.r-project.org/package=optparse
     :alt: CRAN Status Badge
+
 .. image:: https://travis-ci.org/trevorld/optparse.png?branch=master
     :target: http://travis-ci.org/trevorld/optparse
     :alt: Build Status
+
 .. image:: https://img.shields.io/codecove/c/github/trevorld/optparse/master.svg
     :target: https://codecov.io/github/trevorld/optparse?branch=master
     :alt: Coverage Status
