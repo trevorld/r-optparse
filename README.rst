@@ -9,7 +9,7 @@ optparse
     :target: http://travis-ci.org/trevorld/optparse
     :alt: Build Status
 
-.. image:: https://img.shields.io/codecove/c/github/trevorld/optparse/master.svg
+.. image:: https://img.shields.io/codecov/c/github/trevorld/optparse/master.svg
     :target: https://codecov.io/github/trevorld/optparse?branch=master
     :alt: Coverage Status
 
