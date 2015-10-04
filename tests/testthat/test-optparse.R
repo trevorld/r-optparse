@@ -58,7 +58,7 @@ context("Testing parse_args")
 test_that("parse_args works as expected", {
     # option_list took outside test_that
     option_list2 <- list( 
-        make_option(c("-n", "--add_numbers"), action="store_true", default=FALSE,
+        make_option(c("-n", "--add-numbers"), action="store_true", default=FALSE,
             help="Print line number at the beginning of each line [default]")
         )
     parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list2)
@@ -75,32 +75,39 @@ test_that("parse_args works as expected", {
                             args = c("-c", "10"))),
                 sort_list(list(sd = 1, help = FALSE, verbose = TRUE, 
                             count = 10, mean = 0, generator = "rnorm")))
-    expect_equal(sort_list(parse_args(parser, args = c("--add_numbers", "example.txt"), 
+    expect_equal(sort_list(parse_args(parser, args = c("--add-numbers", "example.txt"), 
                             positional_arguments = TRUE)),
-                sort_list(list(options = list(add_numbers = TRUE, help = FALSE), 
+                sort_list(list(options = list(`add-numbers` = TRUE, help = FALSE), 
                              args = c("example.txt"))))
-    expect_equal(sort_list(parse_args(parser, args = c("--add_numbers"), 
+    expect_equal(sort_list(parse_args(parser, args = c("--add-numbers"), 
                             positional_arguments = TRUE)),
+                sort_list(list(options = list(`add-numbers` = TRUE, help = FALSE), 
+                             args = character(0))))
+    expect_equal(sort_list(parse_args(parser, args = c("--add-numbers"), 
+                            positional_arguments = TRUE, convert_hyphens_to_underscores = TRUE)),
                 sort_list(list(options = list(add_numbers = TRUE, help = FALSE), 
                              args = character(0))))
-    expect_equal(sort_list(parse_args(parser, args = c("-add_numbers", "example.txt"), 
+    expect_equal(sort_list(parse_args2(parser, args = c("--add-numbers"))),
+                sort_list(list(options = list(add_numbers = TRUE, help = FALSE), 
+                             args = character(0))))
+    expect_equal(sort_list(parse_args(parser, args = c("-add-numbers", "example.txt"), 
                                 positional_arguments = TRUE)),
-                sort_list(list(options = list(add_numbers = FALSE, help = FALSE), 
-                             args = c("-add_numbers", "example.txt"))))
-    expect_that(parse_args(parser, args = c("-add_numbers", "example.txt")), throws_error())
-    expect_equal(sort_list(parse_args(parser, args = c("-add_numbers", "example.txt"),
+                sort_list(list(options = list(`add-numbers` = FALSE, help = FALSE), 
+                             args = c("-add-numbers", "example.txt"))))
+    expect_that(parse_args(parser, args = c("-add-numbers", "example.txt")), throws_error())
+    expect_equal(sort_list(parse_args(parser, args = c("-add-numbers", "example.txt"),
                                       positional_arguments = c(1,3))),
-                 sort_list(list(options = list(add_numbers = FALSE, help = FALSE),
-                                args = c("-add_numbers", "example.txt"))))
-    expect_equal(sort_list(parse_args(parser, args = c("--add_numbers", "example.txt"),
+                 sort_list(list(options = list(`add-numbers` = FALSE, help = FALSE),
+                                args = c("-add-numbers", "example.txt"))))
+    expect_equal(sort_list(parse_args(parser, args = c("--add-numbers", "example.txt"),
                                       positional_arguments = c(1,3))),
-                 sort_list(list(options = list(add_numbers = TRUE, help = FALSE),
+                 sort_list(list(options = list(`add-numbers` = TRUE, help = FALSE),
                                 args = c("example.txt"))))
     expect_equal(sort_list(parse_args(parser, args = c("example.txt"),
                                       positional_arguments = 1)),
-                 sort_list(list(options = list(add_numbers = FALSE, help = FALSE),
+                 sort_list(list(options = list(`add-numbers` = FALSE, help = FALSE),
                                 args = c("example.txt"))))
-    expect_that(parse_args(parser, args = c("-add_numbers", "example.txt"),
+    expect_that(parse_args(parser, args = c("-add-numbers", "example.txt"),
                            positional_arguments=c(0, 1)), throws_error())
     expect_that(parse_args(parser, args = c("example.txt"),
                            positional_arguments=c(2, Inf)), throws_error())

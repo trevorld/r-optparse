@@ -338,7 +338,9 @@ print_help <- function(object) {
 #' Parse command line options.
 #' 
 #' \code{parse_args} parses command line options using an \code{OptionParser}
-#' instance for guidance.
+#' instance for guidance. \code{parse_args2} is a wrapper to \code{parse_args}
+#' setting the options \code{positional_arguments} and \code{convert_hyphens_to_underscores}
+#' to \code{TRUE}.
 #' 
 #' @param object An \code{OptionParser} instance.
 #' @param args A character vector containing command line options to be parsed.
@@ -355,6 +357,9 @@ print_help <- function(object) {
 #'     \code{c(0, Inf)}.  The default \code{FALSE} is
 #'     supported for backward compatibility only, as it alters
 #'     the format of the return value.
+#' @param convert_hyphens_to_underscores If the names in the returned list of options
+#'      contains hyphens then convert them to underscores.  The default \code{FALSE} is 
+#'      supported for backward compatibility reasons as it alters the format of the return value
 #' @return Returns a list with field \code{options} containing our option values
 #'     as well as another field \code{args} which contains a vector of
 #'     positional arguments.  For backward compatibility, if and only if
@@ -395,20 +400,24 @@ print_help <- function(object) {
 #'
 #'# example from vignette using positional arguments
 #'option_list2 <- list( 
-#'    make_option(c("-n", "--add_numbers"), action="store_true", default=FALSE,
+#'    make_option(c("-n", "--add-numbers"), action="store_true", default=FALSE,
 #'        help="Print line number at the beginning of each line [default]")
 #'    )
 #'parser <- OptionParser(usage = "%prog [options] file", option_list=option_list2)
 #'
-#'parse_args(parser, args = c("--add_numbers", "example.txt"), positional_arguments = TRUE)
+#'parse_args(parser, args = c("--add-numbers", "example.txt"), positional_arguments = TRUE)
 #'
-#'parse_args(parser, args = c("-add_numbers", "example.txt"), positional_arguments = TRUE)
+#'parse_args(parser, args = c("--add-numbers", "example.txt"), positional_arguments = TRUE,
+#'          convert_hyphens_to_underscores = TRUE)
+#'
+#'parse_args2(parser, args = c("--add-numbers", "example.txt"))
 #'
 #' @import getopt
 #' @importFrom utils tail
 #' @export 
 parse_args <- function(object, args = commandArgs(trailingOnly = TRUE), 
-                    print_help_and_exit = TRUE, positional_arguments = FALSE) {
+                    print_help_and_exit = TRUE, positional_arguments = FALSE,
+                    convert_hyphens_to_underscores = FALSE) {
 
     n_options <- length( object@options )
 
@@ -479,6 +488,9 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
             }
         }
     }
+    if (convert_hyphens_to_underscores) {
+        names(options_list) <- gsub("-", "_", names(options_list))
+    }
     if(options_list[["help"]] & print_help_and_exit) {
         print_help(object)
         if(interactive()) stop("help requested") else quit(status=1) 
@@ -496,6 +508,13 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
     } else {    
         return(options_list)
     }
+}
+#' @rdname parse_args
+#' @export
+parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
+                        print_help_and_exit = TRUE) {
+    parse_args(object, args = args, print_help_and_exit = print_help_and_exit,
+               positional_arguments = TRUE, convert_hyphens_to_underscores = TRUE)
 }
 
 # Tells me whether a string is a valid option
@@ -591,3 +610,4 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
     }
     return( c( long_flag, short_flag, argument, object@type, object@help) )
 }
+
