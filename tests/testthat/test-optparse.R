@@ -38,7 +38,20 @@ test_that("make_option works as expected", {
                 make_option("--integer", default=as.integer(5)))
     expect_equal(make_option("--logical", type="logical", default="TRUE"),
                 make_option("--logical", default=TRUE))
+    expect_equal(make_option("--filename")@type, "character")
     expect_that(make_option("badflag"), throws_error())
+})
+
+get_long_flags <- function(parser) {
+    sort(sapply(parser@options, function(x) { x@long_flag }))
+}
+context("Test add_option")
+test_that("add_option works as expected", {
+    parser1 <- OptionParser(option_list = list(make_option("--generator"), make_option("--count")))
+    parser2 <- OptionParser()
+    parser2 <- add_option(parser2, "--generator")
+    parser2 <- add_option(parser2, "--count")
+    expect_equal(get_long_flags(parser1), get_long_flags(parser2))
 })
 
 context("Testing parse_args")
