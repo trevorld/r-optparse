@@ -3,10 +3,15 @@
 \encoding{latin1}
 \name{parse_args}
 \alias{parse_args}
+\alias{parse_args2}
 \title{Parse command line options.}
 \usage{
 parse_args(object, args = commandArgs(trailingOnly = TRUE),
-  print_help_and_exit = TRUE, positional_arguments = FALSE)
+  print_help_and_exit = TRUE, positional_arguments = FALSE,
+  convert_hyphens_to_underscores = FALSE)
+
+parse_args2(object, args = commandArgs(trailingOnly = TRUE),
+  print_help_and_exit = TRUE)
 }
 \arguments{
 \item{object}{An \code{OptionParser} instance.}
@@ -27,6 +32,10 @@ length two denoting the minimum and maximum number of arguments
 \code{c(0, Inf)}.  The default \code{FALSE} is
 supported for backward compatibility only, as it alters
 the format of the return value.}
+
+\item{convert_hyphens_to_underscores}{If the names in the returned list of options
+contains hyphens then convert them to underscores.  The default \code{FALSE} is
+supported for backward compatibility reasons as it alters the format of the return value}
 }
 \value{
 Returns a list with field \code{options} containing our option values
@@ -37,7 +46,9 @@ Returns a list with field \code{options} containing our option values
 }
 \description{
 \code{parse_args} parses command line options using an \code{OptionParser}
-instance for guidance.
+instance for guidance. \code{parse_args2} is a wrapper to \code{parse_args}
+setting the options \code{positional_arguments} and \code{convert_hyphens_to_underscores}
+to \code{TRUE}.
 }
 \section{Acknowledgement}{
 
@@ -70,14 +81,17 @@ parse_args(OptionParser(option_list = option_list), args = c("--sd=3", "--quietl
 
 # example from vignette using positional arguments
 option_list2 <- list(
-   make_option(c("-n", "--add_numbers"), action="store_true", default=FALSE,
+   make_option(c("-n", "--add-numbers"), action="store_true", default=FALSE,
        help="Print line number at the beginning of each line [default]")
    )
 parser <- OptionParser(usage = "\%prog [options] file", option_list=option_list2)
 
-parse_args(parser, args = c("--add_numbers", "example.txt"), positional_arguments = TRUE)
+parse_args(parser, args = c("--add-numbers", "example.txt"), positional_arguments = TRUE)
 
-parse_args(parser, args = c("-add_numbers", "example.txt"), positional_arguments = TRUE)
+parse_args(parser, args = c("--add-numbers", "example.txt"), positional_arguments = TRUE,
+         convert_hyphens_to_underscores = TRUE)
+
+parse_args2(parser, args = c("--add-numbers", "example.txt"))
 }
 \author{
 Trevor Davis.
