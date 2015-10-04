@@ -106,7 +106,7 @@ One can also equivalently make options in a list::
 ``optparse`` has limited positional argument support, other command-line parsers for R such as ``argparse``
 have richer positional argument support::
 
-    > parse_args(parser, args = c("--v", "-c25", "75", "22"), positional_arguments = TRUE)
+    > parse_args(parser, args = c("-v", "-c25", "75", "22"), positional_arguments = TRUE)
 
     $options
     $options$help
@@ -120,6 +120,24 @@ have richer positional argument support::
     
     
     $args
-    [1] "--v"  "-c25" "75"   "22"  
+    [1] "75"   "22"  
+
+The ``parse_args2`` wraps ``parse_args`` while setting ``positional_arguments=TRUE`` and ``convert_hyphens_to_underscores=TRUE``::
+
+    > parse_args2(parser, args = c("-v", "-c25", "75", "22"))
+
+    $options
+    $options$help
+    [1] FALSE
+    
+    $options$verbose
+    [1] TRUE
+    
+    $options$count
+    [1] 5
+    
+    
+    $args
+    [1] "75"   "22"  
 
 For richer examples please see the `package vignette <https://cran.r-project.org/web/packages/optparse/vignettes/optparse.pdf>`_.
