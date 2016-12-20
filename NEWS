@@ -1,3 +1,7 @@
+optparse 1.4.1
+==============
+* Fix bug when ``add_help_option`` in ``OptionParser`` set to ``FALSE``.  Thanks to Jeff Bruce for bug report.
+
 optparse 1.4.0
 ==============
 * parse_args now supports convert_hyphens_to_underscores argument which converts any hyphens to underscores 

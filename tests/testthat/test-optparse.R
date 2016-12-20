@@ -262,3 +262,16 @@ test_that("Can set zero length default options", {
 #     expect_that(print_help(OptionParser()), not(gives_warning()))
 # })
 # 
+
+# Use h flag for non-help (Reported by Jeff Bruce)
+context("Use h option for non-help")
+test_that("Use h option for non-help", {
+    option_list_neg <- list( make_option(c("-h", "--mean"), default=0.0) )
+    parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list_neg)
+    expect_that(parse_args(parser, args = c("-h", "-5.0")), throws_error()) 
+
+    option_list_neg <- list( make_option(c("-h", "--mean"), default=0.0) )
+    parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list_neg, add_help_option=FALSE)
+    args <- parse_args(parser, args = c("-h", "-5.0"))
+    expect_equal(args, list(mean = -5.0)) 
+})

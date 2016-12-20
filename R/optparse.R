@@ -29,7 +29,7 @@
 
 #' Option Parser
 #' 
-#'  @slot usage The program usage message that will printed out if
+#' @slot usage The program usage message that will printed out if
 #'     \code{parse_args} finds a help option, \code{\%prog} is substituted with the
 #'     value of the \code{prog} argument.
 #' @slot options A list of of \code{OptionParserOption} instances that will
@@ -491,9 +491,11 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
     if (convert_hyphens_to_underscores) {
         names(options_list) <- gsub("-", "_", names(options_list))
     }
-    if(options_list[["help"]] & print_help_and_exit) {
-        print_help(object)
-        if(interactive()) stop("help requested") else quit(status=1) 
+    if (any(grepl("^help$", names(options_list)))) {
+        if(options_list[["help"]] & print_help_and_exit) {
+            print_help(object)
+            if(interactive()) stop("help requested") else quit(status=1) 
+        }
     }
     if (length(arguments_positional) < min(positional_arguments)) {
       stop(sprintf("required at least %g positional arguments, got %g",
