@@ -26,10 +26,10 @@ usage statement and options statement}
 \item{\code{epilogue}}{Additional text for \code{print_help} to print out after
 the options statement}
 }}
-\author{
-Trevor Davis.
-}
+
 \seealso{
 \code{\link{OptionParserOption}}
 }
-
+\author{
+Trevor Davis.
+}

@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: optparse
 Type: Package
 Title: Command Line Option Parser
-Version: 1.4.2
+Version: 1.4.3
 Author: Trevor L Davis. Some documentation and examples ported from Allen Day's
     getopt package. Some documentation from the optparse Python module by the
     Python Software Foundation. Contributions from Steve Lianoglou, Jim
@@ -22,8 +22,8 @@ Imports:
     methods,
     getopt (>= 1.19.0)
 Suggests:
-    knitr,
+    knitr (>= 1.15.19),
     stringr,
     testthat
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

@@ -2,8 +2,8 @@
 % Please edit documentation in R/optparse.R
 \docType{class}
 \name{OptionParserOption-class}
-\alias{OptionParserOption}
 \alias{OptionParserOption-class}
+\alias{OptionParserOption}
 \title{Class to hold information about command-line options}
 \description{
 Class to hold information about command-line options
@@ -48,7 +48,7 @@ substituted by the value of \code{default}.}
 \item{\code{metavar}}{A character string that stands in for the option argument when
 printing help text.  Default is the value of \code{dest}.}
 }}
+
 \seealso{
 \code{\link{make_option}}
 }
-

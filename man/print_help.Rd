@@ -17,9 +17,6 @@ message.  It returns \code{invisible(NULL)}.
 \code{print_help} print an usage message from an OptionParser object, usually
 called by \code{parse_args} when it encounters a help option.
 }
-\author{
-Trevor Davis.
-}
 \references{
 Python's \code{optparse} library, which inspired this package,
     is described here: \url{http://docs.python.org/library/optparse.html}
@@ -27,4 +24,6 @@ Python's \code{optparse} library, which inspired this package,
 \seealso{
 \code{{parse_args}} \code{{OptionParser}}
 }
-
+\author{
+Trevor Davis.
+}

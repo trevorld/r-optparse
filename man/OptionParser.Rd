@@ -40,9 +40,6 @@ This function is used to create an instance of a parser object
 which when combined with the \code{parse_args}, \code{make_option}, and \code{add_option}
 methods is very useful for parsing options from the command line.
 }
-\author{
-Trevor Davis.
-}
 \references{
 Python's \code{optparse} library, which inspired this package,
    is described here: \url{http://docs.python.org/library/optparse.html}
@@ -51,4 +48,6 @@ Python's \code{optparse} library, which inspired this package,
 \code{\link{parse_args}} \code{\link{make_option}}
     \code{\link{add_option}}
 }
-
+\author{
+Trevor Davis.
+}

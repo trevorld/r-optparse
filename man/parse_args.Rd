@@ -60,6 +60,7 @@ to \code{TRUE}.
     Stefan Seemayer for bug report and patch;
     Kirill \enc{Müller}{Muller} for patches; Steve Humburg for patch.
 }
+
 \examples{
 # example from vignette
 option_list <- list( 
@@ -94,9 +95,6 @@ parse_args(parser, args = c("--add-numbers", "example.txt"), positional_argument
 parse_args2(parser, args = c("--add-numbers", "example.txt"))
 
 }
-\author{
-Trevor Davis.
-}
 \references{
 Python's \code{optparse} library, which inspired this package,
      is described here: \url{http://docs.python.org/library/optparse.html}
@@ -104,4 +102,6 @@ Python's \code{optparse} library, which inspired this package,
 \seealso{
 \code{\link{OptionParser}} \code{\link{print_help}}
 }
-
+\author{
+Trevor Davis.
+}

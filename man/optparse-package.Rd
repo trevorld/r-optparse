@@ -2,8 +2,8 @@
 % Please edit documentation in R/optparse-package.R
 \docType{package}
 \name{optparse-package}
-\alias{optparse}
 \alias{optparse-package}
+\alias{optparse}
 \title{Command line option parser}
 \description{
 Goal is to create an R package of a command line parser inspired by Python's
@@ -39,6 +39,13 @@ flag is able to have a corresponding argument. %%%
    }
 
 }
+\references{
+Python's \code{optparse} library, which this package is based on,
+is described here: \url{http://docs.python.org/library/optparse.html}
+}
+\seealso{
+\code{\link[getopt]{getopt}}
+}
 \author{
 Trevor Davis.
 
@@ -47,12 +54,4 @@ Some documentation and unit tests ported from Allen Day's getopt package.
 The documentation for Python's optparse library, which this package is based
 on, is Copyright 1990-2009, Python Software Foundation.
 }
-\references{
-Python's \code{optparse} library, which this package is based on,
-is described here: \url{http://docs.python.org/library/optparse.html}
-}
-\seealso{
-\code{\link[getopt]{getopt}}
-}
 \keyword{package}
-
