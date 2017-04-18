@@ -139,4 +139,3 @@ The ``parse_args2`` wraps ``parse_args`` while setting ``positional_arguments=TR
     $args
     [1] "75"   "22"  
 
-For richer examples please see the `package vignette <https://cran.r-project.org/web/packages/optparse/vignettes/optparse.pdf>`_.
