@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
 Files: *
-Copyright: 2010-2015 Trevor L Davis 
+Copyright: 2010-2017 Trevor L Davis 
 License: GPL-2+
 
 File: exec/example.R
@@ -32,7 +32,7 @@ License: GPL-2+
 
 File: R/optparse.R 
 Copyright: 1990-2009 Python Software Foundation
-           2011-2014 Trevor L Davis 
+           2011-2017 Trevor L Davis 
            2010 Steve Lianoglou
            2011 Jim Nikelski
            2013 Kirill Müller

@@ -1,3 +1,7 @@
+optparse 1.4.4
+==============
+* Minor documentation fixes.  Thanks jjramsey and Daeyoung Kim for bug reports.
+
 optparse 1.4.1
 ==============
 * Fix bug when ``add_help_option`` in ``OptionParser`` set to ``FALSE``.  Thanks to Jeff Bruce for bug report.

@@ -72,8 +72,7 @@ setClass("OptionParser", representation(usage = "character", options = "list",
 #'     by \code{parse_args} should \code{optparse} store option values.  Default is
 #'     derived from the long flag in \code{opt_str}.
 #' @slot default The default value \code{optparse} should use if it does not
-#'     find the option on the command line.  Default is derived from the long flag
-#'     in \code{opt_str}.
+#'     find the option on the command line.  
 #' @slot help A character string describing the option to be used by
 #'     \code{print_help} in generating a usage message.  \code{\%default} will be
 #'     substituted by the value of \code{default}.
@@ -183,8 +182,7 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'     by \code{parse_args} should \code{optparse} store option values.  Default is
 #'     derived from the long flag in \code{opt_str}.
 #' @param default The default value \code{optparse} should use if it does not
-#'     find the option on the command line.  Default is derived from the long flag
-#'     in \code{opt_str}.
+#'     find the option on the command line.  
 #' @param help A character string describing the option to be used by
 #'     \code{print_help} in generating a usage message.  \code{\%default} will be
 #'     substituted by the value of \code{default}.

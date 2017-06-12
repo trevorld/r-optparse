@@ -38,8 +38,7 @@ by \code{parse_args} should \code{optparse} store option values.  Default is
 derived from the long flag in \code{opt_str}.}
 
 \item{\code{default}}{The default value \code{optparse} should use if it does not
-find the option on the command line.  Default is derived from the long flag
-in \code{opt_str}.}
+find the option on the command line.}
 
 \item{\code{help}}{A character string describing the option to be used by
 \code{print_help} in generating a usage message.  \code{\%default} will be
