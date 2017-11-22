@@ -57,7 +57,7 @@ A simple example::
     [1] 15
 
 Note that the ``args`` argument of ``parse_args`` default is ``commandArgs(trailing=TRUE)``
-so it typically doesn't need to be explicitly set if righting an Rscript.
+so it typically doesn't need to be explicitly set if writing an Rscript.
 
 One can also equivalently make options in a list::
 
@@ -121,7 +121,7 @@ have richer positional argument support::
     $args
     [1] "75"   "22"  
 
-The ``parse_args2`` wraps ``parse_args`` while setting ``positional_arguments=TRUE`` and ``convert_hyphens_to_underscores=TRUE``::
+The function ``parse_args2`` wraps ``parse_args`` while setting ``positional_arguments=TRUE`` and ``convert_hyphens_to_underscores=TRUE``::
 
     > parse_args2(parser, args = c("-v", "-c25", "75", "22"))
 
