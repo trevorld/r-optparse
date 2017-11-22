@@ -1,3 +1,8 @@
+optparse 1.4.5
+==============
+* Better help message when forgetting to set ``add_help_option=FALSE``.
+  Thanks Jeff P. Bruce for bug report.
+
 optparse 1.4.4
 ==============
 * Minor documentation fixes.  Thanks jjramsey and Daeyoung Kim for bug reports.

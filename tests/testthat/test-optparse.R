@@ -268,7 +268,7 @@ context("Use h option for non-help")
 test_that("Use h option for non-help", {
     option_list_neg <- list( make_option(c("-h", "--mean"), default=0.0) )
     parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list_neg)
-    expect_that(parse_args(parser, args = c("-h", "-5.0")), throws_error()) 
+    expect_error(parse_args(parser, args = c("-h", "-5.0")), "redundant short names") 
 
     option_list_neg <- list( make_option(c("-h", "--mean"), default=0.0) )
     parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list_neg, add_help_option=FALSE)

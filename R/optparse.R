@@ -466,7 +466,13 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
 
     options_list <- list()
     if(length(args)) {
-        opt <- getopt(spec=spec, opt=args)
+        opt <- try(getopt(spec=spec, opt=args), silent=TRUE)
+        if(class(opt) == "try-error") {
+            if(grepl("redundant short names for flags", opt)) {
+                opt <- paste(opt, "did you forget to set ``add_holp_option=FALSE`` in ``OptionParser``")
+            }
+            stop(opt)
+        }
     } else {
         opt <- list()
     }
@@ -490,7 +496,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
         names(options_list) <- gsub("-", "_", names(options_list))
     }
     if (any(grepl("^help$", names(options_list)))) {
-        if(options_list[["help"]] & print_help_and_exit) {
+        if(options_list[["help"]] && print_help_and_exit) {
             print_help(object)
             if(interactive()) stop("help requested") else quit(status=1) 
         }
