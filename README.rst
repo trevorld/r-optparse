@@ -1,19 +1,20 @@
 optparse
 ========
 
-.. image:: http://www.r-pkg.org/badges/version/optparse
-    :target: http://cran.r-project.org/package=optparse
+.. image:: https://www.r-pkg.org/badges/version/optparse
+    :target: https://cran.r-project.org/package=optparse
     :alt: CRAN Status Badge
 
 .. image:: https://travis-ci.org/trevorld/optparse.png?branch=master
-    :target: http://travis-ci.org/trevorld/optparse
+    :target: https://travis-ci.org/trevorld/optparse
     :alt: Build Status
 
 .. image:: https://img.shields.io/codecov/c/github/trevorld/optparse/master.svg
     :target: https://codecov.io/github/trevorld/optparse?branch=master
     :alt: Coverage Status
 
-.. image:: http://cranlogs.r-pkg.org/badges/optparse
+.. image:: https://cranlogs.r-pkg.org/badges/optparse
+    :target: https://cran.r-project.org/package=optparse
    :alt: RStudio CRAN mirror downloads
 
 A pure R language command line parser inspired by Python's 'optparse' library to
