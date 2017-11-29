@@ -12,6 +12,8 @@ optparse
 .. image:: https://img.shields.io/codecov/c/github/trevorld/optparse/master.svg
     :target: https://codecov.io/github/trevorld/optparse?branch=master
     :alt: Coverage Status
+.. image:: http://cranlogs.r-pkg.org/badges/optparse
+   :alt: RStudio CRAN mirror downloads
 
 A pure R language command line parser inspired by Python's 'optparse' library to
 be used with Rscript to write "#!" shebang scripts that accept short and

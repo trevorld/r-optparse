@@ -498,7 +498,10 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
     if (any(grepl("^help$", names(options_list)))) {
         if(options_list[["help"]] && print_help_and_exit) {
             print_help(object)
-            if(interactive()) stop("help requested") else quit(status=1) 
+            if(interactive()) 
+                stop("help requested")
+            else
+                quit(status=0) 
         }
     }
     if (length(arguments_positional) < min(positional_arguments)) {

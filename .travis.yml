@@ -3,7 +3,7 @@ sudo: required
 warnings_are_errors: true
 before_install: echo "options(repos = c(CRAN='http://cran.rstudio.com'))" > ~/.Rprofile
 apt_packages:
-    - rst2pdf
+    - pandoc
 r_binary_packages:
     - getopt
     - stringr
