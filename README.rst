@@ -15,7 +15,7 @@ optparse
 
 .. image:: https://cranlogs.r-pkg.org/badges/optparse
     :target: https://cran.r-project.org/package=optparse
-   :alt: RStudio CRAN mirror downloads
+    :alt: RStudio CRAN mirror downloads
 
 A pure R language command line parser inspired by Python's 'optparse' library to
 be used with Rscript to write "#!" shebang scripts that accept short and
