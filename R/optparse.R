@@ -84,6 +84,7 @@ setClass("OptionParser", representation(usage = "character", options = "list",
 OptionParserOption <- setClass("OptionParserOption", representation(short_flag="character", 
                                     long_flag="character",
                                     action="character",
+                                    callback="ANY",
                                     type="character",
                                     dest="character",
                                     default="ANY",
@@ -218,8 +219,11 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'        help="Standard deviation if generator == \"rnorm\" [default %default]")
 #'
 #' @export
-make_option <- function(opt_str, action="store", type=NULL,
+make_option <- function(opt_str, action="store", callback=NULL, type=NULL,
                      dest=NULL, default=NULL, help="", metavar=NULL) {
+
+
+
     # flags
     short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
     if(length(short_flag)) {} else { short_flag <- as.character(NA) }
@@ -256,19 +260,19 @@ make_option <- function(opt_str, action="store", type=NULL,
             metavar <- character(0)
         }
     }
-        
+       
     return(new("OptionParserOption", short_flag=short_flag, long_flag=long_flag,
-                        action=action, type=type, dest=dest, default=default, 
+                        action=action, callback=callback, type=type, dest=dest, default=default, 
                         help=help, metavar=metavar))
 }
 #' @rdname add_make_option
 #' @export
-add_option <- function(object, opt_str, action="store", type=NULL, 
+add_option <- function(object, opt_str, action="store", callback=NULL, type=NULL, 
                     dest=NULL, default=NULL, help="", metavar=NULL) {
     options_list <- object@options
     n_original_options <- length(options_list)
     options_list[[n_original_options + 1]] <- make_option(opt_str=opt_str,
-                                           action=action, type=type, dest=dest,
+                                           action=action, callback=callback, type=type, dest=dest,
                                            default=default, help=help, metavar=metavar)        
     object@options <- options_list
     return(object)
@@ -486,6 +490,11 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
             } else {    
                 options_list[[option@dest]] <- option_value
             }
+            
+            if ( option@action == "callback" && !is.null(option@callback) && is.function(option@callback)){
+                options_list[[option@dest]] <- option@callback(option_value)
+            }
+
         } else {
             if( !is.null(option@default) & is.null(options_list[[option@dest]]) ) {
                 options_list[[option@dest]] <- option@default  
