@@ -61,6 +61,7 @@ setClass("OptionParser", representation(usage = "character", options = "list",
 #'     value if the option is found on the command string.  \dQuote{store_true}
 #'     stores \code{TRUE} if the option is found and \dQuote{store_false} stores
 #'     \code{FALSE} if the option is found.
+#' @slot callback A function that executes after the each option value is fully parsed
 #' @slot type A character string that describes specifies which data type
 #'     should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
 #'     \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
@@ -172,6 +173,7 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'     value if the option is found on the command string.  \dQuote{store_true}
 #'     stores \code{TRUE} if the option is found and \dQuote{store_false} stores
 #'     \code{FALSE} if the option is found.
+#' @param callback A function that executes after the each option value is fully parsed
 #' @param type A character string that describes specifies which data type
 #'     should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
 #'     \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
