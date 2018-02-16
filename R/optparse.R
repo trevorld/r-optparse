@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2015 Trevor L. Davis <trevor.l.davis@stanford.edu>  
+# Copyright (c) 2010-2017 Trevor L. Davis <trevor.l.davis@gmail.com>  
 # Copyright (c) 2015 Rick FitzJohn https://github.com/richfitz
 # Copyright (c) 2013 Kirill Müller https://github.com/krlmlr
 # Copyright (c) 2011 Jim Nikelski <nikelski@bic.mni.mcgill.ca>

@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Copyright 2010-2013 Trevor L Davis <trevor.l.davis@stanford.edu>
+# Copyright 2010-2013 Trevor L Davis <trevor.l.davis@gmail.com>
 # Copyright 2013 Kirill Müller 
 #  
 #  This file is free software: you may copy, redistribute and/or modify it  

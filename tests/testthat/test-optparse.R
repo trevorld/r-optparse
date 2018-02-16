@@ -1,4 +1,4 @@
-# Copyright 2010-2015 Trevor L Davis <trevor.l.davis@stanford.edu>
+# Copyright 2010-2017 Trevor L Davis <trevor.l.davis@gmail.com>
 # Copyright 2013 Kirill Müller
 # Copyright 2008 Allen Day
 #  

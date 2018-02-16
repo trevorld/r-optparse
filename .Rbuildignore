@@ -1,5 +1,3 @@
 CONTRIBUTING
 README.rst
 ^\.travis\.yml$
-^.*\.Rproj$
-^\.Rproj\.user$

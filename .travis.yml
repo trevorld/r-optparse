@@ -2,7 +2,9 @@ language: r
 cache: packages
 r:
     - release
-    - devel
+    - devel 
+os:
+    - linux
 sudo: false
 latex: false
 warnings_are_errors: true
