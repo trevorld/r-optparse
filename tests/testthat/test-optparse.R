@@ -250,6 +250,14 @@ test_that("Can set zero length default options", {
     expect_output(print_help(parser), "Default double")
 })
 
+# Bug found by Matthew Flickinger
+test_that("Can parse empty string", {
+    option_list <- list(make_option(c("", "--string")))
+    parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list)
+    expect_equal(sort_list(parse_args(parser, args = c("--string="))) ,
+                sort_list(list(string="", help=FALSE)))
+})
+
 # # Bug found by Rich FitzJohn 
 # oo <- options()
 # on.exit(options(oo))
