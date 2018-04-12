@@ -221,7 +221,7 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'        help="Standard deviation if generator == \"rnorm\" [default %default]")
 #'
 #' @export
-make_option <- function(opt_str, action="store", callback=NULL, type=NULL,
+make_option <- function(opt_str, action="store", callback=NULL, callback_args=NULL, callback_kwargs=NULL,type=NULL,
                      dest=NULL, default=NULL, help="", metavar=NULL) {
 
 
@@ -269,12 +269,12 @@ make_option <- function(opt_str, action="store", callback=NULL, type=NULL,
 }
 #' @rdname add_make_option
 #' @export
-add_option <- function(object, opt_str, action="store", callback=NULL, type=NULL, 
+add_option <- function(object, opt_str, action="store", callback=NULL, callback_args=NULL, callback_kwargs=NULL, type=NULL, 
                     dest=NULL, default=NULL, help="", metavar=NULL) {
     options_list <- object@options
     n_original_options <- length(options_list)
     options_list[[n_original_options + 1]] <- make_option(opt_str=opt_str,
-                                           action=action, callback=callback, type=type, dest=dest,
+                                           action=action, callback=callback, callback_args=NULL, callback_kwargs=NULL, type=type, dest=dest,
                                            default=default, help=help, metavar=metavar)        
     object@options <- options_list
     return(object)
@@ -491,10 +491,24 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
                 options_list[[option@dest]] <- FALSE
             } else {    
                 options_list[[option@dest]] <- option_value
-            }
-            
-            if ( option@action == "callback" && !is.null(option@callback) && is.function(option@callback)){
-                options_list[[option@dest]] <- option@callback(option_value)
+            }         
+            if (option@action == "callback") {
+                if(!is.function(option@callback))
+                    stop(springf("callback not callable"))
+                if(option@callback_args != NULL && (!is.list(callback_args) && names(callback_args) != NULL)) 
+                    stop(sprinf("callback_args, if supplied, must be ordinary list"))
+                if(option@callback_kwargs != NULL && (!is.list(callback_kwargs) && names(callback_args) == NULL))
+                    stop(sprinf("callback_kwargs, if supplied, must be ordinary list"))
+
+                options_list[[option@dest]] <- option@callback(option, option_value, object, args, kwargs)
+                
+            } else {
+                if(option@callback != NULL)
+                    warning("callback argument is supplied for non-callback action")
+                if(option@callback_args != NULL)
+                    warning("callback_args argument is supplied for non-callback action")
+                if(option@callback_kwargs != NULL)
+                    warning("callback_kwargs argument is supplied for non-callback action")
             }
 
         } else {
