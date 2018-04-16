@@ -86,6 +86,8 @@ OptionParserOption <- setClass("OptionParserOption", representation(short_flag="
                                     long_flag="character",
                                     action="character",
                                     callback="ANY",
+                                    callback_args="ANY",
+                                    callback_kwargs="ANY",
                                     type="character",
                                     dest="character",
                                     default="ANY",
@@ -264,7 +266,8 @@ make_option <- function(opt_str, action="store", callback=NULL, callback_args=NU
     }
        
     return(new("OptionParserOption", short_flag=short_flag, long_flag=long_flag,
-                        action=action, callback=callback, type=type, dest=dest, default=default, 
+                        action=action, callback=callback, callback_args=callback_args, 
+                        callback_kwargs=callback_kwargs, type=type, dest=dest, default=default, 
                         help=help, metavar=metavar))
 }
 #' @rdname add_make_option
@@ -274,7 +277,7 @@ add_option <- function(object, opt_str, action="store", callback=NULL, callback_
     options_list <- object@options
     n_original_options <- length(options_list)
     options_list[[n_original_options + 1]] <- make_option(opt_str=opt_str,
-                                           action=action, callback=callback, callback_args=NULL, callback_kwargs=NULL, type=type, dest=dest,
+                                           action=action, callback=callback, callback_args=callback_args, callback_kwargs=callback_kwargs, type=type, dest=dest,
                                            default=default, help=help, metavar=metavar)        
     object@options <- options_list
     return(object)
@@ -494,13 +497,13 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
             }         
             if (option@action == "callback") {
                 if(!is.function(option@callback))
-                    stop(springf("callback not callable"))
-                if(option@callback_args != NULL && (!is.list(callback_args) && names(callback_args) != NULL)) 
-                    stop(sprinf("callback_args, if supplied, must be ordinary list"))
-                if(option@callback_kwargs != NULL && (!is.list(callback_kwargs) && names(callback_args) == NULL))
-                    stop(sprinf("callback_kwargs, if supplied, must be ordinary list"))
+                    stop(sprintf("callback not callable"))
+                if(option@callback_args != NULL && (!is.list(option@callback_args) && !is.null(option@callback_args) )) 
+                    stop(sprintf("callback_args, if supplied, must be ordinary list"))
+                if(option@callback_kwargs != NULL && (!is.list(option@callback_kwargs) && !is.null(option@callback_args)))
+                    stop(sprintf("callback_kwargs, if supplied, must be ordinary list"))
 
-                options_list[[option@dest]] <- option@callback(option, option_value, object, args, kwargs)
+                options_list[[option@dest]] <- option@callback(option, option@long_flag,  option_value, object, args, kwargs)
                 
             } else {
                 if(option@callback != NULL)
