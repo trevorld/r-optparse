@@ -511,11 +511,11 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
                 
             } else {
                 if(option@callback != NULL)
-                    warning("callback argument is supplied for non-callback action")
+                    stop("callback argument is supplied for non-callback action")
                 if(option@callback_args != NULL)
-                    warning("callback_args argument is supplied for non-callback action")
+                    stop("callback_args argument is supplied for non-callback action")
                 if(option@callback_kwargs != NULL)
-                    warning("callback_kwargs argument is supplied for non-callback action")
+                    stop("callback_kwargs argument is supplied for non-callback action")
             }
 
         } else {
