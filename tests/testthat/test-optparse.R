@@ -32,6 +32,11 @@ option_list <- list(
         help="Standard deviation if generator == \"rnorm\" [default \\%default]")
     )
 
+test_callback <- function (option, flag, option_value, parser, ...) {
+    print(c(flag, option_value))
+    return(option_value * 15 / 2)
+} 
+
 context("Testing make_option")
 test_that("make_option works as expected", {
     expect_equal(make_option("--integer", type="integer", default=5),
@@ -60,8 +65,9 @@ test_that("parse_args works as expected", {
     option_list2 <- list( 
         make_option(c("-n", "--add-numbers"), action="store_true", default=FALSE,
             help="Print line number at the beginning of each line [default]")
-        )
+    )
     parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list2)
+    print(parse_args(parser, args = c("-n"), positional_arguments=TRUE))
     expect_equal(sort_list(parse_args(OptionParser(option_list = option_list), 
                             args = c("--sd=3", "--quietly"))),
                 sort_list(list(sd = 3, verbose = FALSE, help = FALSE, 
@@ -117,11 +123,15 @@ test_that("parse_args works as expected", {
                            positional_arguments="any"), throws_error("must be logical or numeric"))
     expect_that(parse_args(parser, args = c("example.txt"),
                            positional_arguments=1:3), throws_error("must have length 1 or 2"))
+    expect_that(parse_args(parser, args = c("--count=30"),
+                           callback=test_callback, callback_args=3), throws_error("callback_args, if supplied, must be ordinary list")) 
     if(interactive()) {
         expect_that(capture.output(parse_args(parser, args = c("--help"))), throws_error("help requested"))
         expect_that(capture.output(parse_args(parser, args = c("--help"), positional_arguments=c(1, 2))), throws_error("help requested"))
     }
+
 })
+
 # Bug found by Miroslav Posta
 test_that("test using numeric instead of double", {
     option_list_neg <- list( make_option(c("-m", "--mean"), default=0, type="numeric") )
