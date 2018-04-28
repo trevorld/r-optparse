@@ -227,10 +227,7 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'        help="Standard deviation if generator == \"rnorm\" [default %default]")
 #'
 #' @export
-make_option <- function(opt_str, action="store", callback=NULL, callback_args=NULL, callback_kwargs=NULL,type=NULL,
-                     dest=NULL, default=NULL, help="", metavar=NULL) {
-
-
+make_option <- function(opt_str, action="store", callback=NULL, callback_args=NULL, callback_kwargs=NULL,type=NULL, dest=NULL, default=NULL, help="", metavar=NULL) {
 
     # flags
     short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
@@ -500,22 +497,24 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
                 options_list[[option@dest]] <- option_value
             }         
             if (option@action == "callback") {
+
                 if(!is.function(option@callback))
                     stop(sprintf("callback not callable"))
                 if(option@callback_args != NULL && (!is.list(option@callback_args) && !is.null(option@callback_args) )) 
                     stop(sprintf("callback_args, if supplied, must be ordinary list"))
                 if(option@callback_kwargs != NULL && (!is.list(option@callback_kwargs) && !is.null(option@callback_args)))
-                    stop(sprintf("callback_kwargs, if supplied, must be ordinary list"))
-
+                    stop(sprintf("callback_kwargs, if supplied, must be ordinary list")) 
                 options_list[[option@dest]] <- option@callback(option, option@long_flag,  option_value, object, args, kwargs)
-                
+
             } else {
-                if(option@callback != NULL)
-                    stop("callback argument is supplied for non-callback action")
-                if(option@callback_args != NULL)
+                
+                if(!is.null(option@callback))      
+                    stop(sprintf("callback argument is supplied for non-callback action")) 
+                if(!is.null(option@callback_args))
                     stop("callback_args argument is supplied for non-callback action")
-                if(option@callback_kwargs != NULL)
+                if(!is.null(option@callback_kwargs))
                     stop("callback_kwargs argument is supplied for non-callback action")
+                
             }
 
         } else {
