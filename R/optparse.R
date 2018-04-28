@@ -155,14 +155,14 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
                     description=description, epilogue=epilogue))
 }
 
-#'Functions to enable our OptionParser to recognize specific command line
-#'options.
+#' Functions to enable our OptionParser to recognize specific command line 
+#' options.
 #'
-#'\code{add_option} adds a option to a prexisting \code{OptionParser} instance
-#'whereas \code{make_option} is used to create a list of
-#'\code{OptionParserOption} instances that will be used in the
-#'\code{option_list} argument of the \code{OptionParser} function to create a
-#'new \code{OptionParser} instance.
+#' \code{add_option} adds a option to a prexisting \code{OptionParser} instance
+#' whereas \code{make_option} is used to create a list of
+#' \code{OptionParserOption} instances that will be used in the
+#' \code{option_list} argument of the \code{OptionParser} function to create a
+#' new \code{OptionParser} instance.
 #'
 #' @rdname add_make_option
 #' @param object An instance of the \code{OptionParser} class
@@ -177,9 +177,11 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'     value if the option is found on the command string.  \dQuote{store_true}
 #'     stores \code{TRUE} if the option is found and \dQuote{store_false} stores
 #'     \code{FALSE} if the option is found.
-#' @param callback A function that executes after the each option value is fully parsed
+#' @param callback A function that executes after the each option value is fully 
+#'     parsed.
 #' @param callback_args Additional arguments that pass to the callback function. 
-#' @param callback_kwargs Additional named arguments that pass to the callback function.
+#' @param callback_kwargs Additional named arguments that pass to the callback
+#'     function.
 #' @param type A character string that describes specifies which data type
 #'     should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
 #'     \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
@@ -227,7 +229,7 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'        help="Standard deviation if generator == \"rnorm\" [default %default]")
 #'
 #' @export
-make_option <- function(opt_str, action="store", callback=NULL, callback_args=NULL, callback_kwargs=NULL,type=NULL, dest=NULL, default=NULL, help="", metavar=NULL) {
+make_option <- function(opt_str, action="store", callback=NULL, callback_args=NULL, callback_kwargs=NULL, type=NULL, dest=NULL, default=NULL, help="", metavar=NULL) {
 
     # flags
     short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
@@ -284,19 +286,19 @@ add_option <- function(object, opt_str, action="store", callback=NULL, callback_
     return(object)
 }
 
-#'Printing an usage message from an OptionParser object
+#' Printing an usage message from an OptionParser object
 #'
-#'\code{print_help} print an usage message from an OptionParser object, usually
-#'called by \code{parse_args} when it encounters a help option.
+#' \code{print_help} print an usage message from an OptionParser object, usually
+#' called by \code{parse_args} when it encounters a help option.
 #'
 #'
-#'@param object A \code{OptionParser} instance.
-#'@return \code{print_help} uses the \code{cat} function to print out a usage
-#'message.  It returns \code{invisible(NULL)}.
-#'@author Trevor Davis.
+#' @param object A \code{OptionParser} instance.
+#' @return \code{print_help} uses the \code{cat} function to print out a usage
+#' message.  It returns \code{invisible(NULL)}.
+#' @author Trevor Davis.
 #'
-#'@seealso \code{{parse_args}} \code{{OptionParser}}
-#'@references Python's \code{optparse} library, which inspired this package,
+#' @seealso \code{{parse_args}} \code{{OptionParser}}
+#' @references Python's \code{optparse} library, which inspired this package,
 #'     is described here: \url{http://docs.python.org/library/optparse.html}
 #' @export
 print_help <- function(object) {
@@ -504,16 +506,16 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
                     stop(sprintf("callback_args, if supplied, must be ordinary list"))
                 if(option@callback_kwargs != NULL && (!is.list(option@callback_kwargs) && !is.null(option@callback_args)))
                     stop(sprintf("callback_kwargs, if supplied, must be ordinary list")) 
-                options_list[[option@dest]] <- option@callback(option, option@long_flag,  option_value, object, args, kwargs)
+                options_list[[option@dest]] <- option@callback(option, option@long_flag,  option_value, object, args, option@callbackkwargs)
 
             } else {
                 
                 if(!is.null(option@callback))      
                     stop(sprintf("callback argument is supplied for non-callback action")) 
                 if(!is.null(option@callback_args))
-                    stop("callback_args argument is supplied for non-callback action")
+                    stop(sprintf("callback_args argument is supplied for non-callback action"))
                 if(!is.null(option@callback_kwargs))
-                    stop("callback_kwargs argument is supplied for non-callback action")
+                    stop(sprintf("callback_kwargs argument is supplied for non-callback action"))
                 
             }
 

@@ -3,14 +3,16 @@
 \name{make_option}
 \alias{make_option}
 \alias{add_option}
-\title{Functions to enable our OptionParser to recognize specific command line
+\title{Functions to enable our OptionParser to recognize specific command line 
 options.}
 \usage{
-make_option(opt_str, action = "store", callback = NULL, type = NULL,
+make_option(opt_str, action = "store", callback = NULL,
+  callback_args = NULL, callback_kwargs = NULL, type = NULL,
   dest = NULL, default = NULL, help = "", metavar = NULL)
 
 add_option(object, opt_str, action = "store", callback = NULL,
-  type = NULL, dest = NULL, default = NULL, help = "", metavar = NULL)
+  callback_args = NULL, callback_kwargs = NULL, type = NULL,
+  dest = NULL, default = NULL, help = "", metavar = NULL)
 }
 \arguments{
 \item{opt_str}{A character vector containing the string of the desired long
@@ -26,7 +28,13 @@ value if the option is found on the command string.  \dQuote{store_true}
 stores \code{TRUE} if the option is found and \dQuote{store_false} stores
 \code{FALSE} if the option is found.}
 
-\item{callback}{A function that executes after the each option value is fully parsed}
+\item{callback}{A function that executes after the each option value is fully 
+parsed.}
+
+\item{callback_args}{Additional arguments that pass to the callback function.}
+
+\item{callback_kwargs}{Additional named arguments that pass to the callback
+function.}
 
 \item{type}{A character string that describes specifies which data type
 should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
