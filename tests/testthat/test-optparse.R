@@ -15,7 +15,6 @@
 #  You should have received a copy of the GNU General Public License  
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
 
-
 option_list <- list( 
     make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
         help="Print extra output [default]"),
@@ -29,7 +28,17 @@ option_list <- list(
     make_option("--mean", default=0, 
         help="Mean if generator == \"rnorm\" [default \\%default]"),
     make_option("--sd", default=1, metavar="standard deviation",
-        help="Standard deviation if generator == \"rnorm\" [default \\%default]")
+        help="Standard deviation if generator == \"rnorm\" [default \\%default]") 
+    )
+
+ordinary_callback <- function (option, flag, option_value, parser, ...) {
+    print(c(flag, option_value))
+    return(option_value * option_value)
+} 
+
+option_list_callback <- list(
+    make_option(c("-s", "--squared_distance"), action="callback", type="integer",
+        callback=ordinary_callback, help="Saured distance between two points")
     )
 
 context("Testing make_option")
@@ -60,8 +69,10 @@ test_that("parse_args works as expected", {
     option_list2 <- list( 
         make_option(c("-n", "--add-numbers"), action="store_true", default=FALSE,
             help="Print line number at the beginning of each line [default]")
-        )
+    )
     parser <- OptionParser(usage = "\\%prog [options] file", option_list=option_list2)
+    parser_callback <- OptionParser(option_list=option_list_callback)
+    print(parse_args(parser, args = c("-n"), positional_arguments=TRUE))
     expect_equal(sort_list(parse_args(OptionParser(option_list = option_list), 
                             args = c("--sd=3", "--quietly"))),
                 sort_list(list(sd = 3, verbose = FALSE, help = FALSE, 
@@ -117,11 +128,15 @@ test_that("parse_args works as expected", {
                            positional_arguments="any"), throws_error("must be logical or numeric"))
     expect_that(parse_args(parser, args = c("example.txt"),
                            positional_arguments=1:3), throws_error("must have length 1 or 2"))
+    expect_equal(parse_args(parser_callback, args = c("--squared_distance=16"))$squared_distance, 256)
+    
     if(interactive()) {
         expect_that(capture.output(parse_args(parser, args = c("--help"))), throws_error("help requested"))
         expect_that(capture.output(parse_args(parser, args = c("--help"), positional_arguments=c(1, 2))), throws_error("help requested"))
     }
+
 })
+
 # Bug found by Miroslav Posta
 test_that("test using numeric instead of double", {
     option_list_neg <- list( make_option(c("-m", "--mean"), default=0, type="numeric") )
