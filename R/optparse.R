@@ -261,6 +261,7 @@ make_option <- function(opt_str, action="store", type=NULL,
                         action=action, type=type, dest=dest, default=default, 
                         help=help, metavar=metavar))
 }
+
 #' @rdname add_make_option
 #' @export
 add_option <- function(object, opt_str, action="store", type=NULL, 
@@ -274,20 +275,19 @@ add_option <- function(object, opt_str, action="store", type=NULL,
     return(object)
 }
 
-#'Printing an usage message from an OptionParser object
-#'
-#'\code{print_help} print an usage message from an OptionParser object, usually
-#'called by \code{parse_args} when it encounters a help option.
-#'
-#'
-#'@param object A \code{OptionParser} instance.
-#'@return \code{print_help} uses the \code{cat} function to print out a usage
-#'message.  It returns \code{invisible(NULL)}.
-#'@author Trevor Davis.
-#'
-#'@seealso \code{{parse_args}} \code{{OptionParser}}
-#'@references Python's \code{optparse} library, which inspired this package,
-#'     is described here: \url{http://docs.python.org/library/optparse.html}
+#' Printing an usage message from an OptionParser object
+#' 
+#' \code{print_help} print an usage message from an OptionParser object, usually
+#' called by \code{parse_args} when it encounters a help option.
+#' 
+#' @param object A \code{OptionParser} instance.
+#' @return \code{print_help} uses the \code{cat} function to print out a usage
+#'         message.  It returns \code{invisible(NULL)}.
+#' @author Trevor Davis.
+#' 
+#' @seealso \code{{parse_args}} \code{{OptionParser}}
+#' @references Python's \code{optparse} library, which inspired this package,
+#'      is described here: \url{http://docs.python.org/library/optparse.html}
 #' @export
 print_help <- function(object) {
     cat(object@usage, fill = TRUE)
