@@ -1,3 +1,5 @@
 CONTRIBUTING
 README.rst
 ^\.travis\.yml$
+^appveyor\.yml$
+revdep

@@ -25,12 +25,6 @@ value if the option is found on the command string.  \dQuote{store_true}
 stores \code{TRUE} if the option is found and \dQuote{store_false} stores
 \code{FALSE} if the option is found.}
 
-\item{\code{callback}}{A function that executes after the each option value is fully parsed}
-
-\item{\code{callback_args}}{Additional arguments that pass to the callback function.}
-
-\item{\code{callback_kwargs}}{Additional named arguments that pass to the callback function.}
-
 \item{\code{type}}{A character string that describes specifies which data type
 should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
 \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
@@ -52,6 +46,10 @@ substituted by the value of \code{default}.}
 
 \item{\code{metavar}}{A character string that stands in for the option argument when
 printing help text.  Default is the value of \code{dest}.}
+
+\item{\code{callback}}{A function that executes after the each option value is fully parsed}
+
+\item{\code{callback_args}}{Additional arguments that pass to the callback function.}
 }}
 
 \seealso{

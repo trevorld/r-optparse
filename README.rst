@@ -7,7 +7,11 @@ optparse
 
 .. image:: https://travis-ci.org/trevorld/optparse.png?branch=master
     :target: https://travis-ci.org/trevorld/optparse
-    :alt: Build Status
+    :alt: Travis-CI Build Status
+
+.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/optparse?branch=master&svg=true 
+    :target: https://ci.appveyor.com/project/trevorld/optparse
+    :alt: AppVeyor Build Status
 
 .. image:: https://img.shields.io/codecov/c/github/trevorld/optparse/master.svg
     :target: https://codecov.io/github/trevorld/optparse?branch=master
