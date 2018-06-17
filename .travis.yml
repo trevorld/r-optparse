@@ -5,6 +5,11 @@ r:
     - devel 
 os:
     - linux
+    - osx
+matrix:
+    exclude:
+        r: devel
+        os: osx
 sudo: false
 latex: false
 warnings_are_errors: true
