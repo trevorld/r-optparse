@@ -3,3 +3,4 @@
 *.rst
 .Rproj.user
 /.Rhistory
+revdep

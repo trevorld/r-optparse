@@ -3,14 +3,16 @@
 \name{make_option}
 \alias{make_option}
 \alias{add_option}
-\title{Functions to enable our OptionParser to recognize specific command line
+\title{Functions to enable our OptionParser to recognize specific command line 
 options.}
 \usage{
 make_option(opt_str, action = "store", type = NULL, dest = NULL,
-  default = NULL, help = "", metavar = NULL)
+  default = NULL, help = "", metavar = NULL, callback = NULL,
+  callback_args = NULL)
 
 add_option(object, opt_str, action = "store", type = NULL, dest = NULL,
-  default = NULL, help = "", metavar = NULL)
+  default = NULL, help = "", metavar = NULL, callback = NULL,
+  callback_args = NULL)
 }
 \arguments{
 \item{opt_str}{A character vector containing the string of the desired long
@@ -47,6 +49,13 @@ substituted by the value of \code{default}.}
 
 \item{metavar}{A character string that stands in for the option argument when
 printing help text.  Default is the value of \code{dest}.}
+
+\item{callback}{A function that executes after the each option value is fully 
+parsed.  It's value is assigned to the option and its arguments are
+the option S4 object, the long flag string, the value of the option, 
+the parser S4 object, and \code{...}.}
+
+\item{callback_args}{A list of additional arguments passed to callback function (via \code{do.call}).}
 
 \item{object}{An instance of the \code{OptionParser} class}
 }

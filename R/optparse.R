@@ -78,6 +78,8 @@ setClass("OptionParser", representation(usage = "character", options = "list",
 #'     substituted by the value of \code{default}.
 #' @slot metavar A character string that stands in for the option argument when
 #'     printing help text.  Default is the value of \code{dest}.
+#' @slot callback A function that executes after the each option value is fully parsed
+#' @slot callback_args Additional arguments that pass to the callback function. 
 #' @seealso \code{\link{make_option}}
 #' @exportClass OptionParserOption
 #' @export OptionParserOption
@@ -88,7 +90,9 @@ OptionParserOption <- setClass("OptionParserOption", representation(short_flag="
                                     dest="character",
                                     default="ANY",
                                     help="character",
-                                    metavar="character"),)
+                                    metavar="character",
+                                    callback="ANY",
+                                    callback_args="ANY"))
 
 #' A function to create an instance of a parser object
 #'
@@ -149,14 +153,14 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
                     description=description, epilogue=epilogue))
 }
 
-#'Functions to enable our OptionParser to recognize specific command line
-#'options.
+#' Functions to enable our OptionParser to recognize specific command line 
+#' options.
 #'
-#'\code{add_option} adds a option to a prexisting \code{OptionParser} instance
-#'whereas \code{make_option} is used to create a list of
-#'\code{OptionParserOption} instances that will be used in the
-#'\code{option_list} argument of the \code{OptionParser} function to create a
-#'new \code{OptionParser} instance.
+#' \code{add_option} adds a option to a prexisting \code{OptionParser} instance
+#' whereas \code{make_option} is used to create a list of
+#' \code{OptionParserOption} instances that will be used in the
+#' \code{option_list} argument of the \code{OptionParser} function to create a
+#' new \code{OptionParser} instance.
 #'
 #' @rdname add_make_option
 #' @param object An instance of the \code{OptionParser} class
@@ -188,6 +192,11 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'     substituted by the value of \code{default}.
 #' @param metavar A character string that stands in for the option argument when
 #'     printing help text.  Default is the value of \code{dest}.
+#' @param callback A function that executes after the each option value is fully 
+#'     parsed.  It's value is assigned to the option and its arguments are
+#'     the option S4 object, the long flag string, the value of the option, 
+#'     the parser S4 object, and \code{...}.
+#' @param callback_args A list of additional arguments passed to callback function (via \code{do.call}).
 #' @return Both \code{make_option} and \code{add_option} return instances of
 #'     class \code{OptionParserOption}.
 #' @author Trevor Davis.
@@ -218,8 +227,8 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'        help="Standard deviation if generator == \"rnorm\" [default %default]")
 #'
 #' @export
-make_option <- function(opt_str, action="store", type=NULL,
-                     dest=NULL, default=NULL, help="", metavar=NULL) {
+make_option <- function(opt_str, action="store", type=NULL, dest=NULL, default=NULL, help="", metavar=NULL, callback=NULL, callback_args=NULL) {
+
     # flags
     short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
     if(length(short_flag)) {} else { short_flag <- as.character(NA) }
@@ -231,16 +240,16 @@ make_option <- function(opt_str, action="store", type=NULL,
         if( action %in% c("store_true", "store_false") ) {
             type <- "logical"
         }
-        else {
-            if( action %in% c("store") ) {
-                if (is.null(default)) {
-                    type <- "character"
-                } else {
-                    type <- typeof(default)
-                }
+        else if (action == "store") {
+            if (is.null(default)) {
+                type <- "character"
+            } else {
+                type <- typeof(default)
             }
         }
     }
+    if (is.null(type)) 
+        stop("Option type cannot be inferred. It or a default argument must be specified.")
     if (type == "numeric") { type <- "double" }
     # default
     if((type != typeof(default)) & !is.null(default)) {
@@ -256,37 +265,49 @@ make_option <- function(opt_str, action="store", type=NULL,
             metavar <- character(0)
         }
     }
-        
+    if (action == "callback") {            
+        if(!is.function(callback))
+            warning(sprintf("callback argument is not a function"))
+    } else {
+        if(!is.null(callback))      
+            warning(sprintf("callback argument is supplied for non-callback action")) 
+        if(!is.null(callback_args))      
+            warning(sprintf("callback_args argument is supplied for non-callback action")) 
+    }
+       
     return(new("OptionParserOption", short_flag=short_flag, long_flag=long_flag,
                         action=action, type=type, dest=dest, default=default, 
-                        help=help, metavar=metavar))
+                        help=help, metavar=metavar, 
+                        callback=callback, callback_args=callback_args))
 }
+
 #' @rdname add_make_option
 #' @export
 add_option <- function(object, opt_str, action="store", type=NULL, 
-                    dest=NULL, default=NULL, help="", metavar=NULL) {
+                    dest=NULL, default=NULL, help="", metavar=NULL, 
+                    callback=NULL, callback_args=NULL) {
     options_list <- object@options
     n_original_options <- length(options_list)
     options_list[[n_original_options + 1]] <- make_option(opt_str=opt_str,
                                            action=action, type=type, dest=dest,
-                                           default=default, help=help, metavar=metavar)        
+                                           default=default, help=help, metavar=metavar,
+                                           callback=callback, callback_args=callback_args)        
     object@options <- options_list
     return(object)
 }
 
-#'Printing an usage message from an OptionParser object
+#' Printing an usage message from an OptionParser object
+#' 
+#' \code{print_help} print an usage message from an OptionParser object, usually
+#' called by \code{parse_args} when it encounters a help option.
 #'
-#'\code{print_help} print an usage message from an OptionParser object, usually
-#'called by \code{parse_args} when it encounters a help option.
+#' @param object A \code{OptionParser} instance.
+#' @return \code{print_help} uses the \code{cat} function to print out a usage
+#' message.  It returns \code{invisible(NULL)}.
+#' @author Trevor Davis.
 #'
-#'
-#'@param object A \code{OptionParser} instance.
-#'@return \code{print_help} uses the \code{cat} function to print out a usage
-#'message.  It returns \code{invisible(NULL)}.
-#'@author Trevor Davis.
-#'
-#'@seealso \code{{parse_args}} \code{{OptionParser}}
-#'@references Python's \code{optparse} library, which inspired this package,
+#' @seealso \code{{parse_args}} \code{{OptionParser}}
+#' @references Python's \code{optparse} library, which inspired this package,
 #'     is described here: \url{http://docs.python.org/library/optparse.html}
 #' @export
 print_help <- function(object) {
@@ -485,7 +506,16 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
                 options_list[[option@dest]] <- FALSE
             } else {    
                 options_list[[option@dest]] <- option_value
-            }
+            }         
+            if (option@action == "callback") {
+
+                callback_fn <- function(...) {
+                    option@callback(option, option@long_flag,  option_value, object, ...)
+                }
+                options_list[[option@dest]] <- do.call(callback_fn, option@callback_args)
+
+            } 
+
         } else {
             if( !is.null(option@default) & is.null(options_list[[option@dest]]) ) {
                 options_list[[option@dest]] <- option@default  

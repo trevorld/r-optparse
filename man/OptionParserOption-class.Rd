@@ -46,6 +46,10 @@ substituted by the value of \code{default}.}
 
 \item{\code{metavar}}{A character string that stands in for the option argument when
 printing help text.  Default is the value of \code{dest}.}
+
+\item{\code{callback}}{A function that executes after the each option value is fully parsed}
+
+\item{\code{callback_args}}{Additional arguments that pass to the callback function.}
 }}
 
 \seealso{
