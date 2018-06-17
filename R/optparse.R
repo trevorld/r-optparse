@@ -274,6 +274,8 @@ make_option <- function(opt_str, action="store", type=NULL, dest=NULL, default=N
         if(!is.null(callback_args))      
             warning(sprintf("callback_args argument is supplied for non-callback action")) 
     }
+    if (is.null(callback_args))
+        callback_args <- list()
        
     return(new("OptionParserOption", short_flag=short_flag, long_flag=long_flag,
                         action=action, type=type, dest=dest, default=default, 

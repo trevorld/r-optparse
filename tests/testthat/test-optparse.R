@@ -143,6 +143,11 @@ test_that("callback works as expected", {
     opts <- parse_args(parser2, args = c("--value=2"))
     expect_equal(opts$value, 8)
 
+    parser3 <- add_option(parser0, c("-v", "--value"), type="integer",
+                         action="callback", callback=callback_fn)
+    opts <- parse_args(parser3, args = c("--value=2"))
+    expect_equal(opts$value, 4)
+
     expect_warning(add_option(parser0, "--warning", callback=as.list), "callback argument is supplied for non-callback action")
     expect_warning(add_option(parser0, "--warning", callback_args=list(3,b=4)), "callback_args argument is supplied for non-callback action")
     expect_error(add_option(parser0, "--warning", action="callback", callback="hello"), "Option type cannot be inferred")
