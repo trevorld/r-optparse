@@ -6,7 +6,7 @@ optparse 1.6.0
 optparse 1.5.0
 ==============
 
-* If ``interactive() == FALSE`` and ``print_help_and_exit == TRUE'' then
+* If ``interactive() == FALSE`` and ``print_help_and_exit == TRUE`` then
   ``optparse`` will now call ``quit(status=0)`` instead of ``quit(status=1)`` after
   printing the help message (this matches behaviour of the python package).
 * Better help message when forgetting to set ``add_help_option=FALSE`` when
