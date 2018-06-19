@@ -10,7 +10,7 @@ optparse 1.5.0
   ``optparse`` will now call ``quit(status=0)`` instead of ``quit(status=1)`` after
   printing the help message (this matches behaviour of the python package).
 * Better help message when forgetting to set ``add_help_option=FALSE`` when
-  defining an ``-h`` or ``-help`` flag.  Thanks Jeff P. Bruce for bug report.
+  defining an ``-h`` or ``--help`` flag.  Thanks Jeff P. Bruce for bug report.
 * Increment ``getopt`` requirement so that empty strings are parsed correctly.
   Thanks Matthew Flickinger for bug report.
 
