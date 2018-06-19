@@ -9,7 +9,7 @@ optparse 1.5.0
 * If ``interactive() == FALSE`` and ``print_help_and_exit == TRUE`` then
   ``optparse`` will now call ``quit(status=0)`` instead of ``quit(status=1)`` after
   printing the help message (this matches behaviour of the python package).
-* Better help message when forgetting to set ``add_help_option=FALSE`` when
+* Better error message when forgetting to set ``add_help_option=FALSE`` when
   defining an ``-h`` or ``--help`` flag.  Thanks Jeff P. Bruce for bug report.
 * Increment ``getopt`` requirement so that empty strings are parsed correctly.
   Thanks Matthew Flickinger for bug report.
@@ -17,7 +17,7 @@ optparse 1.5.0
 optparse 1.4.4
 ==============
 
-* Minor documentation fixes.  Thanks jjramsey and Daeyoung Kim for bug reports.
+* Minor documentation fixes.  Thanks J. J. Ramsey and Daeyoung Kim for bug reports.
 
 optparse 1.4.1
 ==============
@@ -27,21 +27,21 @@ optparse 1.4.1
 optparse 1.4.0
 ==============
 
-* parse_args now supports convert_hyphens_to_underscores argument which converts any hyphens to underscores 
+* ``parse_args`` now supports ``convert_hyphens_to_underscores`` argument which converts any hyphens to underscores 
   when returning the list of options
-* Now includes the convenience function parse_args2 which wraps parse_args with positional_arguments set to TRUE
-  and convert_hyphens_to_underscores set to TRUE.
+* Now includes the convenience function ``parse_args2`` which wraps ``parse_args`` with ``positional_arguments`` set to ``TRUE``
+  and ``convert_hyphens_to_underscores`` set to ``TRUE``.
 
 optparse 1.3.1
 ==============
 
-* optparse should no longer give any warnings when options(warnPartialMatchArgs=TRUE).  Thanks Rich FitzJohn for patch.
-* print_help no longer throws an error if we have a default argument of length zero.  Thanks Benjamin Tyner for bug report.
+* ``optparse`` should no longer give any warnings when ``options(warnPartialMatchArgs=TRUE)``.  Thanks Rich FitzJohn for patch.
+* ``print_help`` no longer throws an error if we have a default argument of length zero.  Thanks Benjamin Tyner for bug report.
 
 optparse 1.3.0
 ==============
 
-* OptionParser and OptionParserOption are now exported.  Thanks Peter Humburg for patch.
+* ``OptionParser`` and ``OptionParserOption`` S4 classes are now exported.  Thanks Peter Humburg for patch.
 
 optparse 1.2.0
 ==============
