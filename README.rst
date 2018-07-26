@@ -21,6 +21,10 @@ optparse
     :target: https://cran.r-project.org/package=optparse
     :alt: RStudio CRAN mirror downloads
 
+.. image:: http://www.repostatus.org/badges/latest/active.svg
+   :alt: Project Status: Active – The project has reached a stable, usable state and is being actively developed.
+   :target: http://www.repostatus.org/#active
+
 A pure R language command line parser inspired by Python's 'optparse' library to
 be used with Rscript to write "#!" shebang scripts that accept short and
 long flag/options.
