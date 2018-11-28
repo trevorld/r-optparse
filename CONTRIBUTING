@@ -1,8 +1,12 @@
-Pull requests are welcome but not guaranteed to be accepted (especially if they break reverse compatibility).
-It might be a good idea to submit an issue asking whether such a feature would be accepted before writing a patch.
+Pull requests are welcome but not guaranteed to be accepted (especially if they
+break reverse compatibility).  It might be a good idea to submit an issue
+asking whether such a feature would be accepted before writing a patch.
 
-When submitting a patch please state that you are giving me an non-exclusive Unlimited license to your contribution 
-so I have the flexibility of updating the package license in the future while you retain the right to use your code 
-on other projects as you see fit as well as the right to fork the version of package that you contributed to.
+When submitting a patch please state that you are giving me an non-exclusive
+Unlimited license to your contribution so I have the flexibility of updating
+the package license in the future while you retain the right to use your code
+on other projects as you see fit as well as the right to fork the version of
+package that you contributed to.
 
-Additionally, although not required, adding a unit test illustrating a bug or testing the new feature would be much appreciated.
+Additionally, although not required, adding a unit test illustrating a bug or
+testing the new feature would be much appreciated.

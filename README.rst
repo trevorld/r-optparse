@@ -49,7 +49,7 @@ examples
 
 A simple example::
 
-    > suppressPackageStartupMessages(library("optparse"))
+    > library("optparse")
     > parser <- OptionParser()
     > parser <- add_option(parser, c("-v", "--verbose"), action="store_true", 
     >                 default=TRUE, help="Print extra output [default]")
@@ -73,7 +73,7 @@ so it typically doesn't need to be explicitly set if writing an Rscript.
 
 One can also equivalently make options in a list::
 
-    > suppressPackageStartupMessages(library("optparse"))
+    > library("optparse")
     > option_list <- list( 
     >     make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
     >         help="Print extra output [default]"),
@@ -113,6 +113,11 @@ One can also equivalently make options in a list::
     
     	-c NUMBER, --count=NUMBER
     		Number of random normals to generate [default 5]
+
+
+    Error in parse_args(parser, args = c("--help")) : help requested
+
+Note by default when ``optparse::parse_args`` sees a ``--help`` flag it will first print out a usage message and then either throw an error in interactive use or call ``quit`` in non-interactive use (i.e. when used within an Rscript called by a shell).  To disable the error/quit set the argument ``print_help_and_exit`` to ``FALSE`` in ``parse_args`` and to simply print out the usage string one can also use the function ``print_usage``.
 
 ``optparse`` has limited positional argument support, other command-line parsers for R such as ``argparse``
 have richer positional argument support::

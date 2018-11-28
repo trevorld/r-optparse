@@ -1,3 +1,8 @@
+optparse 1.6.1
+==============
+
+* Improve accuracy of README (#27).  Thanks Alex Penson for bug report.
+
 optparse 1.6.0
 ==============
 
