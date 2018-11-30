@@ -1,20 +1,20 @@
-optparse
-========
+optparse: Command line optional argument parser
+===============================================
 
 .. image:: https://www.r-pkg.org/badges/version/optparse
     :target: https://cran.r-project.org/package=optparse
     :alt: CRAN Status Badge
 
-.. image:: https://travis-ci.org/trevorld/optparse.png?branch=master
-    :target: https://travis-ci.org/trevorld/optparse
+.. image:: https://travis-ci.org/trevorld/r-optparse.svg?branch=master
+    :target: https://travis-ci.org/trevorld/r-optparse
     :alt: Travis-CI Build Status
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/optparse?branch=master&svg=true 
-    :target: https://ci.appveyor.com/project/trevorld/optparse
+.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/r-optparse?branch=master&svg=true 
+    :target: https://ci.appveyor.com/project/trevorld/r-optparse
     :alt: AppVeyor Build Status
 
-.. image:: https://img.shields.io/codecov/c/github/trevorld/optparse/master.svg
-    :target: https://codecov.io/github/trevorld/optparse?branch=master
+.. image:: https://img.shields.io/codecov/c/github/trevorld/r-optparse/master.svg
+    :target: https://codecov.io/github/trevorld/r-optparse?branch=master
     :alt: Coverage Status
 
 .. image:: https://cranlogs.r-pkg.org/badges/optparse
@@ -29,12 +29,16 @@ A pure R language command line parser inspired by Python's 'optparse' library to
 be used with Rscript to write "#!" shebang scripts that accept short and
 long flag/options.
 
-To install the development version use::
+To install the last version released on CRAN use the following command::
 
-    devtools::install_github("optparse", "trevorld")
+    > install.packages("optparse")
+
+To install the development version use the following command::
+
+    > remotes::install_github("trevorld/r-optparse")
 
 dependencies
-============
+------------
 
 This package depends on the R package ``getopt``.
 
@@ -42,10 +46,10 @@ To run the unit tests you will need the suggested R package ``testthat`` and in
 order to build the vignette you will need the suggested R package ``knitr`` 
 which in turn probably requires the system tool ``pandoc``::
 
-    sudo apt-get install pandoc
+    $ sudo apt-get install pandoc
 
 examples
-========
+--------
 
 A simple example::
 
