@@ -21,9 +21,6 @@ optparse: Command line optional argument parser
     :target: https://cran.r-project.org/package=optparse
     :alt: RStudio CRAN mirror downloads
 
-.. image:: http://www.repostatus.org/badges/latest/inactive.svg
-   :alt: Project Status: Inactive: The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.
-   :target: http://www.repostatus.org/#inactive
 
 A pure R language command line parser inspired by Python's 'optparse' library to
 be used with Rscript to write "#!" shebang scripts that accept short and
