@@ -1,4 +1,6 @@
 CONTRIBUTING
+Rakefile
+README.Rrst
 README.rst
 ^\.travis\.yml$
 ^\.appveyor\.yml$
