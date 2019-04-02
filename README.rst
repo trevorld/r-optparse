@@ -131,24 +131,24 @@ One can also equivalently make options in a list:
 
 ::
 
-    Usage: %prog [options]
-    
-    
-    Options:
-    	-h, --help
-    		Show this help message and exit
-    
-    	-v, --verbose
-    		Print extra output [default]
-    
-    	-q, --quietly
-    		Print little output
-    
-    	-c NUMBER, --count=NUMBER
-    		Number of random normals to generate [default 5]
-
-
-    Error in parse_args(parser, args = c("--help")) : help requested
+    ## Usage: %prog [options]
+    ## 
+    ## 
+    ## Options:
+    ## 	-h, --help
+    ## 		Show this help message and exit
+    ## 
+    ## 	-v, --verbose
+    ## 		Print extra output [default]
+    ## 
+    ## 	-q, --quietly
+    ## 		Print little output
+    ## 
+    ## 	-c NUMBER, --count=NUMBER
+    ## 		Number of random normals to generate [default 5]
+    ##
+    ##
+    ## Error in parse_args(parser, args = c("--help")) : help requested
 
 Note by default when ``optparse::parse_args`` sees a ``--help`` flag it will first print out a usage message and then either throw an error in interactive use or call ``quit`` in non-interactive use (i.e. when used within an Rscript called by a shell).  To disable the error/quit set the argument ``print_help_and_exit`` to ``FALSE`` in ``parse_args`` and to simply print out the usage string one can also use the function ``print_usage``.
 
