@@ -1,3 +1,9 @@
+optparse 1.6.2
+==============
+
+* Fixs a parsing bug when ``action=="callback"`` and ``positional_argument==TRUE``.
+  Thanks Ni Huang for bug report.
+
 optparse 1.6.1
 ==============
 

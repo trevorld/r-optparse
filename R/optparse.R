@@ -580,7 +580,7 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
             for (ii in seq_along(object@options)) {
                 option <- object@options[[ii]]
                 if(option@long_flag == argument)
-                    return(option@action == "store") 
+                    return(.option_needs_argument(option)) 
             }
         }
     } else { # is a short flag
@@ -588,7 +588,7 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
         for (ii in seq_along(object@options)) {
             option <- object@options[[ii]]
             if(!is.na(option@short_flag) && option@short_flag == last_flag)
-                return(option@action == "store") 
+                return(.option_needs_argument(option)) 
         }
     }
 }
@@ -631,7 +631,7 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
         option <- object@options[[ii]]
         option_strings <- c(option_strings, option@short_flag)
         option_strings <- c(option_strings, option@long_flag)
-        if (option@action == "store") {
+        if (.option_needs_argument(option)) {
             n_arguments <- c(n_arguments, 1, 1)
         } else {
             n_arguments <- c(n_arguments, 0, 0)
@@ -644,11 +644,20 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
 .convert_to_getopt <- function(object) {
     short_flag <- sub("^-", "", object@short_flag)
     long_flag <- sub("^--", "", object@long_flag)
-    if( object@action %in% c("store_true", "store_false") ) {
-        argument <- 0
-    } else {
-        argument <- 1
-    }
+    argument <- ifelse(.option_needs_argument(object), 1, 0)
     return( c( long_flag, short_flag, argument, object@type, object@help) )
 }
 
+.option_needs_argument <- function(option) {
+    if (option@action == "store") {
+        TRUE
+    } else if (option@action == "callback") {
+        if (is.null(option@type)) {
+            FALSE
+        } else {
+            TRUE
+        }
+    } else {
+        FALSE
+    }
+}

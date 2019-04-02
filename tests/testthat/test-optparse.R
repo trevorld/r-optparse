@@ -1,4 +1,4 @@
-# Copyright 2010-2017 Trevor L Davis <trevor.l.davis@gmail.com>
+# Copyright 2010-2019 Trevor L Davis <trevor.l.davis@gmail.com>
 # Copyright 2013 Kirill Müller
 # Copyright 2008 Allen Day
 #  
@@ -152,6 +152,11 @@ test_that("callback works as expected", {
     expect_warning(add_option(parser0, "--warning", callback_args=list(3,b=4)), "callback_args argument is supplied for non-callback action")
     expect_error(add_option(parser0, "--warning", action="callback", callback="hello"), "Option type cannot be inferred")
     expect_warning(add_option(parser0, "--warning", action="callback", type="numeric", callback="hello"), "callback argument is not a function")
+
+    # Bug found by Ni Huang
+    opts <- parse_args(parser1, positional_argument=TRUE, args=c("-s", "3"))
+    expect_equal(opts$options$squared_distance, 9)
+
 })
 
 # Bug found by Miroslav Posta
