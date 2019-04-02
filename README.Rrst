@@ -57,34 +57,19 @@ examples
 
 A simple example:
 
+.. {r simple_example}
 
-.. sourcecode:: r
-    
-
-        library("optparse")
-        parser <- OptionParser()
-        parser <- add_option(parser, c("-v", "--verbose"), action="store_true", 
-                        default=TRUE, help="Print extra output [default]")
-        parser <- add_option(parser, c("-q", "--quietly"), action="store_false", 
-                            dest="verbose", help="Print little output")
-        parser <- add_option(parser, c("-c", "--count"), type="integer", default=5, 
-                        help="Number of random normals to generate [default %default]",
-                        metavar="number")
-        parse_args(parser, args = c("--quietly", "--count=15"))
-
-
-::
-
-    ## $help
-    ## [1] FALSE
-    ## 
-    ## $verbose
-    ## [1] FALSE
-    ## 
-    ## $count
-    ## [1] 15
-
-
+    library("optparse")
+    parser <- OptionParser()
+    parser <- add_option(parser, c("-v", "--verbose"), action="store_true", 
+                    default=TRUE, help="Print extra output [default]")
+    parser <- add_option(parser, c("-q", "--quietly"), action="store_false", 
+                        dest="verbose", help="Print little output")
+    parser <- add_option(parser, c("-c", "--count"), type="integer", default=5, 
+                    help="Number of random normals to generate [default %default]",
+                    metavar="number")
+    parse_args(parser, args = c("--quietly", "--count=15"))
+.. ..
 
 
 Note that the ``args`` argument of ``parse_args`` default is ``commandArgs(trailing=TRUE)``
@@ -92,10 +77,7 @@ so it typically doesn't need to be explicitly set if writing an Rscript.
 
 One can also equivalently make options in a list:
 
-
-.. sourcecode:: r
-    
-
+.. {r list_example}
     library("optparse")
     option_list <- list( 
         make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
@@ -108,20 +90,7 @@ One can also equivalently make options in a list:
         )
                                         
     parse_args(OptionParser(option_list=option_list), args = c("--verbose", "--count=11"))
-
-
-::
-
-    ## $verbose
-    ## [1] TRUE
-    ## 
-    ## $count
-    ## [1] 11
-    ## 
-    ## $help
-    ## [1] FALSE
-
-
+.. ..
 
 ``optparse`` automatically creates a help option:
 
@@ -155,54 +124,13 @@ Note by default when ``optparse::parse_args`` sees a ``--help`` flag it will fir
 ``optparse`` has limited positional argument support, other command-line parsers for R such as ``argparse``
 have richer positional argument support:
 
-
-.. sourcecode:: r
-    
-
+.. {r positional_example}
     parse_args(parser, args = c("-v", "-c25", "75", "22"), positional_arguments = TRUE)
-
-
-::
-
-    ## $options
-    ## $options$help
-    ## [1] FALSE
-    ## 
-    ## $options$verbose
-    ## [1] TRUE
-    ## 
-    ## $options$count
-    ## [1] 5
-    ## 
-    ## 
-    ## $args
-    ## [1] "-c25" "75"   "22"
-
-
+.. ..
 
 The function ``parse_args2`` wraps ``parse_args`` while setting ``positional_arguments=TRUE`` and ``convert_hyphens_to_underscores=TRUE``:
 
+.. {r parse_args2}
 
-.. sourcecode:: r
-    
-
-        parse_args2(parser, args = c("-v", "-c25", "75", "22"))
-
-
-::
-
-    ## $options
-    ## $options$help
-    ## [1] FALSE
-    ## 
-    ## $options$verbose
-    ## [1] TRUE
-    ## 
-    ## $options$count
-    ## [1] 5
-    ## 
-    ## 
-    ## $args
-    ## [1] "-c25" "75"   "22"
-
-
+    parse_args2(parser, args = c("-v", "-c25", "75", "22"))
+.. ..

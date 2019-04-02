@@ -5,7 +5,8 @@
 \title{A function to create an instance of a parser object}
 \usage{
 OptionParser(usage = "usage: \%prog [options]", option_list = list(),
-  add_help_option = TRUE, prog = NULL, description = "", epilogue = "")
+  add_help_option = TRUE, prog = NULL, description = "",
+  epilogue = "")
 }
 \arguments{
 \item{usage}{The program usage message that will printed out if

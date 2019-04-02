@@ -10,9 +10,9 @@ make_option(opt_str, action = "store", type = NULL, dest = NULL,
   default = NULL, help = "", metavar = NULL, callback = NULL,
   callback_args = NULL)
 
-add_option(object, opt_str, action = "store", type = NULL, dest = NULL,
-  default = NULL, help = "", metavar = NULL, callback = NULL,
-  callback_args = NULL)
+add_option(object, opt_str, action = "store", type = NULL,
+  dest = NULL, default = NULL, help = "", metavar = NULL,
+  callback = NULL, callback_args = NULL)
 }
 \arguments{
 \item{opt_str}{A character vector containing the string of the desired long
