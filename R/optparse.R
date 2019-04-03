@@ -259,7 +259,7 @@ make_option <- function(opt_str, action="store", type=NULL, dest=NULL, default=N
     if(is.null(dest)) { dest <- sub("^--", "", long_flag) }
     # metavar
     if(is.null(metavar)) {
-        if(action == "store") { 
+        if(.option_needs_argument_helper(action, type)) { 
             metavar <- sub("^--", "", long_flag)
         } else {
             metavar <- character(0)
@@ -324,14 +324,14 @@ print_help <- function(object) {
         cat("\t")
         if(!is.na(option@short_flag)) {
             cat(option@short_flag)
-            if( option@action == "store" ) {
+            if (.option_needs_argument(option)) {
                 cat(" ", toupper(option@metavar), sep="")
             }
             cat(", ")
         }
         if(!is.null(option@long_flag)) {
             cat(option@long_flag)
-            if( option@action == "store" ) {
+            if(.option_needs_argument(option)) {
                 cat("=", toupper(option@metavar), sep="")
             }
         }
@@ -649,10 +649,13 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
 }
 
 .option_needs_argument <- function(option) {
-    if (option@action == "store") {
+    .option_needs_argument_helper(option@action, option@type)
+}
+.option_needs_argument_helper <- function(action, type) {
+    if (action == "store") {
         TRUE
-    } else if (option@action == "callback") {
-        if (is.null(option@type)) {
+    } else if (action == "callback") {
+        if (is.null(type)) {
             FALSE
         } else {
             TRUE

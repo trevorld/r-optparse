@@ -137,6 +137,11 @@ test_that("callback works as expected", {
                          action="callback", help="Squared distance between two points", callback=callback_fn, callback_args=list(2))
     opts <- parse_args(parser1, args = c("--squared_distance=16"))
     expect_equal(opts$squared_distance, 256)
+    # Bug found by Ni Huang (#28)
+    opts <- parse_args(parser1, positional_argument=TRUE, args=c("-s", "3"))
+    expect_equal(opts$options$squared_distance, 9)
+    # Bug found by Ni Huang (#29)
+    expect_output(print_help(parser1), "SQUARED_DISTANCE")
 
     parser2 <- add_option(parser0, c("-v", "--value"), type="integer",
                          action="callback", callback=callback_fn, callback_args=list(n=3))
@@ -153,9 +158,6 @@ test_that("callback works as expected", {
     expect_error(add_option(parser0, "--warning", action="callback", callback="hello"), "Option type cannot be inferred")
     expect_warning(add_option(parser0, "--warning", action="callback", type="numeric", callback="hello"), "callback argument is not a function")
 
-    # Bug found by Ni Huang
-    opts <- parse_args(parser1, positional_argument=TRUE, args=c("-s", "3"))
-    expect_equal(opts$options$squared_distance, 9)
 
 })
 

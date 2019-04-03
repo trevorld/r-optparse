@@ -1,7 +1,13 @@
+optparse 1.6.3
+==============
+
+* Fixes bug in printing help for ``action=="callback"`` when ``metavar==NULL`` (#29).
+  Thanks Ni Huang for bug report.
+
 optparse 1.6.2
 ==============
 
-* Fixs a parsing bug when ``action=="callback"`` and ``positional_argument==TRUE``.
+* Fixs a parsing bug when ``action=="callback"`` and ``positional_argument==TRUE`` (#28).
   Thanks Ni Huang for bug report.
 
 optparse 1.6.1
