@@ -227,7 +227,8 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list=list(),
 #'        help="Standard deviation if generator == \"rnorm\" [default %default]")
 #'
 #' @export
-make_option <- function(opt_str, action="store", type=NULL, dest=NULL, default=NULL, help="", metavar=NULL, callback=NULL, callback_args=NULL) {
+make_option <- function(opt_str, action="store", type=NULL, dest=NULL, default=NULL, 
+                        help="", metavar=NULL, callback=NULL, callback_args=NULL) {
 
     # flags
     short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
@@ -235,7 +236,7 @@ make_option <- function(opt_str, action="store", type=NULL, dest=NULL, default=N
         short_flag <- NA_character_ 
     } else {
         if (nchar(short_flag) > 2) {
-            stop(paste(short_flag, "must only be a '-' and a single letter"))
+            stop(paste("Short flag", short_flag, "must only be a '-' and a single letter"))
         }
     }
     long_flag <- opt_str[grepl("^--[[:alpha:]]", opt_str)]

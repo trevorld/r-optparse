@@ -1,4 +1,4 @@
-optparse 1.6.3
+optparse 1.6.4
 ==============
 
 * Fixes bug in printing help for ``action=="callback"`` when ``metavar==NULL`` (#29).
