@@ -3,6 +3,8 @@ optparse 1.6.3
 
 * Fixes bug in printing help for ``action=="callback"`` when ``metavar==NULL`` (#29).
   Thanks Ni Huang for bug report.
+* Throws an error when passed short flags more than one letter long (#32).
+  Thanks Gautier Richard for bug report.
 
 optparse 1.6.2
 ==============
@@ -13,12 +15,12 @@ optparse 1.6.2
 optparse 1.6.1
 ==============
 
-* Improve accuracy of README (#27).  Thanks Alex Penson for bug report.
+* Improves accuracy of README (#27).  Thanks Alex Penson for bug report.
 
 optparse 1.6.0
 ==============
 
-* Support for callback actions (#26).  Thanks Gyu Jin Choi for patch.
+* Supports callback actions (#26).  Thanks Gyu Jin Choi for patch.
 
 optparse 1.5.0
 ==============

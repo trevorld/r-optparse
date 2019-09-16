@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2017 Trevor L. Davis <trevor.l.davis@gmail.com>  
+# Copyright (c) 2010-2019 Trevor L. Davis <trevor.l.davis@gmail.com>  
 # Copyright (c) 2015 Rick FitzJohn https://github.com/richfitz
 # Copyright (c) 2013 Kirill Müller https://github.com/krlmlr
 # Copyright (c) 2011 Jim Nikelski <nikelski@bic.mni.mcgill.ca>
@@ -231,7 +231,13 @@ make_option <- function(opt_str, action="store", type=NULL, dest=NULL, default=N
 
     # flags
     short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
-    if(length(short_flag)) {} else { short_flag <- as.character(NA) }
+    if(length(short_flag) == 0) {
+        short_flag <- NA_character_ 
+    } else {
+        if (nchar(short_flag) > 2) {
+            stop(paste(short_flag, "must only be a '-' and a single letter"))
+        }
+    }
     long_flag <- opt_str[grepl("^--[[:alpha:]]", opt_str)]
     if(length(long_flag)) {} else {stop("We require a long flag option")}
 

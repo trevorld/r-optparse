@@ -40,6 +40,7 @@ test_that("make_option works as expected", {
                 make_option("--logical", default=TRUE))
     expect_equal(make_option("--filename")@type, "character")
     expect_that(make_option("badflag"), throws_error())
+    expect_error(make_option("-cd"), "must only be")
 })
 
 get_long_flags <- function(parser) {
