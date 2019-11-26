@@ -14,7 +14,7 @@ Class to hold information about command-line options
 \item{\code{short_flag}}{String of the desired short flag
 comprised of the \dQuote{-} followed by a letter.}
 
-\item{\code{long_flag}}{String of the desired long flag comprised of \dQuote{--} 
+\item{\code{long_flag}}{String of the desired long flag comprised of \dQuote{--}
 followed by a letter and then a sequence of alphanumeric characters.}
 
 \item{\code{action}}{A character string that describes the action \code{optparse}

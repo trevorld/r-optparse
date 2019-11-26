@@ -6,19 +6,26 @@
 \alias{parse_args2}
 \title{Parse command line options.}
 \usage{
-parse_args(object, args = commandArgs(trailingOnly = TRUE),
-  print_help_and_exit = TRUE, positional_arguments = FALSE,
-  convert_hyphens_to_underscores = FALSE)
+parse_args(
+  object,
+  args = commandArgs(trailingOnly = TRUE),
+  print_help_and_exit = TRUE,
+  positional_arguments = FALSE,
+  convert_hyphens_to_underscores = FALSE
+)
 
-parse_args2(object, args = commandArgs(trailingOnly = TRUE),
-  print_help_and_exit = TRUE)
+parse_args2(
+  object,
+  args = commandArgs(trailingOnly = TRUE),
+  print_help_and_exit = TRUE
+)
 }
 \arguments{
 \item{object}{An \code{OptionParser} instance.}
 
 \item{args}{A character vector containing command line options to be parsed.
 Default is everything after the Rscript program in the command line. If
-\code{positional_arguments} is not \code{FALSE} then \code{parse_args} will 
+\code{positional_arguments} is not \code{FALSE} then \code{parse_args} will
 look for positional arguments at the end of this vector.}
 
 \item{print_help_and_exit}{Whether \code{parse_args} should call
@@ -34,7 +41,7 @@ supported for backward compatibility only, as it alters
 the format of the return value.}
 
 \item{convert_hyphens_to_underscores}{If the names in the returned list of options
-contains hyphens then convert them to underscores.  The default \code{FALSE} is 
+contains hyphens then convert them to underscores.  The default \code{FALSE} is
 supported for backward compatibility reasons as it alters the format of the return value}
 }
 \value{
@@ -51,10 +58,10 @@ setting the options \code{positional_arguments} and \code{convert_hyphens_to_und
 to \code{TRUE}.
 }
 \section{Acknowledgement}{
- 
+
     A big thanks to Steve Lianoglou for a bug report and patch;
-    Juan Carlos \enc{Borrás}{Borras} for a bug report; 
-    Jim Nikelski for a bug report and patch; 
+    Juan Carlos \enc{Borrás}{Borras} for a bug report;
+    Jim Nikelski for a bug report and patch;
     Ino de Brujin and Benjamin Tyner for a bug report;
     Jonas Zimmermann for bug report; Miroslav Posta for bug reports;
     Stefan Seemayer for bug report and patch;
@@ -63,29 +70,29 @@ to \code{TRUE}.
 
 \examples{
 # example from vignette
-option_list <- list( 
-   make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
-       help="Print extra output [default]"),
-   make_option(c("-q", "--quietly"), action="store_false", 
-       dest="verbose", help="Print little output"),
-   make_option(c("-c", "--count"), type="integer", default=5, 
-       help="Number of random normals to generate [default \%default]",
-       metavar="number"),
-   make_option("--generator", default="rnorm", 
-       help = "Function to generate random deviates [default \\"\%default\\"]"),
-   make_option("--mean", default=0, 
-       help="Mean if generator == \\"rnorm\\" [default \%default]"),
-   make_option("--sd", default=1, metavar="standard deviation",
-       help="Standard deviation if generator == \\"rnorm\\" [default \%default]")
+option_list <- list(
+   make_option(c("-v", "--verbose"), action = "store_true", default = TRUE,
+       help = "Print extra output [default]"),
+   make_option(c("-q", "--quietly"), action = "store_false",
+       dest = "verbose", help = "Print little output"),
+   make_option(c("-c", "--count"), type = "integer", default = 5,
+       help = "Number of random normals to generate [default \%default]",
+       metavar = "number"),
+   make_option("--generator", default = "rnorm",
+       help = "Function to generate random deviates [default \"\%default\"]"),
+   make_option("--mean", default = 0,
+       help = "Mean if generator == \"rnorm\" [default \%default]"),
+   make_option("--sd", default = 1, metavar = "standard deviation",
+       help = "Standard deviation if generator == \"rnorm\" [default \%default]")
    )
 parse_args(OptionParser(option_list = option_list), args = c("--sd=3", "--quietly"))
 
 # example from vignette using positional arguments
-option_list2 <- list( 
-   make_option(c("-n", "--add-numbers"), action="store_true", default=FALSE,
-       help="Print line number at the beginning of each line [default]")
+option_list2 <- list(
+   make_option(c("-n", "--add-numbers"), action = "store_true", default = FALSE,
+       help = "Print line number at the beginning of each line [default]")
    )
-parser <- OptionParser(usage = "\%prog [options] file", option_list=option_list2)
+parser <- OptionParser(usage = "\%prog [options] file", option_list = option_list2)
 
 parse_args(parser, args = c("--add-numbers", "example.txt"), positional_arguments = TRUE)
 

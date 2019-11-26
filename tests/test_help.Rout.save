@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 
 > library("optparse")
 > 
-> parser = OptionParser()
+> parser <- OptionParser()
 > parse_args(parser, "--help")
 Usage: %prog [options]
 

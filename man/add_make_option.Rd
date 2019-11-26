@@ -3,16 +3,33 @@
 \name{make_option}
 \alias{make_option}
 \alias{add_option}
-\title{Functions to enable our OptionParser to recognize specific command line 
+\title{Functions to enable our OptionParser to recognize specific command line
 options.}
 \usage{
-make_option(opt_str, action = "store", type = NULL, dest = NULL,
-  default = NULL, help = "", metavar = NULL, callback = NULL,
-  callback_args = NULL)
+make_option(
+  opt_str,
+  action = "store",
+  type = NULL,
+  dest = NULL,
+  default = NULL,
+  help = "",
+  metavar = NULL,
+  callback = NULL,
+  callback_args = NULL
+)
 
-add_option(object, opt_str, action = "store", type = NULL,
-  dest = NULL, default = NULL, help = "", metavar = NULL,
-  callback = NULL, callback_args = NULL)
+add_option(
+  object,
+  opt_str,
+  action = "store",
+  type = NULL,
+  dest = NULL,
+  default = NULL,
+  help = "",
+  metavar = NULL,
+  callback = NULL,
+  callback_args = NULL
+)
 }
 \arguments{
 \item{opt_str}{A character vector containing the string of the desired long
@@ -50,9 +67,9 @@ substituted by the value of \code{default}.}
 \item{metavar}{A character string that stands in for the option argument when
 printing help text.  Default is the value of \code{dest}.}
 
-\item{callback}{A function that executes after the each option value is fully 
+\item{callback}{A function that executes after the each option value is fully
 parsed.  It's value is assigned to the option and its arguments are
-the option S4 object, the long flag string, the value of the option, 
+the option S4 object, the long flag string, the value of the option,
 the parser S4 object, and \code{...}.}
 
 \item{callback_args}{A list of additional arguments passed to callback function (via \code{do.call}).}
@@ -74,23 +91,23 @@ new \code{OptionParser} instance.
 
    make_option("--longflag")
    make_option(c("-l", "--longflag"))
-   make_option("--integer", type="integer", default=5)
-   make_option("--integer", default=as.integer(5))  # same as previous
+   make_option("--integer", type = "integer", default = 5)
+   make_option("--integer", default = as.integer(5))  # same as previous
 
    # examples from package vignette
-   make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
-       help="Print extra output [default]")
-   make_option(c("-q", "--quietly"), action="store_false",
-     dest="verbose", help="Print little output")
-   make_option(c("-c", "--count"), type="integer", default=5, 
-       help="Number of random normals to generate [default \%default]",
-       metavar="number")
-   make_option("--generator", default="rnorm", 
-       help = "Function to generate random deviates [default \\"\%default\\"]")
-   make_option("--mean", default=0, 
-       help="Mean if generator == \\"rnorm\\" [default \%default]")
-   make_option("--sd", default=1, metavar="standard deviation",
-       help="Standard deviation if generator == \\"rnorm\\" [default \%default]")
+   make_option(c("-v", "--verbose"), action = "store_true", default = TRUE,
+       help = "Print extra output [default]")
+   make_option(c("-q", "--quietly"), action = "store_false",
+     dest = "verbose", help = "Print little output")
+   make_option(c("-c", "--count"), type = "integer", default = 5,
+       help = "Number of random normals to generate [default \%default]",
+       metavar = "number")
+   make_option("--generator", default = "rnorm",
+       help = "Function to generate random deviates [default \"\%default\"]")
+   make_option("--mean", default = 0,
+       help = "Mean if generator == \"rnorm\" [default \%default]")
+   make_option("--sd", default = 1, metavar = "standard deviation",
+       help = "Standard deviation if generator == \"rnorm\" [default \%default]")
 
 }
 \references{

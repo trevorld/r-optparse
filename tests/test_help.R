@@ -1,4 +1,4 @@
 library("optparse")
 
-parser = OptionParser()
+parser <- OptionParser()
 parse_args(parser, "--help")

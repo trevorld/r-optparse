@@ -3,6 +3,7 @@ CONTRIBUTING
 Rakefile
 README.Rrst
 README.rst
-^\.travis\.yml$
 ^\.appveyor\.yml$
+^\.lintr$
+^\.travis\.yml$
 revdep
