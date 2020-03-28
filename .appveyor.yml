@@ -11,7 +11,7 @@ install:
   ps: Bootstrap
 
 cache:
-  - C:\RLibrary
+  - C:\RLibrary -> .appveyor.yml
 
 # Adapt as necessary starting from here
 #
@@ -20,7 +20,6 @@ environment:
       USE_RTOOLS: true
   matrix:
     - R_VERSION: devel
-
     - R_VERSION: release
 
 build_script:

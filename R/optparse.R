@@ -171,9 +171,9 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list = list(),
 #' @param action A character string that describes the action \code{optparse}
 #'     should take when it encounters an option, either \dQuote{store},
 #'     \dQuote{store_true}, \dQuote{store_false}, or \dQuote{callback}.
-#'     An action of \dQuote{store} signifies that \code{optparse} 
+#'     An action of \dQuote{store} signifies that \code{optparse}
 #'      should store the specified following value if the option is found on the command string.
-#'     \dQuote{store_true} stores \code{TRUE} if the option is found 
+#'     \dQuote{store_true} stores \code{TRUE} if the option is found
 #'      and \dQuote{store_false} stores \code{FALSE} if the option is found.
 #'     \dQuote{callback} stores the return value produced by the function
 #'     specified in the \code{callback} argument.
