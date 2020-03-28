@@ -157,16 +157,19 @@ test_that("callback works as expected", {
     opts <- parse_args(parser3, args = c("--value=2"))
     expect_equal(opts$value, 4)
 
-    expect_warning(add_option(parser0, "--warning", callback = as.list),
+    expect_warning(add_option(parser0, "--warning", action = "store", callback = as.list),
                    "callback argument is supplied for non-callback action")
     expect_warning(add_option(parser0, "--warning", callback_args = list(3, b = 4)),
                    "callback_args argument is supplied for non-callback action")
-    expect_error(add_option(parser0, "--warning", action = "callback", callback = "hello"),
-                 "Option type cannot be inferred")
     expect_warning(add_option(parser0, "--warning", action = "callback", type = "numeric", callback = "hello"),
                    "callback argument is not a function")
 
-
+    callback_fn <- function(option, flag, option_value, parser) {
+        42
+    }
+    parser4 <- add_option(parser0, "--null_type", type = NULL, callback = callback_fn)
+    opts <- parse_args(parser4, args = c("--null_type"))
+    expect_equal(opts$null_type, 42)
 })
 
 # Bug found by Miroslav Posta

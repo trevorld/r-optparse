@@ -8,7 +8,7 @@ options.}
 \usage{
 make_option(
   opt_str,
-  action = "store",
+  action = NULL,
   type = NULL,
   dest = NULL,
   default = NULL,
@@ -21,7 +21,7 @@ make_option(
 add_option(
   object,
   opt_str,
-  action = "store",
+  action = NULL,
   type = NULL,
   dest = NULL,
   default = NULL,
@@ -39,11 +39,14 @@ comprised of the \dQuote{-} followed by a letter.}
 
 \item{action}{A character string that describes the action \code{optparse}
 should take when it encounters an option, either \dQuote{store},
-\dQuote{store_true}, or \dQuote{store_false}.  The default is \dQuote{store}
-which signifies that \code{optparse} should store the specified following
-value if the option is found on the command string.  \dQuote{store_true}
-stores \code{TRUE} if the option is found and \dQuote{store_false} stores
-\code{FALSE} if the option is found.}
+\dQuote{store_true}, \dQuote{store_false}, or \dQuote{callback}.
+An action of \dQuote{store} signifies that \code{optparse} 
+ should store the specified following value if the option is found on the command string.
+\dQuote{store_true} stores \code{TRUE} if the option is found 
+ and \dQuote{store_false} stores \code{FALSE} if the option is found.
+\dQuote{callback} stores the return value produced by the function
+specified in the \code{callback} argument.
+If \code{callback} is not \code{NULL} then the default is \dQuote{callback} else \dQuote{store}.}
 
 \item{type}{A character string that describes specifies which data type
 should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},

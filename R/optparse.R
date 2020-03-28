@@ -170,11 +170,14 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list = list(),
 #'     comprised of the \dQuote{-} followed by a letter.
 #' @param action A character string that describes the action \code{optparse}
 #'     should take when it encounters an option, either \dQuote{store},
-#'     \dQuote{store_true}, or \dQuote{store_false}.  The default is \dQuote{store}
-#'     which signifies that \code{optparse} should store the specified following
-#'     value if the option is found on the command string.  \dQuote{store_true}
-#'     stores \code{TRUE} if the option is found and \dQuote{store_false} stores
-#'     \code{FALSE} if the option is found.
+#'     \dQuote{store_true}, \dQuote{store_false}, or \dQuote{callback}.
+#'     An action of \dQuote{store} signifies that \code{optparse} 
+#'      should store the specified following value if the option is found on the command string.
+#'     \dQuote{store_true} stores \code{TRUE} if the option is found 
+#'      and \dQuote{store_false} stores \code{FALSE} if the option is found.
+#'     \dQuote{callback} stores the return value produced by the function
+#'     specified in the \code{callback} argument.
+#'     If \code{callback} is not \code{NULL} then the default is \dQuote{callback} else \dQuote{store}.
 #' @param type A character string that describes specifies which data type
 #'     should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
 #'     \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
@@ -227,8 +230,10 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list = list(),
 #'        help = "Standard deviation if generator == \"rnorm\" [default %default]")
 #'
 #' @export
-make_option <- function(opt_str, action = "store", type = NULL, dest = NULL, default = NULL,
+make_option <- function(opt_str, action = NULL, type = NULL, dest = NULL, default = NULL,
                         help = "", metavar = NULL, callback = NULL, callback_args = NULL) {
+
+    action <- ifelse(is.null(action), ifelse(is.null(callback), "store", "callback"), action)
 
     # flags
     short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
@@ -246,11 +251,9 @@ make_option <- function(opt_str, action = "store", type = NULL, dest = NULL, def
     if (is.null(type)) {
         type <- infer_type(action, default)
     }
-    if (is.null(type))
-        stop("Option type cannot be inferred. It or a default argument must be specified.")
     if (type == "numeric") type <- "double"
     # default
-    if ((type != typeof(default)) & !is.null(default)) {
+    if ((type != typeof(default)) && !is.null(default)) {
         storage.mode(default) <- type
     }
     # dest
@@ -274,17 +277,11 @@ make_option <- function(opt_str, action = "store", type = NULL, dest = NULL, def
 }
 
 infer_type <- function(action, default) {
-    if (action %in% c("store_true", "store_false")) {
-        "logical"
-    } else if (action == "store") {
-        if (is.null(default)) {
-            "character"
-        } else {
-            typeof(default)
-        }
-    } else {
-        NULL
-    }
+    switch(action,
+           store = ifelse(is.null(default), "character", typeof(default)),
+           store_false = "logical",
+           store_true = "logical",
+           callback = "NULL")
 }
 
 warn_callback <- function(action, callback, callback_args) {
@@ -301,7 +298,7 @@ warn_callback <- function(action, callback, callback_args) {
 
 #' @rdname add_make_option
 #' @export
-add_option <- function(object, opt_str, action = "store", type = NULL,
+add_option <- function(object, opt_str, action = NULL, type = NULL,
                     dest = NULL, default = NULL, help = "", metavar = NULL,
                     callback = NULL, callback_args = NULL) {
     options_list <- object@options
@@ -470,7 +467,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
         if (options_list[["help"]] && print_help_and_exit) {
             print_help(object)
             if (interactive())
-                stop("help requested") #nocov
+                stop("help requested")
             else
                 quit(status = 0)
         }
@@ -670,22 +667,16 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
     short_flag <- sub("^-", "", object@short_flag)
     long_flag <- sub("^--", "", object@long_flag)
     argument <- ifelse(.option_needs_argument(object), 1, 0)
-    return(c(long_flag, short_flag, argument, object@type, object@help))
+    type <- ifelse(object@type == "NULL", "logical", object@type)
+    return(c(long_flag, short_flag, argument, type, object@help))
 }
 
 .option_needs_argument <- function(option) {
     .option_needs_argument_helper(option@action, option@type)
 }
 .option_needs_argument_helper <- function(action, type) {
-    if (action == "store") {
-        TRUE
-    } else if (action == "callback") {
-        if (is.null(type)) {
-            FALSE
-        } else {
-            TRUE
-        }
-    } else {
-        FALSE
-    }
+    switch(action,
+           store = TRUE,
+           callback = ifelse(type == "NULL", FALSE, TRUE),
+           FALSE)
 }
