@@ -29,7 +29,8 @@ option_list <- list(
         help = "Mean if generator == \"rnorm\" [default \\%default]"),
     make_option("--sd", default = 1, metavar = "standard deviation",
         help = "Standard deviation if generator == \"rnorm\" [default \\%default]")
-    )
+)
+parser_ol <- OptionParser(option_list = option_list)
 
 
 context("Testing make_option")
@@ -63,16 +64,16 @@ test_that("parse_args works as expected", {
             help = "Print line number at the beginning of each line [default]")
     )
     parser <- OptionParser(usage = "\\%prog [options] file", option_list = option_list2)
-    expect_equal(sort_list(parse_args(OptionParser(option_list = option_list),
+    expect_equal(sort_list(parse_args(parser_ol,
                             args = c("--sd=3", "--quietly"))),
                 sort_list(list(sd = 3, verbose = FALSE, help = FALSE,
                     count = 5, mean = 0, generator = "rnorm")))
-    expect_equal(sort_list(parse_args(OptionParser(option_list = option_list),
+    expect_equal(sort_list(parse_args(parser_ol,
                         args = character(0), positional_arguments = TRUE)),
                 sort_list(list(options = list(sd = 1, help = FALSE, verbose = TRUE,
                                 count = 5, mean = 0, generator = "rnorm"),
                             args = character(0))))
-    expect_equal(sort_list(parse_args(OptionParser(option_list = option_list),
+    expect_equal(sort_list(parse_args(parser_ol,
                             args = c("-c", "10"))),
                 sort_list(list(sd = 1, help = FALSE, verbose = TRUE,
                             count = 10, mean = 0, generator = "rnorm")))
@@ -91,15 +92,8 @@ test_that("parse_args works as expected", {
     expect_equal(sort_list(parse_args2(parser, args = c("--add-numbers"))),
                 sort_list(list(options = list(add_numbers = TRUE, help = FALSE),
                              args = character(0))))
-    expect_equal(sort_list(parse_args(parser, args = c("-add-numbers", "example.txt"),
-                                positional_arguments = TRUE)),
-                sort_list(list(options = list(`add-numbers` = FALSE, help = FALSE),
-                             args = c("-add-numbers", "example.txt"))))
-    expect_error(parse_args(parser, args = c("-add-numbers", "example.txt")))
-    expect_equal(sort_list(parse_args(parser, args = c("-add-numbers", "example.txt"),
-                                      positional_arguments = c(1, 3))),
-                 sort_list(list(options = list(`add-numbers` = FALSE, help = FALSE),
-                                args = c("-add-numbers", "example.txt"))))
+    expect_error(parse_args(parser, args = c("-add-numbers", "example.txt")), positional_arguments = FALSE)
+    expect_error(parse_args(parser, args = c("-add-numbers", "example.txt"), positional_arguments = TRUE))
     expect_equal(sort_list(parse_args(parser, args = c("--add-numbers", "example.txt"),
                                       positional_arguments = c(1, 3))),
                  sort_list(list(options = list(`add-numbers` = TRUE, help = FALSE),
@@ -210,32 +204,29 @@ test_that("test bug when multiple short flag options '-abc' with positional_argu
         }
         unsorted_list[sort(names(unsorted_list))]
     }
-    expect_equal(sort_list(parse_args(OptionParser(option_list = option_list),
+    expect_equal(sort_list(parse_args(parser_ol,
                         args = c("-qc", "10"), positional_arguments = TRUE)),
                 sort_list(list(options = list(sd = 1, help = FALSE, verbose = FALSE,
                                 count = 10, mean = 0, generator = "rnorm"),
                             args = character(0))))
-    expect_equal(sort_list(parse_args(OptionParser(option_list = option_list),
-                        args = c("-qcde", "10"), positional_arguments = TRUE)),
-                sort_list(list(options = list(sd = 1, help = FALSE, verbose = TRUE,
-                                count = 5, mean = 0, generator = "rnorm"),
-                            args = c("-qcde", "10"))))
-    expect_equal(sort_list(parse_args(OptionParser(option_list = option_list),
+    expect_error(parse_args(parser_ol, args = c("-qcde", "10"), positional_arguments = TRUE))
+    expect_error(parse_args(parser_ol, args = c("a", "b", "c", "d", "e"), positional_arguments = c(1, 3)))
+    expect_equal(sort_list(parse_args(parser_ol,
                         args = c("CMD", "-qc", "10", "bumblebee"), positional_arguments = TRUE)),
                 sort_list(list(options = list(sd = 1, help = FALSE, verbose = FALSE,
                                 count = 10, mean = 0, generator = "rnorm"),
                             args = c("CMD", "bumblebee"))))
-    args <- c("CMD", "-qc", "10", "--qcdefg", "--what-what", "bumblebee")
-    expect_equal(sort_list(parse_args(OptionParser(option_list = option_list),
-                                      args = args, positional_arguments = TRUE)),
-                 sort_list(list(options = list(sd = 1, help = FALSE, verbose = FALSE,
-                                               count = 10, mean = 0, generator = "rnorm"),
-                                args = c("CMD", "--qcdefg", "--what-what", "bumblebee"))))
+    args <- c("CMD", "-qc", "10", "bumblebee", "--qcdefg")
+    expect_error(parse_args(parser_ol, args = args, positional_arguments = TRUE),
+                 "Don't know long flag argument --qcdefg")
+    args <- c("-qxc", "10", "bumblebee")
+    expect_error(parse_args(parser_ol, args = args, positional_arguments = TRUE),
+                 'short flag "x" is invalid')
 })
 
 # Bug found by Ino de Brujin and Benjamin Tyner
 test_that("test bug when long flag option with '=' with positional_arguments = TRUE", {
-    expect_equal(sort_list(parse_args(OptionParser(option_list = option_list),
+    expect_equal(sort_list(parse_args(parser_ol,
                             args = c("--count=10"), positional_arguments = TRUE)),
                 sort_list(list(options = list(sd = 1, help = FALSE, verbose = TRUE,
                             count = 10, mean = 0, generator = "rnorm"),

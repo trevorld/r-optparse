@@ -569,14 +569,11 @@ parse_options <- function(object, args, convert_hyphens_to_underscores) {
                 options_list[[option@dest]] <- option_value
             }
             if (option@action == "callback") {
-
                 callback_fn <- function(...) {
                     option@callback(option, option@long_flag,  option_value, object, ...) # nolint
                 }
                 options_list[[option@dest]] <- do.call(callback_fn, option@callback_args)
-
             }
-
         } else {
             if (!is.null(option@default) & is.null(options_list[[option@dest]])) {
                 options_list[[option@dest]] <- option@default
@@ -600,12 +597,9 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
 # Tells me whether a string is a valid option
 .is_option_string <- function(argument, object) {
     if (.is_long_flag(argument)) {
-        if (grepl("=", argument)) {
-            argument <- sub("(.*?)=.*", "\\1", argument)
-        }
-        return(argument %in% .get_long_options(object))
+        return(TRUE)
     } else if (.is_short_flag(argument)) {
-        return(all(.expand_short_option(argument) %in% .get_short_options(object)))
+        return(TRUE)
     } else {
         return(FALSE)
     }
@@ -621,6 +615,7 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
                 if (option@long_flag == argument)
                     return(.option_needs_argument(option))
             }
+            stop("Don't know long flag argument ", argument)
         }
     } else { # is a short flag
         last_flag <- tail(.expand_short_option(argument), 1)
@@ -634,20 +629,6 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
 # convenience functions that tells if argument is a type of flag and returns all long flag options or short flag options
 .is_long_flag <- function(argument) return(grepl("^--", argument))
 .is_short_flag <- function(argument) return(grepl("^-[^-]", argument))
-.get_long_options <- function(object) {
-    long_options <- vector("character")
-    for (ii in seq_along(object@options)) {
-        long_options <- c(long_options, object@options[[ii]]@long_flag)
-    }
-    return(long_options)
-}
-.get_short_options <- function(object) {
-    short_options <- vector("character")
-    for (ii in seq_along(object@options)) {
-        short_options <- c(short_options, object@options[[ii]]@short_flag)
-    }
-    return(short_options)
-}
 # .expand_short_option based on function by Jim Nikelski (c) 2011
 # He gave me a non-exclusive unlimited license to this code
 # .expand_short_option("-cde") = c("-c", "-d", "-e") # nolint
@@ -670,7 +651,6 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
     type <- ifelse(object@type == "NULL", "logical", object@type)
     return(c(long_flag, short_flag, argument, type, object@help))
 }
-
 .option_needs_argument <- function(option) {
     .option_needs_argument_helper(option@action, option@type)
 }
