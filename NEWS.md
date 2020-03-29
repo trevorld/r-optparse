@@ -30,10 +30,6 @@ optparse 1.6.0
 ==============
 
 * Supports callback actions (#26).  Thanks Gyu Jin Choi for patch.
-
-optparse 1.5.0
-==============
-
 * If ``interactive() == FALSE`` and ``print_help_and_exit == TRUE`` then
   ``optparse`` will now call ``quit(status=0)`` instead of ``quit(status=1)`` after
   printing the help message (this matches behaviour of the python package).
@@ -46,21 +42,13 @@ optparse 1.4.4
 ==============
 
 * Minor documentation fixes.  Thanks J. J. Ramsey and Daeyoung Kim for bug reports.
-
-optparse 1.4.1
-==============
-
 * Fix bug when ``add_help_option`` in ``OptionParser`` set to ``FALSE``.  Thanks to Jeff Bruce for bug report.
-
-optparse 1.4.0
-==============
-
 * ``parse_args`` now supports ``convert_hyphens_to_underscores`` argument which converts any hyphens to underscores 
   when returning the list of options
 * Now includes the convenience function ``parse_args2`` which wraps ``parse_args`` with ``positional_arguments`` set to ``TRUE``
   and ``convert_hyphens_to_underscores`` set to ``TRUE``.
 
-optparse 1.3.1
+optparse 1.3.2
 ==============
 
 * ``optparse`` should no longer give any warnings when ``options(warnPartialMatchArgs=TRUE)``.  Thanks Rich FitzJohn for patch.
@@ -82,10 +70,6 @@ optparse 1.2.0
   after printing a help message but will instead throw an error.
   ``optparse`` will continue to ``quit(status=1)`` after printing a help message
   for non-interactive Rscripts unless ``print_help_and_exit == FALSE``.
-
-optparse 1.1.0
-==============
-
 * In ``make_option`` argument ``type="numeric"`` automatically cast to ``double``.
   Previously users might have received an error passing negative numbers if they
   accidentally specified "numeric" instead of "double".

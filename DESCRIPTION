@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: optparse
 Type: Package
 Title: Command Line Option Parser
-Version: 1.6.5-3
+Version: 1.6.5-4
 Authors@R: c(person("Trevor L", "Davis", role = c("aut", "cre"), email="trevor.l.davis@gmail.com"),
     person("Allen", "Day", role="ctb", comment="Some documentation and examples ported from the getopt package."),
     person("Python Software Foundation", role="ctb", comment="Some documentation from the optparse Python module."),
