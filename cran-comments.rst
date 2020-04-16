@@ -1,10 +1,10 @@
 **Test environments**
 
-* local (linux), R 3.4.4
-* win-builder (windows), R release and R devel
+* win-builder (windows), R devel
+* appveyor (windows), R release and R devel
+* local (linux), R 3.6.3
 * travis-ci (linux), R release and R devel
 * travis-ci (OSX), R release
-* appveyor (windows), R release and R devel
 
 **R CMD check --as-cran results**
 

@@ -1,11 +1,12 @@
-optparse 1.6.5
+optparse 1.6.6
 ==============
+
+* Throws an error for unknown short flags and long flags when ``positional_arguments=TRUE``.
+  Thanks Greg Minshall for bug report (#34).
 * If the ``callback`` parameter of ``add_option`` / ``make_option`` is not ``NULL`` then
   the default of ``action`` is now ``"callback"``.  Thanks Greg Minshall for suggestion (#35).
 * Better documentation of ``action=="callback"`` in the man page for ``add_option`` and ``make_option``.
   Thanks Greg Minshall for bug report (#35).
-* Throws an error for unknown short flags and long flags when ``positional_arguments=TRUE``.
-  Thanks Greg Minshall for bug report (#34).
 
 optparse 1.6.4
 ==============
