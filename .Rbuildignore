@@ -3,6 +3,7 @@ CONTRIBUTING
 Rakefile
 README.Rrst
 README.rst
+README.html
 ^\.appveyor\.yml$
 ^_pkgdown.yml$
 ^\.lintr$
