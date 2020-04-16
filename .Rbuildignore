@@ -4,7 +4,7 @@ Rakefile
 README.Rrst
 README.rst
 ^\.appveyor\.yml$
-^\_pkgdown$
+^_pkgdown.yml$
 ^\.lintr$
 ^\.travis\.yml$
 revdep
