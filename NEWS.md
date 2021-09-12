@@ -1,3 +1,11 @@
+optparse 1.7.0
+==============
+
+* Add a ``formatter`` argument to ``OptionParser()`` for a function to format the usage message (#30).
+  By default uses the new function ``IndentedHelpFormatter()``.
+  `{optparse}` also provides the new function ``TitledHelpFormatter()``.
+  Thanks Ni Huang for suggestion.
+
 optparse 1.6.6
 ==============
 

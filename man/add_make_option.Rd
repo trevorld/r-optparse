@@ -41,9 +41,9 @@ comprised of the \dQuote{-} followed by a letter.}
 should take when it encounters an option, either \dQuote{store},
 \dQuote{store_true}, \dQuote{store_false}, or \dQuote{callback}.
 An action of \dQuote{store} signifies that \code{optparse}
- should store the specified following value if the option is found on the command string.
+should store the specified following value if the option is found on the command string.
 \dQuote{store_true} stores \code{TRUE} if the option is found
- and \dQuote{store_false} stores \code{FALSE} if the option is found.
+and \dQuote{store_false} stores \code{FALSE} if the option is found.
 \dQuote{callback} stores the return value produced by the function
 specified in the \code{callback} argument.
 If \code{callback} is not \code{NULL} then the default is \dQuote{callback} else \dQuote{store}.}
@@ -81,7 +81,7 @@ the parser S4 object, and \code{...}.}
 }
 \value{
 Both \code{make_option} and \code{add_option} return instances of
-    class \code{OptionParserOption}.
+class \code{OptionParserOption}.
 }
 \description{
 \code{add_option} adds a option to a prexisting \code{OptionParser} instance
@@ -115,7 +115,7 @@ new \code{OptionParser} instance.
 }
 \references{
 Python's \code{optparse} library, which inspires this package,
-    is described here: \url{http://docs.python.org/library/optparse.html}
+is described here: \url{http://docs.python.org/library/optparse.html}
 }
 \seealso{
 \code{\link{parse_args}} \code{\link{OptionParser}}

@@ -10,7 +10,8 @@ OptionParser(
   add_help_option = TRUE,
   prog = NULL,
   description = "",
-  epilogue = ""
+  epilogue = "",
+  formatter = IndentedHelpFormatter
 )
 }
 \arguments{
@@ -37,6 +38,11 @@ usage statement and options statement}
 
 \item{epilogue}{Additional text for \code{print_help} to print out after
 the options statement}
+
+\item{formatter}{A function that formats usage text.
+The function should take only one argument (an \code{OptionParser()} object).
+Default is \code{\link[=IndentedHelpFormatter]{IndentedHelpFormatter()}}.
+The other builtin formatter provided by this package is \code{\link[=TitledHelpFormatter]{TitledHelpFormatter()}}.}
 }
 \value{
 An instance of the \code{OptionParser} class.
@@ -48,11 +54,11 @@ methods is very useful for parsing options from the command line.
 }
 \references{
 Python's \code{optparse} library, which inspired this package,
-   is described here: \url{http://docs.python.org/library/optparse.html}
+is described here: \url{http://docs.python.org/library/optparse.html}
 }
 \seealso{
 \code{\link{parse_args}} \code{\link{make_option}}
-    \code{\link{add_option}}
+\code{\link{add_option}}
 }
 \author{
 Trevor Davis.

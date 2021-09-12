@@ -119,7 +119,6 @@ test_that("parse_args works as expected", {
         expect_that(capture.output(parse_args(parser, args = c("--help"), positional_arguments = c(1, 2))),
                     throws_error("help requested"))
     }
-
 })
 
 # Patch from Gyu Jin Choi.
@@ -254,6 +253,10 @@ test_that("description and epilogue work as expected", {
     expect_equal(stringr::str_count(
                 capture.output(print_help(OptionParser("usage: foo bar")))[1],
                 "[Uu]sage"), 1)
+
+    parser <- OptionParser(formatter = TitledHelpFormatter)
+    parser <- add_option(parser, c("-f", "--foo"), help = "Foobar")
+    expect_output(print_help(parser), "Usage\n=====")
 
     # bug found by Stefan Seemayer for NA default
     optlist <- list(

@@ -25,6 +25,10 @@ usage statement and options statement}
 
 \item{\code{epilogue}}{Additional text for \code{print_help} to print out after
 the options statement}
+
+\item{\code{formatter}}{A function that \code{print_help} will use to print out after
+the options statement.  Default is \code{\link[=IndentedHelpFormatter]{IndentedHelpFormatter()}}.  This
+package also provides the builtin formatter \code{\link[=TitledHelpFormatter]{TitledHelpFormatter()}}.}
 }}
 
 \seealso{

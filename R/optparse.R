@@ -41,12 +41,16 @@
 #'     usage statement and options statement
 #' @slot epilogue  Additional text for \code{print_help} to print out after
 #'     the options statement
+#' @slot formatter  A function that \code{print_help} will use to print out after
+#'     the options statement.  Default is [IndentedHelpFormatter()].  This
+#'     package also provides the builtin formatter [TitledHelpFormatter()].
 #' @author Trevor Davis.
 #' @seealso \code{\link{OptionParserOption}}
 #' @import methods
 #' @exportClass OptionParser
 setClass("OptionParser", representation(usage = "character", options = "list",
-                description = "character", epilogue = "character"))
+                description = "character", epilogue = "character",
+                formatter = "function"))
 
 #' Class to hold information about command-line options
 #'
@@ -118,6 +122,10 @@ OptionParserOption <- setClass("OptionParserOption", representation(short_flag =
 #'     usage statement and options statement
 #' @param epilogue  Additional text for \code{print_help} to print out after
 #'     the options statement
+#' @param formatter A function that formats usage text.
+#'                  The function should take only one argument (an `OptionParser()` object).
+#'                  Default is [IndentedHelpFormatter()].
+#'                  The other builtin formatter provided by this package is [TitledHelpFormatter()].
 #' @return An instance of the \code{OptionParser} class.
 #' @author Trevor Davis.
 #'
@@ -129,7 +137,8 @@ OptionParserOption <- setClass("OptionParserOption", representation(short_flag =
 #' @export
 OptionParser <- function(usage = "usage: %prog [options]", option_list = list(), # nolint
                             add_help_option = TRUE, prog = NULL,
-                            description = "", epilogue = "") {
+                            description = "", epilogue = "",
+                            formatter = IndentedHelpFormatter) {
 
     if (is.null(prog)) {
         prog <- get_Rscript_filename()
@@ -150,7 +159,8 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list = list(),
     }
 
     return(new("OptionParser", usage = usage, options = option_list,
-                    description = description, epilogue = epilogue))
+                    description = description, epilogue = epilogue,
+                    formatter = formatter))
 }
 
 #' Functions to enable our OptionParser to recognize specific command line
@@ -326,6 +336,29 @@ add_option <- function(object, opt_str, action = NULL, type = NULL,
 #'     is described here: \url{http://docs.python.org/library/optparse.html}
 #' @export
 print_help <- function(object) {
+    object@formatter(object)
+}
+
+#' Builtin help text formatters
+#'
+#' `IndentedHelpFormatter()` is the default help text formatter.
+#' `TitledHelpFormatter()` is an alternative help text formatter.
+#'
+#' @param object An [OptionParser()] object.
+#' @examples
+#'  parser <- OptionParser(formatter = IndentedHelpFormatter)
+#'  parser <- add_option(parser, "--generator", help = "Generator option")
+#'  parser <- add_option(parser, "--count", help = "Count option")
+#'  print_help(parser)
+#'
+#'  parser <- OptionParser(formatter = TitledHelpFormatter)
+#'  parser <- add_option(parser, "--generator", help = "Generator option")
+#'  parser <- add_option(parser, "--count", help = "Count option")
+#'  print_help(parser)
+#' @return `NULL` invisibly.  As a side effect prints out help text.
+#' @rdname formatter
+#' @export
+IndentedHelpFormatter <- function(object) {
     cat(object@usage, fill = TRUE)
     cat(object@description, fill = TRUE)
     cat("\n")
@@ -346,6 +379,39 @@ print_help <- function(object) {
             cat(option@long_flag)
             if (.option_needs_argument(option)) {
                 cat("=", toupper(option@metavar), sep = "")
+            }
+        }
+        cat("\n\t\t")
+        cat(sub("%default", .as_string(option@default), option@help))
+        cat("\n\n")
+    }
+    cat(object@epilogue, fill = TRUE)
+    return(invisible(NULL))
+}
+
+#' @rdname formatter
+#' @export
+TitledHelpFormatter <- function(object) {
+    usage <- c("Usage\n=====\n", gsub("Usage: ", "", object@usage))
+    cat(usage, fill = TRUE)
+    cat(object@description, fill = TRUE)
+    cat("\n")
+    cat("Options", "=======", sep = "\n")
+
+    options_list <- object@options
+    for (ii in seq_along(options_list)) {
+        option <- options_list[[ii]]
+        if (!is.null(option@long_flag)) {
+            cat(option@long_flag)
+            if (.option_needs_argument(option)) {
+                cat("=", toupper(option@metavar), sep = "")
+            }
+        }
+        if (!is.na(option@short_flag)) {
+            cat(", ")
+            cat(option@short_flag)
+            if (.option_needs_argument(option)) {
+                cat(" ", toupper(option@metavar), sep = "")
             }
         }
         cat("\n\t\t")

@@ -5,13 +5,9 @@ optparse: Command line optional argument parser
     :target: https://cran.r-project.org/package=optparse
     :alt: CRAN Status Badge
 
-.. image:: https://travis-ci.org/trevorld/r-optparse.svg?branch=master
-    :target: https://travis-ci.org/trevorld/r-optparse
-    :alt: Travis-CI Build Status
-
-.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/r-optparse?branch=master&svg=true 
-    :target: https://ci.appveyor.com/project/trevorld/r-optparse
-    :alt: AppVeyor Build Status
+.. image:: https://github.com/trevorld/r-optparse/workflows/R-CMD-check/badge.svg
+    :target: https://github.com/trevorld/r-optparse/actions
+    :alt: R-CMD-check
 
 .. image:: https://img.shields.io/codecov/c/github/trevorld/r-optparse/master.svg
     :target: https://codecov.io/github/trevorld/r-optparse?branch=master
@@ -20,7 +16,6 @@ optparse: Command line optional argument parser
 .. image:: https://cranlogs.r-pkg.org/badges/optparse
     :target: https://cran.r-project.org/package=optparse
     :alt: RStudio CRAN mirror downloads
-
 
 A pure R language command line parser inspired by Python's 'optparse' library to
 be used with Rscript to write "#!" shebang scripts that accept short and
@@ -125,12 +120,12 @@ Note by default when ``optparse::parse_args`` sees a ``--help`` flag it will fir
 have richer positional argument support:
 
 .. {r positional_example}
-    parse_args(parser, args = c("-v", "-c25", "75", "22"), positional_arguments = TRUE)
+    parse_args(parser, args = c("-vc", "25", "75", "22"), positional_arguments = TRUE)
 .. ..
 
 The function ``parse_args2`` wraps ``parse_args`` while setting ``positional_arguments=TRUE`` and ``convert_hyphens_to_underscores=TRUE``:
 
 .. {r parse_args2}
 
-    parse_args2(parser, args = c("-v", "-c25", "75", "22"))
+    parse_args2(parser, args = c("-vc", "25", "75", "22"))
 .. ..

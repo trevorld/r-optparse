@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: optparse
 Type: Package
 Title: Command Line Option Parser
-Version: 1.6.6
+Version: 1.7.0-1
 Authors@R: c(person("Trevor L", "Davis", role = c("aut", "cre"), email="trevor.l.davis@gmail.com"),
     person("Allen", "Day", role="ctb", comment="Some documentation and examples ported from the getopt package."),
     person("Python Software Foundation", role="ctb", comment="Some documentation from the optparse Python module."),
@@ -26,9 +26,9 @@ Imports:
     methods,
     getopt (>= 1.20.2)
 Suggests:
-    covr,
     knitr (>= 1.15.19),
     stringr,
     testthat
 VignetteBuilder: knitr
-RoxygenNote: 7.0.2
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

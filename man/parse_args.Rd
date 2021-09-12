@@ -46,10 +46,10 @@ supported for backward compatibility reasons as it alters the format of the retu
 }
 \value{
 Returns a list with field \code{options} containing our option values
-    as well as another field \code{args} which contains a vector of
-    positional arguments.  For backward compatibility, if and only if
-    \code{positional_arguments} is \code{FALSE}, returns a list containing
-    option values.
+as well as another field \code{args} which contains a vector of
+positional arguments.  For backward compatibility, if and only if
+\code{positional_arguments} is \code{FALSE}, returns a list containing
+option values.
 }
 \description{
 \code{parse_args} parses command line options using an \code{OptionParser}
@@ -59,13 +59,13 @@ to \code{TRUE}.
 }
 \section{Acknowledgement}{
 
-    A big thanks to Steve Lianoglou for a bug report and patch;
-    Juan Carlos \enc{Borrás}{Borras} for a bug report;
-    Jim Nikelski for a bug report and patch;
-    Ino de Brujin and Benjamin Tyner for a bug report;
-    Jonas Zimmermann for bug report; Miroslav Posta for bug reports;
-    Stefan Seemayer for bug report and patch;
-    Kirill \enc{Müller}{Muller} for patches; Steve Humburg for patch.
+A big thanks to Steve Lianoglou for a bug report and patch;
+Juan Carlos \enc{Borrás}{Borras} for a bug report;
+Jim Nikelski for a bug report and patch;
+Ino de Brujin and Benjamin Tyner for a bug report;
+Jonas Zimmermann for bug report; Miroslav Posta for bug reports;
+Stefan Seemayer for bug report and patch;
+Kirill \enc{Müller}{Muller} for patches; Steve Humburg for patch.
 }
 
 \examples{
@@ -104,7 +104,7 @@ parse_args2(parser, args = c("--add-numbers", "example.txt"))
 }
 \references{
 Python's \code{optparse} library, which inspired this package,
-     is described here: \url{http://docs.python.org/library/optparse.html}
+is described here: \url{http://docs.python.org/library/optparse.html}
 }
 \seealso{
 \code{\link{OptionParser}} \code{\link{print_help}}
