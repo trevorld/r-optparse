@@ -9,3 +9,4 @@ README.html
 ^\.lintr$
 ^\.travis\.yml$
 revdep
+^\.github$
