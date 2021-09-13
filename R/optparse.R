@@ -477,7 +477,7 @@ TitledHelpFormatter <- function(object) {
 #'
 #' @seealso \code{\link{OptionParser}} \code{\link{print_help}}
 #' @references Python's \code{optparse} library, which inspired this package,
-#'      is described here: \url{http://docs.python.org/library/optparse.html}
+#'      is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @encoding latin1
 #' @examples
 #' # example from vignette
