@@ -132,7 +132,7 @@ OptionParserOption <- setClass("OptionParserOption", representation(short_flag =
 #' @seealso \code{\link{parse_args}} \code{\link{make_option}}
 #'     \code{\link{add_option}}
 #' @references Python's \code{optparse} library, which inspired this package,
-#'    is described here: \url{http://docs.python.org/library/optparse.html}
+#'    is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @import getopt
 #' @export
 OptionParser <- function(usage = "usage: %prog [options]", option_list = list(), # nolint
@@ -216,7 +216,7 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list = list(),
 #'
 #' @seealso \code{\link{parse_args}} \code{\link{OptionParser}}
 #' @references Python's \code{optparse} library, which inspires this package,
-#'     is described here: \url{http://docs.python.org/library/optparse.html}
+#'     is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @examples
 #'
 #'    make_option("--longflag")
@@ -333,7 +333,7 @@ add_option <- function(object, opt_str, action = NULL, type = NULL,
 #'
 #' @seealso \code{{parse_args}} \code{{OptionParser}}
 #' @references Python's \code{optparse} library, which inspired this package,
-#'     is described here: \url{http://docs.python.org/library/optparse.html}
+#'     is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @export
 print_help <- function(object) {
     object@formatter(object)

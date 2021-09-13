@@ -33,7 +33,7 @@
 #'on, is Copyright 1990-2009, Python Software Foundation.
 #'@seealso \code{\link[getopt]{getopt}}
 #'@references Python's \code{optparse} library, which this package is based on,
-#'is described here: \url{http://docs.python.org/library/optparse.html}
+#'is described here: \url{https://docs.python.org/3/library/optparse.html}
 #'@keywords package
 #'@examples
 #'

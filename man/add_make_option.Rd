@@ -115,7 +115,7 @@ new \code{OptionParser} instance.
 }
 \references{
 Python's \code{optparse} library, which inspires this package,
-is described here: \url{http://docs.python.org/library/optparse.html}
+is described here: \url{https://docs.python.org/3/library/optparse.html}
 }
 \seealso{
 \code{\link{parse_args}} \code{\link{OptionParser}}

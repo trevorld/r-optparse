@@ -41,7 +41,7 @@ flag is able to have a corresponding argument. \%\%\%
 }
 \references{
 Python's \code{optparse} library, which this package is based on,
-is described here: \url{http://docs.python.org/library/optparse.html}
+is described here: \url{https://docs.python.org/3/library/optparse.html}
 }
 \seealso{
 \code{\link[getopt]{getopt}}
