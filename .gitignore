@@ -3,6 +3,7 @@
 *.rst
 .Rproj.user
 /.Rhistory
+pkgdown
 revdep
 README.md
 README.html

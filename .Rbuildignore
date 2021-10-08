@@ -1,6 +1,8 @@
 cran-comments.rst
 CONTRIBUTING
 Rakefile
+^raw-data$
+^pkgdown$
 README.Rrst
 README.rst
 README.html
