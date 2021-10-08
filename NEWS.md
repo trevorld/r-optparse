@@ -1,4 +1,4 @@
-optparse 1.7.0
+optparse 1.7.1
 ==============
 
 * Add a ``formatter`` argument to ``OptionParser()`` for a function to format the usage message (#30).

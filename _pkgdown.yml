@@ -1,4 +1,4 @@
-destination: "/home/trevorld/a/projects/websites/R/optparse/"
+destination: "../../websites/R/optparse/"
 url: "https://trevorldavis.com/R/optparse"
 development:
     mode: auto

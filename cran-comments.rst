@@ -1,14 +1,21 @@
 **Test environments**
 
+* local (linux), R 4.1.1
 * win-builder (windows), R devel
-* appveyor (windows), R release and R devel
-* local (linux), R 3.6.3
-* travis-ci (linux), R release and R devel
-* travis-ci (OSX), R release
+* Github Actions (linux), R devel and R release
+* Github Actions (OSX), R release
+* Github Actions (windows), R release
 
 **R CMD check --as-cran results**
 
 Status: OK
+
+**revdepcheck results**
+
+We checked 14 reverse dependencies (7 from CRAN + 7 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
 
 **Nota benes**
 
@@ -24,7 +31,7 @@ Status: OK
 
   Looking online it seems ``error 127`` is an issue with a virtual machine not
   having enough memory.  Perhaps ``--no-vignettes`` flag should be turned on
-  for OSX test machines?  I am unable to reproduce this error in my Travis-CI
+  for OSX test machines?  I am unable to reproduce this error in my Github Actions
   OSX test environment (i.e. the vignette always builds fine).
 
 * As in previous uploads while in a non-interactive session (i.e. in an
