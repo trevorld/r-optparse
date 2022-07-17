@@ -1,3 +1,9 @@
+optparse 1.7.2
+==============
+
+* Throws a more informative error message for unknown short flags when ``positional_arguments=TRUE``.
+  Thanks Greg Minshall for bug report.
+
 optparse 1.7.1
 ==============
 

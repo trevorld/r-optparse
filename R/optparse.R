@@ -563,7 +563,7 @@ getopt_options <- function(object, args) {
 
     if (length(args)) {
         opt <- try(getopt(spec = spec, opt = args), silent = TRUE)
-        if (class(opt) == "try-error") {
+        if (inherits(opt, "try-error")) {
             if (grepl("redundant short names for flags", opt)) {
                 opt <- paste(opt, "did you forget to set ``add_help_option=FALSE`` in ``OptionParser``")
             }
@@ -690,6 +690,7 @@ parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
             if (!is.na(option@short_flag) && option@short_flag == last_flag)
                 return(.option_needs_argument(option))
         }
+        stop("Don't know short flag argument ", last_flag)
     }
 }
 # convenience functions that tells if argument is a type of flag and returns all long flag options or short flag options
