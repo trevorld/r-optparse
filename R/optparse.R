@@ -519,6 +519,37 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
                     print_help_and_exit = TRUE, positional_arguments = FALSE,
                     convert_hyphens_to_underscores = FALSE) {
 
+    tryCatch(parse_args_helper(object, args,
+                               print_help_and_exit, positional_arguments,
+                               convert_hyphens_to_underscores),
+             error = function(e) pa_stop(object, e))
+}
+
+quieter_error_handler <- function(e) {
+    quit('no', status = 1, runLast = FALSE)
+}
+
+pa_stop <- function(object, e) {
+    cnd <- errorCondition(e$message,
+                          call = "optparse::parse_args_helper()",
+                          class = "optparse_parse_error")
+    if (interactive()) {
+        stop(cnd)
+    } else {
+        signalCondition(cnd)
+        msg <- paste0("\n", get_Rscript_filename(), ": error: ", e$message)
+        cat(object@usage, msg, sep = "\n", file = stderr())
+        opt <- options(error = getOption("error",  quieter_error_handler),
+                       show.error.messages = FALSE)
+        on.exit(options(opt))
+        stop(cnd)
+    }
+}
+
+parse_args_helper <- function(object, args = commandArgs(trailingOnly = TRUE),
+                              print_help_and_exit = TRUE, positional_arguments = FALSE,
+                              convert_hyphens_to_underscores = FALSE) {
+
     pal <- should_include_any_args(positional_arguments)
     include_any_args <- pal$include_any_args
     positional_arguments <- pal$positional_arguments
@@ -538,6 +569,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
                 quit(status = 0)
         }
     }
+
     if (length(arguments_positional) < min(positional_arguments)) {
       stop(sprintf("required at least %g positional arguments, got %g",
                    min(positional_arguments), length(arguments_positional)))
@@ -552,6 +584,7 @@ parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
         return(options_list)
     }
 }
+
 
 getopt_options <- function(object, args) {
     # Convert our option specification into ``getopt`` format
@@ -688,7 +721,7 @@ requires_long_flag <- function(argument, object) {
             if (option@long_flag == argument)
                 return(option_needs_argument(option))
         }
-        stop("Don't know long flag argument ", argument)
+        stop(paste("no such option:", argument))
     }
 }
 
@@ -699,7 +732,7 @@ requires_short_flag <- function(argument, object) {
         if (!is.na(option@short_flag) && option@short_flag == last_flag)
             return(option_needs_argument(option))
     }
-    stop("Don't know short flag argument ", last_flag)
+    stop(paste("no such option:", last_flag))
 }
 
 

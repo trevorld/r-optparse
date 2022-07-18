@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: optparse
 Type: Package
 Title: Command Line Option Parser
-Version: 1.7.2-1
+Version: 1.7.2-2
 Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")),
@@ -23,7 +23,7 @@ URL: https://github.com/trevorld/r-optparse
 BugReports: https://github.com/trevorld/r-optparse/issues
 LazyLoad: yes
 Depends:
-    R (>= 2.9.0)
+    R (>= 3.6.0)
 Imports:
     methods,
     getopt (>= 1.20.2)

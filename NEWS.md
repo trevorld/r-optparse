@@ -1,8 +1,13 @@
 optparse 1.7.2
 ==============
 
+* The errors raised by `parse_args()` (and `parse_args2()`) are now of class "optparse\_parse\_error".
+
+  When `interactive()` is `FALSE` we now print out a usage string followed by 
+  a (less verbose) error message.
+
 * Throws a more informative error message for unknown short flags when ``positional_arguments=TRUE``.
-  Thanks Greg Minshall for bug report.
+  Thanks Greg Minshall for bug report (#42).
 
 optparse 1.7.1
 ==============
