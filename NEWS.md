@@ -1,4 +1,4 @@
-optparse 1.7.2
+optparse 1.7.3
 ==============
 
 * The errors raised by `parse_args()` (and `parse_args2()`) are now of class "optparse\_parse\_error".
