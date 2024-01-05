@@ -1,6 +1,6 @@
 ..
   %\VignetteIndexEntry{optparse Command Line Option Parsing}
-  %\VignetteEngine{knitr}
+  %\VignetteEngine{knitr::knitr}
 
 optparse Command Line Option Parsing
 ====================================

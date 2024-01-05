@@ -9,8 +9,8 @@ optparse: Command line optional argument parser
     :target: https://github.com/trevorld/r-optparse/actions
     :alt: R-CMD-check
 
-.. image:: https://img.shields.io/codecov/c/github/trevorld/r-optparse/master.svg
-    :target: https://codecov.io/github/trevorld/r-optparse?branch=master
+.. image:: https://codecov.io/github/trevorld/r-optparse/branch/master/graph/badge.svg
+    :target: https://app.codecov.io/github/trevorld/r-optparse?branch=master
     :alt: Coverage Status
 
 .. image:: https://cranlogs.r-pkg.org/badges/optparse
