@@ -1,7 +1,7 @@
 optparse 1.7.4
 ==============
 
-* Revise vignette engine specification to suppress new CRAN check NOTE (#43).
+* Revises vignette engine specification in the `DESCRIPTION` to suppress new CRAN check NOTE (#43).
 
 optparse 1.7.3
 ==============

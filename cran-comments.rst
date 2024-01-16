@@ -1,6 +1,6 @@
 **Test environments**
 
-* local (linux), R 4.2.1
+* local (linux), R 4.3.2
 * win-builder (windows), R devel
 * Github Actions (linux), R devel and R release
 * Github Actions (OSX), R release
@@ -12,8 +12,9 @@ Status: OK
 
 **revdepcheck results**
 
+## revdepcheck results
 
-We checked 13 reverse dependencies (3 from CRAN + 10 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
+We checked 13 reverse dependencies (9 from CRAN + 4 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
