@@ -262,10 +262,7 @@ make_option <- function(opt_str, action = NULL, type = NULL, dest = NULL, defaul
         type <- infer_type(action, default)
     }
     if (type == "numeric") type <- "double"
-    # default
-    if ((type != typeof(default)) && !is.null(default)) {
-        storage.mode(default) <- type
-    }
+
     # dest
     if (is.null(dest)) dest <- sub("^--", "", long_flag)
     # metavar
