@@ -1,3 +1,10 @@
+optparse 1.7.5
+==============
+
+* We no longer coerce the type of an option `default` to match that of
+  its `type` argument when `action = "callback"`.
+  Thanks husheng (@hs3434) for bug report (#47).
+
 optparse 1.7.4
 ==============
 
