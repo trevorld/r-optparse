@@ -33,8 +33,7 @@ option_list <- list(
 parser_ol <- OptionParser(option_list = option_list)
 
 
-context("Testing make_option")
-test_that("make_option works as expected", {
+test_that("`make_option()` works as expected", {
     expect_equal(make_option("--integer", type = "integer", default = 5),
                 make_option("--integer", default = as.integer(5)))
     expect_equal(make_option("--logical", type = "logical", default = "TRUE"),
@@ -47,8 +46,7 @@ test_that("make_option works as expected", {
 get_long_flags <- function(parser) {
     sort(sapply(parser@options, function(x) x@long_flag))
 }
-context("Test add_option")
-test_that("add_option works as expected", {
+test_that("`add_option()` works as expected", {
     parser1 <- OptionParser(option_list = list(make_option("--generator"), make_option("--count")))
     parser2 <- OptionParser()
     parser2 <- add_option(parser2, "--generator")
@@ -56,8 +54,7 @@ test_that("add_option works as expected", {
     expect_equal(get_long_flags(parser1), get_long_flags(parser2))
 })
 
-context("Testing parse_args")
-test_that("parse_args works as expected", {
+test_that("`parse_args()` works as expected", {
     # option_list took outside test_that
     option_list2 <- list(
         make_option(c("-n", "--add-numbers"), action = "store_true", default = FALSE,
@@ -241,7 +238,6 @@ test_that("test bug with a NA short flag option with positional_arguments = TRUE
                 sort_list(list(options = list(help = TRUE), args = "foo")))
 })
 
-context("print_help")
 test_that("description and epilogue work as expected", {
     parser <- OptionParser()
     expect_output(print_help(parser), "Usage:")
@@ -318,7 +314,6 @@ test_that("Can parse empty string", {
 # nolint end
 
 # Use h flag for non-help (Reported by Jeff Bruce)
-context("Use h option for non-help")
 test_that("Use h option for non-help", {
     option_list_neg <- list(make_option(c("-h", "--mean"), default = 0.0))
     parser <- OptionParser(usage = "\\%prog [options] file", option_list = option_list_neg)
@@ -328,4 +323,13 @@ test_that("Use h option for non-help", {
     parser <- OptionParser(usage = "\\%prog [options] file", option_list = option_list_neg, add_help_option = FALSE)
     args <- parse_args(parser, args = c("-h", "-5.0"))
     expect_equal(args, list(mean = -5.0))
+})
+
+# Bug found by @husheng (#47)
+test_that("Don't coerce `default` of callback action match that of `type`", {
+    parser <- OptionParser()
+    str2bool <- function(option, flag, option_value, parser) as.logical(option_value)
+    parser <- add_option(parser, "--bool", type = "character", default = FALSE, callback = str2bool)
+    expect_equal(parse_args(parser, c())$bool, FALSE)
+    expect_equal(parse_args(parser, "--bool=T")$bool, TRUE)
 })

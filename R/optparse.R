@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2022 Trevor L. Davis <trevor.l.davis@gmail.com>
+# Copyright (c) 2010-2024 Trevor L. Davis <trevor.l.davis@gmail.com>
 # Copyright (c) 2015 Rick FitzJohn https://github.com/richfitz
 # Copyright (c) 2013 Kirill Müller https://github.com/krlmlr
 # Copyright (c) 2011 Jim Nikelski <nikelski@bic.mni.mcgill.ca>
@@ -262,12 +262,17 @@ make_option <- function(opt_str, action = NULL, type = NULL, dest = NULL, defaul
         type <- infer_type(action, default)
     }
     if (type == "numeric") type <- "double"
+
     # default
-    if ((type != typeof(default)) && !is.null(default)) {
+    if ((action != "callback") &&
+        (type != typeof(default)) &&
+        !is.null(default)) {
         storage.mode(default) <- type
     }
+
     # dest
     if (is.null(dest)) dest <- sub("^--", "", long_flag)
+
     # metavar
     if (is.null(metavar)) {
         if (option_needs_argument_helper(action, type)) {

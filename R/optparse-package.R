@@ -24,8 +24,7 @@
 #'
 #'@name optparse-package
 #'@aliases optparse-package optparse
-#'@docType package
-#'@author Trevor Davis.
+#'@author Trevor L. Davis.
 #'
 #'Some documentation and unit tests ported from Allen Day's getopt package.
 #'
@@ -44,4 +43,4 @@
 #'        readLines(example_file_2)
 #'    }
 #'
-NULL
+"_PACKAGE"

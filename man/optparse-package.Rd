@@ -47,7 +47,7 @@ is described here: \url{https://docs.python.org/3/library/optparse.html}
 \code{\link[getopt]{getopt}}
 }
 \author{
-Trevor Davis.
+Trevor L. Davis.
 
 Some documentation and unit tests ported from Allen Day's getopt package.
 
