@@ -2,8 +2,8 @@ Encoding: UTF-8
 Package: optparse
 Type: Package
 Title: Command Line Option Parser
-Version: 1.7.5-0
-Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"),
+Version: 1.7.5
+Authors@R: c(person("Trevor L.", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")),
     person("Allen", "Day", role="ctb", comment="Some documentation and examples ported from the getopt package."),
