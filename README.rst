@@ -57,7 +57,7 @@ examples
 A simple example:
 
 
-.. sourcecode:: r
+.. code:: r
     
 
         library("optparse")
@@ -92,7 +92,7 @@ so it typically doesn't need to be explicitly set if writing an Rscript.
 One can also equivalently make options in a list:
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("optparse")
@@ -155,7 +155,7 @@ Note by default when ``optparse::parse_args`` sees a ``--help`` flag it will fir
 have richer positional argument support:
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     parse_args(parser, args = c("-vc", "25", "75", "22"), positional_arguments = TRUE)
@@ -182,7 +182,7 @@ have richer positional argument support:
 The function ``parse_args2`` wraps ``parse_args`` while setting ``positional_arguments=TRUE`` and ``convert_hyphens_to_underscores=TRUE``:
 
 
-.. sourcecode:: r
+.. code:: r
     
 
         parse_args2(parser, args = c("-vc", "25", "75", "22"))
