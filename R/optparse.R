@@ -762,7 +762,7 @@ expand_short_option <- function(argument) {
 convert_to_getopt <- function(object) {
     short_flag <- sub("^-", "", object@short_flag)
     long_flag <- sub("^--", "", object@long_flag)
-    argument <- ifelse(option_needs_argument(object), 1, 0)
+    argument <- as.integer(option_needs_argument(object))
     type <- ifelse(object@type == "NULL", "logical", object@type)
     return(c(long_flag, short_flag, argument, type, object@help))
 }
@@ -772,6 +772,6 @@ option_needs_argument <- function(option) {
 option_needs_argument_helper <- function(action, type) {
     switch(action,
            store = TRUE,
-           callback = ifelse(type == "NULL", FALSE, TRUE),
+           callback = !(type == "NULL"),
            FALSE)
 }
