@@ -33,7 +33,7 @@ if( file.access(file) == -1) {
 }
 
 if(opt$add_numbers) {
-    cat(paste(1:length(file_text), file_text), sep = "\n")
+    cat(paste(seq_along(file_text), file_text), sep = "\n")
 } else {
     cat(file_text, sep = "\n")
 }
