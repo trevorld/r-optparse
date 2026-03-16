@@ -1,0 +1,6 @@
+[format]
+indent-style = "tab"
+indent-width = 4
+line-ending = "lf"
+line-width = 100
+skip = ["tribble"]
