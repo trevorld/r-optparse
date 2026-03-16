@@ -5,7 +5,7 @@ optparse: Command line optional argument parser
     :target: https://cran.r-project.org/package=optparse
     :alt: CRAN Status Badge
 
-.. image:: https://github.com/trevorld/r-optparse/workflows/R-CMD-check/badge.svg
+.. image:: https://github.com/trevorld/r-optparse/actions/workflows/R-CMD-check.yaml/badge.svg?branch=master
     :target: https://github.com/trevorld/r-optparse/actions
     :alt: R-CMD-check
 
