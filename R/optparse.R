@@ -48,9 +48,16 @@
 #' @seealso \code{\link{OptionParserOption}}
 #' @import methods
 #' @exportClass OptionParser
-setClass("OptionParser", representation(usage = "character", options = "list",
-                description = "character", epilogue = "character",
-                formatter = "function"))
+setClass(
+	"OptionParser",
+	representation(
+		usage = "character",
+		options = "list",
+		description = "character",
+		epilogue = "character",
+		formatter = "function"
+	)
+)
 
 #' Class to hold information about command-line options
 #'
@@ -87,16 +94,21 @@ setClass("OptionParser", representation(usage = "character", options = "list",
 #' @seealso \code{\link{make_option}}
 #' @exportClass OptionParserOption
 #' @export OptionParserOption
-OptionParserOption <- setClass("OptionParserOption", representation(short_flag = "character", # nolint
-                                    long_flag = "character",
-                                    action = "character",
-                                    type = "character",
-                                    dest = "character",
-                                    default = "ANY",
-                                    help = "character",
-                                    metavar = "character",
-                                    callback = "ANY",
-                                    callback_args = "ANY"))
+OptionParserOption <- setClass(
+	"OptionParserOption",
+	representation(
+		short_flag = "character", # nolint
+		long_flag = "character",
+		action = "character",
+		type = "character",
+		dest = "character",
+		default = "ANY",
+		help = "character",
+		metavar = "character",
+		callback = "ANY",
+		callback_args = "ANY"
+	)
+)
 
 #' A function to create an instance of a parser object
 #'
@@ -135,32 +147,45 @@ OptionParserOption <- setClass("OptionParserOption", representation(short_flag =
 #'    is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @import getopt
 #' @export
-OptionParser <- function(usage = "usage: %prog [options]", option_list = list(), # nolint
-                            add_help_option = TRUE, prog = NULL,
-                            description = "", epilogue = "",
-                            formatter = IndentedHelpFormatter) {
+OptionParser <- function(
+	usage = "usage: %prog [options]",
+	option_list = list(), # nolint
+	add_help_option = TRUE,
+	prog = NULL,
+	description = "",
+	epilogue = "",
+	formatter = IndentedHelpFormatter
+) {
+	if (is.null(prog)) {
+		prog <- get_Rscript_filename()
+	}
+	if (length(prog) && !is.na(prog)) {
+		usage <- gsub("%prog", prog, usage)
+		description <- gsub("%prog", prog, description)
+		epilogue <- gsub("%prog", prog, epilogue)
+	}
+	# Match behavior of usage string in Python optparse package
+	usage <- sub("^usage: ", "Usage: ", usage)
+	usage <- ifelse(grepl("^Usage: ", usage), usage, sub("^", "Usage: ", usage))
+	if (add_help_option) {
+		option_list[[length(option_list) + 1]] <-
+			make_option(
+				c("-h", "--help"),
+				action = "store_true",
+				dest = "help",
+				default = FALSE,
+				help = "Show this help message and exit"
+			)
+	}
 
-    if (is.null(prog)) {
-        prog <- get_Rscript_filename()
-    }
-    if (length(prog) && !is.na(prog)) {
-        usage <- gsub("%prog", prog, usage)
-        description <- gsub("%prog", prog, description)
-        epilogue <- gsub("%prog", prog, epilogue)
-    }
-    # Match behavior of usage string in Python optparse package
-    usage <- sub("^usage: ", "Usage: ", usage)
-    usage <- ifelse(grepl("^Usage: ", usage), usage, sub("^", "Usage: ", usage))
-    if (add_help_option) {
-        option_list[[length(option_list) + 1]] <-
-            make_option(c("-h", "--help"),
-                action = "store_true", dest = "help", default = FALSE,
-                help = "Show this help message and exit")
-    }
-
-    return(new("OptionParser", usage = usage, options = option_list,
-                    description = description, epilogue = epilogue,
-                    formatter = formatter))
+	return(new(
+		"OptionParser",
+		usage = usage,
+		options = option_list,
+		description = description,
+		epilogue = epilogue,
+		formatter = formatter
+	))
 }
 
 #' Functions to enable our OptionParser to recognize specific command line
@@ -240,90 +265,137 @@ OptionParser <- function(usage = "usage: %prog [options]", option_list = list(),
 #'        help = "Standard deviation if generator == \"rnorm\" [default %default]")
 #'
 #' @export
-make_option <- function(opt_str, action = NULL, type = NULL, dest = NULL, default = NULL,
-                        help = "", metavar = NULL, callback = NULL, callback_args = NULL) {
+make_option <- function(
+	opt_str,
+	action = NULL,
+	type = NULL,
+	dest = NULL,
+	default = NULL,
+	help = "",
+	metavar = NULL,
+	callback = NULL,
+	callback_args = NULL
+) {
+	action <- ifelse(is.null(action), ifelse(is.null(callback), "store", "callback"), action)
 
-    action <- ifelse(is.null(action), ifelse(is.null(callback), "store", "callback"), action)
+	# flags
+	short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
+	if (length(short_flag) == 0) {
+		short_flag <- NA_character_
+	} else {
+		if (nchar(short_flag) > 2) {
+			stop(paste("Short flag", short_flag, "must only be a '-' and a single letter"))
+		}
+	}
+	long_flag <- opt_str[grepl("^--[[:alpha:]]", opt_str)]
+	if (length(long_flag) == 0) {
+		stop("We require a long flag option")
+	}
 
-    # flags
-    short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
-    if (length(short_flag) == 0) {
-        short_flag <- NA_character_
-    } else {
-        if (nchar(short_flag) > 2) {
-            stop(paste("Short flag", short_flag, "must only be a '-' and a single letter"))
-        }
-    }
-    long_flag <- opt_str[grepl("^--[[:alpha:]]", opt_str)]
-    if (length(long_flag) == 0) stop("We require a long flag option")
+	# type
+	if (is.null(type)) {
+		type <- infer_type(action, default)
+	}
+	if (type == "numeric") {
+		type <- "double"
+	}
 
-    # type
-    if (is.null(type)) {
-        type <- infer_type(action, default)
-    }
-    if (type == "numeric") type <- "double"
+	# default
+	if (
+		(action != "callback") &&
+			(type != typeof(default)) &&
+			!is.null(default)
+	) {
+		storage.mode(default) <- type
+	}
 
-    # default
-    if ((action != "callback") &&
-        (type != typeof(default)) &&
-        !is.null(default)) {
-        storage.mode(default) <- type
-    }
+	# dest
+	if (is.null(dest)) {
+		dest <- sub("^--", "", long_flag)
+	}
 
-    # dest
-    if (is.null(dest)) dest <- sub("^--", "", long_flag)
+	# metavar
+	if (is.null(metavar)) {
+		if (option_needs_argument_helper(action, type)) {
+			metavar <- sub("^--", "", long_flag)
+		} else {
+			metavar <- character(0)
+		}
+	}
+	warn_callback(action, callback, callback_args)
+	if (is.null(callback_args)) {
+		callback_args <- list()
+	}
 
-    # metavar
-    if (is.null(metavar)) {
-        if (option_needs_argument_helper(action, type)) {
-            metavar <- sub("^--", "", long_flag)
-        } else {
-            metavar <- character(0)
-        }
-    }
-    warn_callback(action, callback, callback_args)
-    if (is.null(callback_args))
-        callback_args <- list()
-
-    return(new("OptionParserOption", short_flag = short_flag, long_flag = long_flag,
-                        action = action, type = type, dest = dest, default = default,
-                        help = help, metavar = metavar,
-                        callback = callback, callback_args = callback_args))
+	return(new(
+		"OptionParserOption",
+		short_flag = short_flag,
+		long_flag = long_flag,
+		action = action,
+		type = type,
+		dest = dest,
+		default = default,
+		help = help,
+		metavar = metavar,
+		callback = callback,
+		callback_args = callback_args
+	))
 }
 
 infer_type <- function(action, default) {
-    switch(action,
-           store = ifelse(is.null(default), "character", typeof(default)),
-           store_false = "logical",
-           store_true = "logical",
-           callback = "NULL")
+	switch(
+		action,
+		store = ifelse(is.null(default), "character", typeof(default)),
+		store_false = "logical",
+		store_true = "logical",
+		callback = "NULL"
+	)
 }
 
 warn_callback <- function(action, callback, callback_args) {
-    if (action == "callback") {
-        if (!is.function(callback))
-            warning(sprintf("callback argument is not a function"))
-    } else {
-        if (!is.null(callback))
-            warning(sprintf("callback argument is supplied for non-callback action"))
-        if (!is.null(callback_args))
-            warning(sprintf("callback_args argument is supplied for non-callback action"))
-    }
+	if (action == "callback") {
+		if (!is.function(callback)) {
+			warning(sprintf("callback argument is not a function"))
+		}
+	} else {
+		if (!is.null(callback)) {
+			warning(sprintf("callback argument is supplied for non-callback action"))
+		}
+		if (!is.null(callback_args)) {
+			warning(sprintf("callback_args argument is supplied for non-callback action"))
+		}
+	}
 }
 
 #' @rdname add_make_option
 #' @export
-add_option <- function(object, opt_str, action = NULL, type = NULL,
-                    dest = NULL, default = NULL, help = "", metavar = NULL,
-                    callback = NULL, callback_args = NULL) {
-    options_list <- object@options
-    n_original_options <- length(options_list)
-    options_list[[n_original_options + 1]] <- make_option(opt_str = opt_str,
-                                           action = action, type = type, dest = dest,
-                                           default = default, help = help, metavar = metavar,
-                                           callback = callback, callback_args = callback_args)
-    object@options <- options_list
-    return(object)
+add_option <- function(
+	object,
+	opt_str,
+	action = NULL,
+	type = NULL,
+	dest = NULL,
+	default = NULL,
+	help = "",
+	metavar = NULL,
+	callback = NULL,
+	callback_args = NULL
+) {
+	options_list <- object@options
+	n_original_options <- length(options_list)
+	options_list[[n_original_options + 1]] <- make_option(
+		opt_str = opt_str,
+		action = action,
+		type = type,
+		dest = dest,
+		default = default,
+		help = help,
+		metavar = metavar,
+		callback = callback,
+		callback_args = callback_args
+	)
+	object@options <- options_list
+	return(object)
 }
 
 #' Printing an usage message from an OptionParser object
@@ -341,7 +413,7 @@ add_option <- function(object, opt_str, action = NULL, type = NULL,
 #'     is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @export
 print_help <- function(object) {
-    object@formatter(object)
+	object@formatter(object)
 }
 
 #' Builtin help text formatters
@@ -363,81 +435,83 @@ print_help <- function(object) {
 #' @return `NULL` invisibly.  As a side effect prints out help text.
 #' @rdname formatter
 #' @export
-IndentedHelpFormatter <- function(object) { # nolint
-    cat(object@usage, fill = TRUE)
-    cat(object@description, fill = TRUE)
-    cat("\n")
-    cat("Options:", sep = "\n")
+IndentedHelpFormatter <- function(object) {
+	# nolint
+	cat(object@usage, fill = TRUE)
+	cat(object@description, fill = TRUE)
+	cat("\n")
+	cat("Options:", sep = "\n")
 
-    options_list <- object@options
-    for (ii in seq_along(options_list)) {
-        option <- options_list[[ii]]
-        cat("\t")
-        if (!is.na(option@short_flag)) {
-            cat(option@short_flag)
-            if (option_needs_argument(option)) {
-                cat(" ", toupper(option@metavar), sep = "")
-            }
-            cat(", ")
-        }
-        if (!is.null(option@long_flag)) {
-            cat(option@long_flag)
-            if (option_needs_argument(option)) {
-                cat("=", toupper(option@metavar), sep = "")
-            }
-        }
-        cat("\n\t\t")
-        cat(sub("%default", as_string(option@default), option@help))
-        cat("\n\n")
-    }
-    cat(object@epilogue, fill = TRUE)
-    return(invisible(NULL))
+	options_list <- object@options
+	for (ii in seq_along(options_list)) {
+		option <- options_list[[ii]]
+		cat("\t")
+		if (!is.na(option@short_flag)) {
+			cat(option@short_flag)
+			if (option_needs_argument(option)) {
+				cat(" ", toupper(option@metavar), sep = "")
+			}
+			cat(", ")
+		}
+		if (!is.null(option@long_flag)) {
+			cat(option@long_flag)
+			if (option_needs_argument(option)) {
+				cat("=", toupper(option@metavar), sep = "")
+			}
+		}
+		cat("\n\t\t")
+		cat(sub("%default", as_string(option@default), option@help))
+		cat("\n\n")
+	}
+	cat(object@epilogue, fill = TRUE)
+	return(invisible(NULL))
 }
 
 #' @rdname formatter
 #' @export
-TitledHelpFormatter <- function(object) { # nolint
-    usage <- c("Usage\n=====\n", gsub("Usage: ", "", object@usage))
-    cat(usage, fill = TRUE)
-    cat(object@description, fill = TRUE)
-    cat("\n")
-    cat("Options", "=======", sep = "\n")
+TitledHelpFormatter <- function(object) {
+	# nolint
+	usage <- c("Usage\n=====\n", gsub("Usage: ", "", object@usage))
+	cat(usage, fill = TRUE)
+	cat(object@description, fill = TRUE)
+	cat("\n")
+	cat("Options", "=======", sep = "\n")
 
-    options_list <- object@options
-    for (ii in seq_along(options_list)) {
-        option <- options_list[[ii]]
-        if (!is.null(option@long_flag)) {
-            cat(option@long_flag)
-            if (option_needs_argument(option)) {
-                cat("=", toupper(option@metavar), sep = "")
-            }
-        }
-        if (!is.na(option@short_flag)) {
-            cat(", ")
-            cat(option@short_flag)
-            if (option_needs_argument(option)) {
-                cat(" ", toupper(option@metavar), sep = "")
-            }
-        }
-        cat("\n\t\t")
-        cat(sub("%default", as_string(option@default), option@help))
-        cat("\n\n")
-    }
-    cat(object@epilogue, fill = TRUE)
-    return(invisible(NULL))
+	options_list <- object@options
+	for (ii in seq_along(options_list)) {
+		option <- options_list[[ii]]
+		if (!is.null(option@long_flag)) {
+			cat(option@long_flag)
+			if (option_needs_argument(option)) {
+				cat("=", toupper(option@metavar), sep = "")
+			}
+		}
+		if (!is.na(option@short_flag)) {
+			cat(", ")
+			cat(option@short_flag)
+			if (option_needs_argument(option)) {
+				cat(" ", toupper(option@metavar), sep = "")
+			}
+		}
+		cat("\n\t\t")
+		cat(sub("%default", as_string(option@default), option@help))
+		cat("\n\n")
+	}
+	cat(object@epilogue, fill = TRUE)
+	return(invisible(NULL))
 }
 
 # Turn default values into a string we can cat, handles NA's and NULL's
 as_string <- function(default) {
-    if (is.null(default)) {
-        default_str <- "NULL"
-    } else if (!length(default)) {
-        default_str <- paste0(typeof(default), "(0)")
-    } else if (is.na(default)) {
-        default_str <- "NA"
-    } else {
-        default_str <- as.character(default)
-    }
+	if (is.null(default)) {
+		default_str <- "NULL"
+	} else if (!length(default)) {
+		default_str <- paste0(typeof(default), "(0)")
+	} else if (is.na(default)) {
+		default_str <- "NA"
+	} else {
+		default_str <- as.character(default)
+	}
 }
 
 #' Parse command line options.
@@ -520,224 +594,261 @@ as_string <- function(default) {
 #' @import getopt
 #' @importFrom utils tail
 #' @export
-parse_args <- function(object, args = commandArgs(trailingOnly = TRUE),
-                    print_help_and_exit = TRUE, positional_arguments = FALSE,
-                    convert_hyphens_to_underscores = FALSE) {
-
-    tryCatch(parse_args_helper(object, args,
-                               print_help_and_exit, positional_arguments,
-                               convert_hyphens_to_underscores),
-             error = function(e) pa_stop(object, e))
+parse_args <- function(
+	object,
+	args = commandArgs(trailingOnly = TRUE),
+	print_help_and_exit = TRUE,
+	positional_arguments = FALSE,
+	convert_hyphens_to_underscores = FALSE
+) {
+	tryCatch(
+		parse_args_helper(
+			object,
+			args,
+			print_help_and_exit,
+			positional_arguments,
+			convert_hyphens_to_underscores
+		),
+		error = function(e) pa_stop(object, e)
+	)
 }
 
 quieter_error_handler <- function(e) {
-    quit('no', status = 1, runLast = FALSE)
+	quit('no', status = 1, runLast = FALSE)
 }
 
 pa_stop <- function(object, e) {
-    cnd <- errorCondition(e$message,
-                          call = "optparse::parse_args_helper()",
-                          class = "optparse_parse_error")
-    if (interactive()) {
-        stop(cnd)
-    } else {
-        signalCondition(cnd)
-        msg <- paste0("\n", get_Rscript_filename(), ": error: ", e$message)
-        cat(object@usage, msg, sep = "\n", file = stderr())
-        opt <- options(error = getOption("error",  quieter_error_handler),
-                       show.error.messages = FALSE)
-        on.exit(options(opt))
-        stop(cnd)
-    }
+	cnd <- errorCondition(
+		e$message,
+		call = "optparse::parse_args_helper()",
+		class = "optparse_parse_error"
+	)
+	if (interactive()) {
+		stop(cnd)
+	} else {
+		signalCondition(cnd)
+		msg <- paste0("\n", get_Rscript_filename(), ": error: ", e$message)
+		cat(object@usage, msg, sep = "\n", file = stderr())
+		opt <- options(
+			error = getOption("error", quieter_error_handler),
+			show.error.messages = FALSE
+		)
+		on.exit(options(opt))
+		stop(cnd)
+	}
 }
 
-parse_args_helper <- function(object, args = commandArgs(trailingOnly = TRUE),
-                              print_help_and_exit = TRUE, positional_arguments = FALSE,
-                              convert_hyphens_to_underscores = FALSE) {
+parse_args_helper <- function(
+	object,
+	args = commandArgs(trailingOnly = TRUE),
+	print_help_and_exit = TRUE,
+	positional_arguments = FALSE,
+	convert_hyphens_to_underscores = FALSE
+) {
+	pal <- should_include_any_args(positional_arguments)
+	include_any_args <- pal$include_any_args
+	positional_arguments <- pal$positional_arguments
 
-    pal <- should_include_any_args(positional_arguments)
-    include_any_args <- pal$include_any_args
-    positional_arguments <- pal$positional_arguments
+	pal <- parse_positional_args(object, args, positional_arguments)
+	arguments_positional <- pal$arguments_positional
+	args <- pal$args
 
-    pal <- parse_positional_args(object, args, positional_arguments)
-    arguments_positional <- pal$arguments_positional
-    args <- pal$args
+	options_list <- parse_options(object, args, convert_hyphens_to_underscores)
 
-    options_list <- parse_options(object, args, convert_hyphens_to_underscores)
+	if (any(grepl("^help$", names(options_list)))) {
+		if (options_list[["help"]] && print_help_and_exit) {
+			print_help(object)
+			if (interactive()) {
+				stop("help requested")
+			} else {
+				quit(status = 0)
+			}
+		}
+	}
 
-    if (any(grepl("^help$", names(options_list)))) {
-        if (options_list[["help"]] && print_help_and_exit) {
-            print_help(object)
-            if (interactive())
-                stop("help requested")
-            else
-                quit(status = 0)
-        }
-    }
-
-    if (length(arguments_positional) < min(positional_arguments)) {
-      stop(sprintf("required at least %g positional arguments, got %g",
-                   min(positional_arguments), length(arguments_positional)))
-    }
-    if (length(arguments_positional) > max(positional_arguments)) {
-      stop(sprintf("required at most %g positional arguments, got %g",
-                   max(positional_arguments), length(arguments_positional)))
-    }
-    if (include_any_args) {
-        return(list(options = options_list, args = arguments_positional))
-    } else {
-        return(options_list)
-    }
+	if (length(arguments_positional) < min(positional_arguments)) {
+		stop(sprintf(
+			"required at least %g positional arguments, got %g",
+			min(positional_arguments),
+			length(arguments_positional)
+		))
+	}
+	if (length(arguments_positional) > max(positional_arguments)) {
+		stop(sprintf(
+			"required at most %g positional arguments, got %g",
+			max(positional_arguments),
+			length(arguments_positional)
+		))
+	}
+	if (include_any_args) {
+		return(list(options = options_list, args = arguments_positional))
+	} else {
+		return(options_list)
+	}
 }
 
 
 getopt_options <- function(object, args) {
-    # Convert our option specification into ``getopt`` format
-    n_options <- length(object@options)
-    spec <- matrix(NA, nrow = n_options, ncol = 5)
-    for (ii in seq_along(object@options)) {
-        spec[ii, ] <- convert_to_getopt(object@options[[ii]])
-    }
+	# Convert our option specification into ``getopt`` format
+	n_options <- length(object@options)
+	spec <- matrix(NA, nrow = n_options, ncol = 5)
+	for (ii in seq_along(object@options)) {
+		spec[ii, ] <- convert_to_getopt(object@options[[ii]])
+	}
 
-    if (length(args)) {
-        opt <- try(getopt(spec = spec, opt = args), silent = TRUE)
-        if (inherits(opt, "try-error")) {
-            if (grepl("redundant short names for flags", opt)) {
-                opt <- paste(opt, "did you forget to set ``add_help_option=FALSE`` in ``OptionParser``")
-            }
-            stop(opt)
-        }
-    } else {
-        opt <- list()
-    }
-    opt
+	if (length(args)) {
+		opt <- try(getopt(spec = spec, opt = args), silent = TRUE)
+		if (inherits(opt, "try-error")) {
+			if (grepl("redundant short names for flags", opt)) {
+				opt <- paste(
+					opt,
+					"did you forget to set ``add_help_option=FALSE`` in ``OptionParser``"
+				)
+			}
+			stop(opt)
+		}
+	} else {
+		opt <- list()
+	}
+	opt
 }
 
 should_include_any_args <- function(positional_arguments) {
-    # pull out positional arguments if ``positional_arguments`` was set to TRUE
-    # or not 0 or c(0, 0)
-    if (!(length(positional_arguments) %in% 1L:2L))
-        stop("positional_arguments must have length 1 or 2")
-    if (is.logical(positional_arguments)) {
-        if (positional_arguments) {
-            positional_arguments <- c(0, Inf)
-            include_any_args <- TRUE
-        } else {
-            include_any_args <- FALSE
-        }
-    } else if (is.numeric(positional_arguments)) {
-        include_any_args <- TRUE
-    } else {
-        stop("positional_arguments must be logical or numeric")
-    }
-    list(include_any_args = include_any_args,
-         positional_arguments = positional_arguments)
+	# pull out positional arguments if ``positional_arguments`` was set to TRUE
+	# or not 0 or c(0, 0)
+	if (!(length(positional_arguments) %in% 1L:2L)) {
+		stop("positional_arguments must have length 1 or 2")
+	}
+	if (is.logical(positional_arguments)) {
+		if (positional_arguments) {
+			positional_arguments <- c(0, Inf)
+			include_any_args <- TRUE
+		} else {
+			include_any_args <- FALSE
+		}
+	} else if (is.numeric(positional_arguments)) {
+		include_any_args <- TRUE
+	} else {
+		stop("positional_arguments must be logical or numeric")
+	}
+	list(include_any_args = include_any_args, positional_arguments = positional_arguments)
 }
 
 parse_positional_args <- function(object, args, positional_arguments) {
-    arguments_positional <- character(0)
-    if (max(positional_arguments) > 0) {
-        original_arguments <- args
-        args <- NULL
-        is_taken <- FALSE # set to true if optional argument needs to take next argument
-        for (argument in original_arguments) {
-            if (is_taken) {
-                args <- c(args, argument)
-                is_taken <- FALSE
-            } else {
-                if (is_option_string(argument, object)) {
-                    args <- c(args, argument)
-                    if (requires_argument(argument, object))
-                        is_taken <- TRUE
-                } else {
-                    arguments_positional <- c(arguments_positional, argument)
-                }
-            }
-        }
-    }
-    list(arguments_positional = arguments_positional, args = args)
+	arguments_positional <- character(0)
+	if (max(positional_arguments) > 0) {
+		original_arguments <- args
+		args <- NULL
+		is_taken <- FALSE # set to true if optional argument needs to take next argument
+		for (argument in original_arguments) {
+			if (is_taken) {
+				args <- c(args, argument)
+				is_taken <- FALSE
+			} else {
+				if (is_option_string(argument, object)) {
+					args <- c(args, argument)
+					if (requires_argument(argument, object)) {
+						is_taken <- TRUE
+					}
+				} else {
+					arguments_positional <- c(arguments_positional, argument)
+				}
+			}
+		}
+	}
+	list(arguments_positional = arguments_positional, args = args)
 }
 
 parse_options <- function(object, args, convert_hyphens_to_underscores) {
+	opt <- getopt_options(object, args)
 
-    opt <- getopt_options(object, args)
-
-    options_list <- list()
-    for (ii in seq_along(object@options)) {
-        option <- object@options[[ii]]
-        option_value <- opt[[sub("^--", "", option@long_flag)]]
-        if (!is.null(option_value)) {
-            if (option@action == "store_false") {
-                options_list[[option@dest]] <- FALSE
-            } else {
-                options_list[[option@dest]] <- option_value
-            }
-            if (option@action == "callback") {
-                callback_fn <- function(...) {
-                    option@callback(option, option@long_flag,  option_value, object, ...) # nolint
-                }
-                options_list[[option@dest]] <- do.call(callback_fn, option@callback_args)
-            }
-        } else {
-            if (!is.null(option@default) && is.null(options_list[[option@dest]])) {
-                options_list[[option@dest]] <- option@default
-            }
-        }
-    }
-    if (convert_hyphens_to_underscores) {
-        names(options_list) <- gsub("-", "_", names(options_list))
-    }
-    options_list
+	options_list <- list()
+	for (ii in seq_along(object@options)) {
+		option <- object@options[[ii]]
+		option_value <- opt[[sub("^--", "", option@long_flag)]]
+		if (!is.null(option_value)) {
+			if (option@action == "store_false") {
+				options_list[[option@dest]] <- FALSE
+			} else {
+				options_list[[option@dest]] <- option_value
+			}
+			if (option@action == "callback") {
+				callback_fn <- function(...) {
+					option@callback(option, option@long_flag, option_value, object, ...) # nolint
+				}
+				options_list[[option@dest]] <- do.call(callback_fn, option@callback_args)
+			}
+		} else {
+			if (!is.null(option@default) && is.null(options_list[[option@dest]])) {
+				options_list[[option@dest]] <- option@default
+			}
+		}
+	}
+	if (convert_hyphens_to_underscores) {
+		names(options_list) <- gsub("-", "_", names(options_list))
+	}
+	options_list
 }
 
 #' @rdname parse_args
 #' @export
-parse_args2 <- function(object, args = commandArgs(trailingOnly = TRUE),
-                        print_help_and_exit = TRUE) {
-    parse_args(object, args = args, print_help_and_exit = print_help_and_exit,
-               positional_arguments = TRUE, convert_hyphens_to_underscores = TRUE)
+parse_args2 <- function(
+	object,
+	args = commandArgs(trailingOnly = TRUE),
+	print_help_and_exit = TRUE
+) {
+	parse_args(
+		object,
+		args = args,
+		print_help_and_exit = print_help_and_exit,
+		positional_arguments = TRUE,
+		convert_hyphens_to_underscores = TRUE
+	)
 }
 
 # Tells me whether a string is a valid option
 is_option_string <- function(argument, object) {
-    if (is_long_flag(argument)) {
-        return(TRUE)
-    } else if (is_short_flag(argument)) {
-        return(TRUE)
-    } else {
-        return(FALSE)
-    }
+	if (is_long_flag(argument)) {
+		return(TRUE)
+	} else if (is_short_flag(argument)) {
+		return(TRUE)
+	} else {
+		return(FALSE)
+	}
 }
 # Tells me if an option string needs to take an argument
 requires_argument <- function(argument, object) {
-    if (is_long_flag(argument)) {
-        requires_long_flag(argument, object)
-    } else { # is a short flag
-        requires_short_flag(argument, object)
-    }
+	if (is_long_flag(argument)) {
+		requires_long_flag(argument, object)
+	} else {
+		# is a short flag
+		requires_short_flag(argument, object)
+	}
 }
 
 requires_long_flag <- function(argument, object) {
-    if (grepl("=", argument)) {
-        return(FALSE)
-    } else {
-        for (ii in seq_along(object@options)) {
-            option <- object@options[[ii]]
-            if (option@long_flag == argument)
-                return(option_needs_argument(option))
-        }
-        stop(paste("no such option:", argument))
-    }
+	if (grepl("=", argument)) {
+		return(FALSE)
+	} else {
+		for (ii in seq_along(object@options)) {
+			option <- object@options[[ii]]
+			if (option@long_flag == argument) {
+				return(option_needs_argument(option))
+			}
+		}
+		stop(paste("no such option:", argument))
+	}
 }
 
 requires_short_flag <- function(argument, object) {
-    last_flag <- tail(expand_short_option(argument), 1)
-    for (ii in seq_along(object@options)) {
-        option <- object@options[[ii]]
-        if (!is.na(option@short_flag) && option@short_flag == last_flag)
-            return(option_needs_argument(option))
-    }
-    stop(paste("no such option:", last_flag))
+	last_flag <- tail(expand_short_option(argument), 1)
+	for (ii in seq_along(object@options)) {
+		option <- object@options[[ii]]
+		if (!is.na(option@short_flag) && option@short_flag == last_flag) {
+			return(option_needs_argument(option))
+		}
+	}
+	stop(paste("no such option:", last_flag))
 }
 
 
@@ -748,30 +859,27 @@ is_short_flag <- function(argument) return(grepl("^-[^-]", argument))
 # He gave me a non-exclusive unlimited license to this code
 # expand_short_option("-cde") = c("-c", "-d", "-e") # nolint
 expand_short_option <- function(argument) {
-    if (nchar(argument) == 2) {
-        return(argument)
-    } else {
-        argument <- substr(argument, 2, nchar(argument)) # remove leading dash
-        argument <- strsplit(argument, "")[[1]] # split into individual characters
-        argument <- paste("-", argument, sep = "") # add leading dash to each short option
-        return(argument)
-    }
+	if (nchar(argument) == 2) {
+		return(argument)
+	} else {
+		argument <- substr(argument, 2, nchar(argument)) # remove leading dash
+		argument <- strsplit(argument, "")[[1]] # split into individual characters
+		argument <- paste("-", argument, sep = "") # add leading dash to each short option
+		return(argument)
+	}
 }
 
 # Converts our representation of options to format getopt can understand
 convert_to_getopt <- function(object) {
-    short_flag <- sub("^-", "", object@short_flag)
-    long_flag <- sub("^--", "", object@long_flag)
-    argument <- as.integer(option_needs_argument(object))
-    type <- ifelse(object@type == "NULL", "logical", object@type)
-    return(c(long_flag, short_flag, argument, type, object@help))
+	short_flag <- sub("^-", "", object@short_flag)
+	long_flag <- sub("^--", "", object@long_flag)
+	argument <- as.integer(option_needs_argument(object))
+	type <- ifelse(object@type == "NULL", "logical", object@type)
+	return(c(long_flag, short_flag, argument, type, object@help))
 }
 option_needs_argument <- function(option) {
-    option_needs_argument_helper(option@action, option@type)
+	option_needs_argument_helper(option@action, option@type)
 }
 option_needs_argument_helper <- function(action, type) {
-    switch(action,
-           store = TRUE,
-           callback = !(type == "NULL"),
-           FALSE)
+	switch(action, store = TRUE, callback = !(type == "NULL"), FALSE)
 }
