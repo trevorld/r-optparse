@@ -11,7 +11,7 @@ Authors@R: c(person("Trevor L.", "Davis", role=c("aut", "cre"),
     person("Steve", "Lianoglou", role="ctb"),
     person("Jim", "Nikelski", role="ctb"),
     person("Kirill", "Müller", role="ctb"),
-    person("Peter", "Humburg", role="ctb"), 
+    person("Peter", "Humburg", role="ctb"),
     person("Rich", "FitzJohn", role="ctb"),
     person("Gyu Jin", "Choi", role="ctb"))
 Description: A command line parser inspired by Python's 'optparse' library to
@@ -19,7 +19,7 @@ Description: A command line parser inspired by Python's 'optparse' library to
     long flag/options.
 License: GPL (>= 2)
 Copyright: See file (inst/)COPYRIGHTS.
-URL: https://github.com/trevorld/r-optparse
+URL: https://github.com/trevorld/r-optparse, https://trevorldavis.com/R/optparse
 BugReports: https://github.com/trevorld/r-optparse/issues
 LazyLoad: yes
 Depends:
