@@ -30,7 +30,7 @@ arguments <- parse_args(parser, positional_arguments = 1)
 opt <- arguments$options
 file <- arguments$args
 
-if (file.access(file) == -1) {
+if (!file.exists(file)) {
 	stop(sprintf("Specified file ( %s ) does not exist", file))
 } else {
 	file_text <- readLines(file)

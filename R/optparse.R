@@ -160,9 +160,9 @@ OptionParser <- function(
 		prog <- get_Rscript_filename()
 	}
 	if (length(prog) && !is.na(prog)) {
-		usage <- gsub("%prog", prog, usage)
-		description <- gsub("%prog", prog, description)
-		epilogue <- gsub("%prog", prog, epilogue)
+		usage <- gsub("%prog", prog, usage, fixed = TRUE)
+		description <- gsub("%prog", prog, description, fixed = TRUE)
+		epilogue <- gsub("%prog", prog, epilogue, fixed = TRUE)
 	}
 	# Match behavior of usage string in Python optparse package
 	usage <- sub("^usage: ", "Usage: ", usage)
