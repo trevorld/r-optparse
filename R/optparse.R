@@ -145,7 +145,7 @@ OptionParserOption <- setClass(
 #'     \code{\link{add_option}}
 #' @references Python's \code{optparse} library, which inspired this package,
 #'    is described here: \url{https://docs.python.org/3/library/optparse.html}
-#' @import getopt
+#' @importFrom getopt getopt getoperand
 #' @export
 OptionParser <- function(
 	usage = "usage: %prog [options]",
@@ -592,7 +592,6 @@ as_string <- function(default) {
 #'parse_args2(parser, args = c("--add-numbers", "example.txt"))
 #'
 #' @import getopt
-#' @importFrom utils tail
 #' @export
 parse_args <- function(
 	object,
@@ -649,11 +648,16 @@ parse_args_helper <- function(
 	include_any_args <- pal$include_any_args
 	positional_arguments <- pal$positional_arguments
 
-	pal <- parse_positional_args(object, args, positional_arguments)
-	arguments_positional <- pal$arguments_positional
-	args <- pal$args
+	operand <- if (include_any_args) "strict" else "after--only"
+	opt <- getopt_options(object, args, operand)
 
-	options_list <- parse_options(object, args, convert_hyphens_to_underscores)
+	arguments_positional <- character(0)
+	if (include_any_args && length(args)) {
+		oa <- getoperand(opt)
+		if (!is.null(oa)) arguments_positional <- oa
+	}
+
+	options_list <- parse_options(object, opt, convert_hyphens_to_underscores)
 
 	if (any(grepl("^help$", names(options_list)))) {
 		if (options_list[["help"]] && print_help_and_exit) {
@@ -688,7 +692,7 @@ parse_args_helper <- function(
 }
 
 
-getopt_options <- function(object, args) {
+getopt_options <- function(object, args, operand = "after--only") {
 	# Convert our option specification into ``getopt`` format
 	n_options <- length(object@options)
 	spec <- matrix(NA, nrow = n_options, ncol = 5)
@@ -697,7 +701,7 @@ getopt_options <- function(object, args) {
 	}
 
 	if (length(args)) {
-		opt <- try(getopt(spec = spec, opt = args), silent = TRUE)
+		opt <- try(getopt(spec = spec, opt = args, operand = operand), silent = TRUE)
 		if (inherits(opt, "try-error")) {
 			if (grepl("redundant short names for flags", opt)) {
 				opt <- paste(
@@ -734,34 +738,7 @@ should_include_any_args <- function(positional_arguments) {
 	list(include_any_args = include_any_args, positional_arguments = positional_arguments)
 }
 
-parse_positional_args <- function(object, args, positional_arguments) {
-	arguments_positional <- character(0)
-	if (max(positional_arguments) > 0) {
-		original_arguments <- args
-		args <- NULL
-		is_taken <- FALSE # set to true if optional argument needs to take next argument
-		for (argument in original_arguments) {
-			if (is_taken) {
-				args <- c(args, argument)
-				is_taken <- FALSE
-			} else {
-				if (is_option_string(argument, object)) {
-					args <- c(args, argument)
-					if (requires_argument(argument, object)) {
-						is_taken <- TRUE
-					}
-				} else {
-					arguments_positional <- c(arguments_positional, argument)
-				}
-			}
-		}
-	}
-	list(arguments_positional = arguments_positional, args = args)
-}
-
-parse_options <- function(object, args, convert_hyphens_to_underscores) {
-	opt <- getopt_options(object, args)
-
+parse_options <- function(object, opt, convert_hyphens_to_underscores) {
 	options_list <- list()
 	for (ii in seq_along(object@options)) {
 		option <- object@options[[ii]]
@@ -806,76 +783,13 @@ parse_args2 <- function(
 	)
 }
 
-# Tells me whether a string is a valid option
-is_option_string <- function(argument, object) {
-	if (is_long_flag(argument)) {
-		return(TRUE)
-	} else if (is_short_flag(argument)) {
-		return(TRUE)
-	} else {
-		return(FALSE)
-	}
-}
-# Tells me if an option string needs to take an argument
-requires_argument <- function(argument, object) {
-	if (is_long_flag(argument)) {
-		requires_long_flag(argument, object)
-	} else {
-		# is a short flag
-		requires_short_flag(argument, object)
-	}
-}
-
-requires_long_flag <- function(argument, object) {
-	if (grepl("=", argument)) {
-		return(FALSE)
-	} else {
-		for (ii in seq_along(object@options)) {
-			option <- object@options[[ii]]
-			if (option@long_flag == argument) {
-				return(option_needs_argument(option))
-			}
-		}
-		stop(paste("no such option:", argument))
-	}
-}
-
-requires_short_flag <- function(argument, object) {
-	last_flag <- tail(expand_short_option(argument), 1)
-	for (ii in seq_along(object@options)) {
-		option <- object@options[[ii]]
-		if (!is.na(option@short_flag) && option@short_flag == last_flag) {
-			return(option_needs_argument(option))
-		}
-	}
-	stop(paste("no such option:", last_flag))
-}
-
-
-# convenience functions that tells if argument is a type of flag and returns all long flag options or short flag options
-is_long_flag <- function(argument) return(grepl("^--", argument))
-is_short_flag <- function(argument) return(grepl("^-[^-]", argument))
-# expand_short_option based on function by Jim Nikelski (c) 2011
-# He gave me a non-exclusive unlimited license to this code
-# expand_short_option("-cde") = c("-c", "-d", "-e") # nolint
-expand_short_option <- function(argument) {
-	if (nchar(argument) == 2) {
-		return(argument)
-	} else {
-		argument <- substr(argument, 2, nchar(argument)) # remove leading dash
-		argument <- strsplit(argument, "")[[1]] # split into individual characters
-		argument <- paste("-", argument, sep = "") # add leading dash to each short option
-		return(argument)
-	}
-}
-
 # Converts our representation of options to format getopt can understand
 convert_to_getopt <- function(object) {
 	short_flag <- sub("^-", "", object@short_flag)
 	long_flag <- sub("^--", "", object@long_flag)
-	argument <- as.integer(option_needs_argument(object))
+	action <- if (option_needs_argument(object)) "store" else "store_true"
 	type <- ifelse(object@type == "NULL", "logical", object@type)
-	return(c(long_flag, short_flag, argument, type, object@help))
+	return(c(long_flag, short_flag, action, type, object@help))
 }
 option_needs_argument <- function(option) {
 	option_needs_argument_helper(option@action, option@type)

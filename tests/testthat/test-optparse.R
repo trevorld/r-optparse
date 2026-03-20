@@ -359,7 +359,7 @@ test_that("test bug when multiple short flag options '-abc' with positional_argu
 	args <- c("CMD", "-qc", "10", "bumblebee", "--qcdefg")
 	expect_error(
 		parse_args(parser_ol, args = args, positional_arguments = TRUE),
-		"no such option: --qcdefg"
+		'long flag "qcdefg" is invalid'
 	)
 	args <- c("-qxc", "10", "bumblebee")
 	expect_error(

@@ -1,3 +1,9 @@
+optparse 1.8.0 (development)
+============================
+
+* `parse_args()` (and `parse_args2()`) now correctly handle a bare `--` separator: all arguments after `--` are treated as positional arguments rather than options.
+* `parse_args()` (and `parse_args2()`) now support abbreviated long flags (e.g. `--verb` matching `--verbose`) when `positional_arguments` is not `FALSE`. Previously abbreviations were only supported when `positional_arguments = FALSE`.
+
 optparse 1.7.5
 ==============
 
@@ -15,7 +21,7 @@ optparse 1.7.3
 
 * The errors raised by `parse_args()` (and `parse_args2()`) are now of class "optparse\_parse\_error".
 
-  When `interactive()` is `FALSE` we now print out a usage string followed by 
+  When `interactive()` is `FALSE` we now print out a usage string followed by
   a (less verbose) error message.
 
 * Throws a more informative error message for unknown short flags when ``positional_arguments=TRUE``.
@@ -75,7 +81,7 @@ optparse 1.4.4
 
 * Minor documentation fixes.  Thanks J. J. Ramsey and Daeyoung Kim for bug reports.
 * Fix bug when ``add_help_option`` in ``OptionParser`` set to ``FALSE``.  Thanks to Jeff Bruce for bug report.
-* ``parse_args`` now supports ``convert_hyphens_to_underscores`` argument which converts any hyphens to underscores 
+* ``parse_args`` now supports ``convert_hyphens_to_underscores`` argument which converts any hyphens to underscores
   when returning the list of options
 * Now includes the convenience function ``parse_args2`` which wraps ``parse_args`` with ``positional_arguments`` set to ``TRUE``
   and ``convert_hyphens_to_underscores`` set to ``TRUE``.
@@ -98,14 +104,14 @@ optparse 1.2.0
   or two numeric values that denote the minimum and maximum number of supported
   positional arguments.
   Thanks Kirill Müller for patch.
-* If ``interactive() == TRUE`` then ``parse_args`` will no longer ``quit(status=1)`` 
+* If ``interactive() == TRUE`` then ``parse_args`` will no longer ``quit(status=1)``
   after printing a help message but will instead throw an error.
   ``optparse`` will continue to ``quit(status=1)`` after printing a help message
   for non-interactive Rscripts unless ``print_help_and_exit == FALSE``.
 * In ``make_option`` argument ``type="numeric"`` automatically cast to ``double``.
   Previously users might have received an error passing negative numbers if they
   accidentally specified "numeric" instead of "double".
-* Bug fixed in printing usage message for options with default value of NA 
+* Bug fixed in printing usage message for options with default value of NA
   and a help string including "%default".
   Thanks Stefan Seemayer for bug report and patch.
 
@@ -123,9 +129,9 @@ optparse 1.0.0
 
 * Added `description` and `epilogue` arguments to `OptionParser` to allow
   users to add more information to generated help messages
-* Slightly alters the generated usage string 
+* Slightly alters the generated usage string
   to match more closely what the Python module does
 * No longer exports S4 classes that represent OptionParser and OptionParserOption
-* Now requires package getopt (>= 1.19) which has also been moved to 
+* Now requires package getopt (>= 1.19) which has also been moved to
   Imports field from Depends field in DESCRIPTION
 * Now also Suggests stringr package in DESCRIPTION
