@@ -26,7 +26,9 @@ Depends:
     R (>= 3.6.0)
 Imports:
     methods,
-    getopt (>= 1.20.2)
+    getopt (>= 1.21.0-3)
+Remotes:
+	getopt=trevorld/r-getopt
 Suggests:
     knitr (>= 1.15.19),
     stringr,
