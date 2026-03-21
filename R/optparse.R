@@ -128,7 +128,6 @@ OptionParserOption <- setClass(
 #' @seealso [parse_args()] [make_option()] [add_option()]
 #' @references Python's `optparse` library, which inspired this package,
 #'    is described here: \url{https://docs.python.org/3/library/optparse.html}
-#' @importFrom getopt getopt getoperand
 #' @export
 OptionParser <- function(
 	usage = "usage: %prog [options]",
@@ -558,7 +557,6 @@ as_string <- function(default) {
 #'
 #'parse_args2(parser, args = c("--add-numbers", "example.txt"))
 #'
-#' @import getopt
 #' @export
 parse_args <- function(
 	object,

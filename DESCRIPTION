@@ -6,7 +6,7 @@ Version: 1.7.6-1
 Authors@R: c(person("Trevor L.", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")),
-    person("Allen", "Day", role="ctb", comment="Some documentation and examples ported from the getopt package."),
+    person("Allen", "Day", role="aut", comment="Code and documentation ported from the getopt package."),
     person("Python Software Foundation", role="ctb", comment="Some documentation from the optparse Python module."),
     person("Steve", "Lianoglou", role="ctb"),
     person("Jim", "Nikelski", role="ctb"),
@@ -25,10 +25,7 @@ LazyLoad: yes
 Depends:
     R (>= 3.6.0)
 Imports:
-    methods,
-    getopt (>= 1.21.0-3)
-Remotes:
-	getopt=trevorld/r-getopt
+    methods
 Suggests:
     knitr (>= 1.15.19),
     stringr,
