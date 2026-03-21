@@ -15,7 +15,8 @@ make_option(
   help = "",
   metavar = NULL,
   callback = NULL,
-  callback_args = NULL
+  callback_args = NULL,
+  const = NULL
 )
 
 add_option(
@@ -28,7 +29,8 @@ add_option(
   help = "",
   metavar = NULL,
   callback = NULL,
-  callback_args = NULL
+  callback_args = NULL,
+  const = NULL
 )
 }
 \arguments{
@@ -39,9 +41,11 @@ comprised of the \dQuote{-} followed by a letter.}
 
 \item{action}{A character string describing the action \code{optparse} should take when it encounters an option. One of:
 \itemize{
+\item \code{"append"}: appends each occurrence's value to \code{default} (or to an empty vector if \code{default} is \code{NULL}). Returns \code{NULL} if never seen and \code{default} is \code{NULL}.
 \item \code{"callback"}: stores the return value of the \code{callback} function.
 \item \code{"count"}: counts the number of times the flag is seen and adds it to \code{default} (treated as \code{0L} if not supplied). Returns \code{NULL} if never seen and no \code{default} was supplied.
 \item \code{"store"} (default): stores the specified following value.
+\item \code{"store_const"}: stores \code{const} if the flag is seen, otherwise \code{default}. Returns \code{NULL} if the flag is not seen and \code{default} is \code{NULL}.
 \item \code{"store_true"}: stores \code{TRUE} if the option is found.
 \item \code{"store_false"}: stores \code{FALSE} if the option is found.
 }
@@ -66,6 +70,8 @@ If \code{callback} is not \code{NULL} the default action is \code{"callback"} ot
 \item{callback}{A function that executes after the option value is fully parsed. Its return value is assigned to the option. Arguments are: the option S4 object, the long flag string, the value of the option, the parser S4 object, and \code{...}.}
 
 \item{callback_args}{A list of additional arguments passed to \code{callback} (via \code{\link[=do.call]{do.call()}}).}
+
+\item{const}{The value to store when \code{action = "store_const"} and the flag is seen. Ignored for all other actions.}
 
 \item{object}{An instance of the \code{OptionParser} class}
 }

@@ -527,6 +527,39 @@ test_that("Use h option for non-help", {
 	expect_equal(args, list(mean = -5.0))
 })
 
+test_that("store_const action works", {
+	parser <- OptionParser()
+	parser <- add_option(parser, c("-v", "--verbose"), action = "store_const", const = 42L)
+	expect_null(parse_args(parser, c())$verbose)
+	expect_equal(parse_args(parser, c("-v"))$verbose, 42L)
+	expect_equal(parse_args(parser, c("--verbose"))$verbose, 42L)
+	parser2 <- add_option(
+		OptionParser(),
+		"--verbose",
+		action = "store_const",
+		const = 42L,
+		default = 0L
+	)
+	expect_equal(parse_args(parser2, c())$verbose, 0L)
+	expect_equal(parse_args(parser2, c("--verbose"))$verbose, 42L)
+})
+
+test_that("append action works", {
+	parser <- OptionParser()
+	parser <- add_option(parser, c("-f", "--file"), action = "append")
+	expect_null(parse_args(parser, c())$file)
+	expect_equal(parse_args(parser, c("--file", "a.txt"))$file, "a.txt")
+	expect_equal(parse_args(parser, c("--file", "a.txt", "-f", "b.txt"))$file, c("a.txt", "b.txt"))
+	parser2 <- add_option(
+		OptionParser(),
+		c("-f", "--file"),
+		action = "append",
+		default = "default.txt"
+	)
+	expect_equal(parse_args(parser2, c())$file, "default.txt")
+	expect_equal(parse_args(parser2, c("--file", "a.txt"))$file, c("default.txt", "a.txt"))
+})
+
 test_that("count action works", {
 	parser <- OptionParser()
 	parser <- add_option(parser, c("-v", "--verbose"), action = "count")
