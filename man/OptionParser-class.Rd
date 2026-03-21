@@ -11,28 +11,28 @@ Option Parser
 
 \describe{
 \item{\code{usage}}{The program usage message that will printed out if
-\code{parse_args} finds a help option, \code{\%prog} is substituted with the
+\code{\link[=parse_args]{parse_args()}} finds a help option, \verb{\\\%prog} is substituted with the
 value of the \code{prog} argument.}
 
 \item{\code{options}}{A list of of \code{OptionParserOption} instances that will
-define how \code{parse_args} reacts to command line options.
-\code{OptionParserOption} instances are usually created by \code{make_option}
+define how \code{\link[=parse_args]{parse_args()}} reacts to command line options.
+\code{OptionParserOption} instances are usually created by \code{\link[=make_option]{make_option()}}
 and can also be added to an existing \code{OptionParser} instance via the
-\code{add_option} function.}
+\code{\link[=add_option]{add_option()}} function.}
 
-\item{\code{description}}{Additional text for \code{print_help} to print out between
+\item{\code{description}}{Additional text for \code{\link[=print_help]{print_help()}} to print out between
 usage statement and options statement}
 
-\item{\code{epilogue}}{Additional text for \code{print_help} to print out after
+\item{\code{epilogue}}{Additional text for \code{\link[=print_help]{print_help()}} to print out after
 the options statement}
 
-\item{\code{formatter}}{A function that \code{print_help} will use to print out after
+\item{\code{formatter}}{A function that \code{\link[=print_help]{print_help()}} will use to print out after
 the options statement.  Default is \code{\link[=IndentedHelpFormatter]{IndentedHelpFormatter()}}.  This
 package also provides the builtin formatter \code{\link[=TitledHelpFormatter]{TitledHelpFormatter()}}.}
 }}
 
 \seealso{
-\code{\link{OptionParserOption}}
+\link{OptionParserOption}
 }
 \author{
 Trevor Davis.

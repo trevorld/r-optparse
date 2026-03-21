@@ -527,6 +527,17 @@ test_that("Use h option for non-help", {
 	expect_equal(args, list(mean = -5.0))
 })
 
+test_that("count action works", {
+	parser <- OptionParser()
+	parser <- add_option(parser, c("-v", "--verbose"), action = "count")
+	expect_null(parse_args(parser, c())$verbose)
+	expect_equal(parse_args(parser, c("-v"))$verbose, 1L)
+	expect_equal(parse_args(parser, c("-v", "-v", "--verbose"))$verbose, 3L)
+	parser2 <- add_option(OptionParser(), c("-v", "--verbose"), action = "count", default = 2L)
+	expect_equal(parse_args(parser2, c())$verbose, 2L)
+	expect_equal(parse_args(parser2, c("-v", "-v"))$verbose, 4L)
+})
+
 # Bug found by @husheng (#47)
 test_that("Don't coerce `default` of callback action match that of `type`", {
 	parser <- OptionParser()

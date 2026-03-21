@@ -17,41 +17,37 @@ comprised of the \dQuote{-} followed by a letter.}
 \item{\code{long_flag}}{String of the desired long flag comprised of \dQuote{--}
 followed by a letter and then a sequence of alphanumeric characters.}
 
-\item{\code{action}}{A character string that describes the action \code{optparse}
-should take when it encounters an option, either \dQuote{store},
-\dQuote{store_true}, or \dQuote{store_false}.  The default is \dQuote{store}
-which signifies that \code{optparse} should store the specified following
-value if the option is found on the command string.  \dQuote{store_true}
-stores \code{TRUE} if the option is found and \dQuote{store_false} stores
-\code{FALSE} if the option is found.}
+\item{\code{action}}{A character string describing the action \code{optparse} should take when it encounters an option. One of:
+\itemize{
+\item \code{"callback"}: stores the return value of the \code{callback} function.
+\item \code{"count"}: counts the number of times the flag is seen and adds it to \code{default} (treated as \code{0L} if not supplied). Returns \code{NULL} if never seen and no \code{default} was supplied.
+\item \code{"store"} (default): stores the specified following value.
+\item \code{"store_true"}: stores \code{TRUE} if the option is found.
+\item \code{"store_false"}: stores \code{FALSE} if the option is found.
+}
 
-\item{\code{type}}{A character string that describes specifies which data type
-should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
-\dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
-\code{action \%in\% c("store_true", store_false)}, \code{typeof(default)} if
-\code{action == "store"} and default is not \code{NULL} and
-\dQuote{character} if \code{action == "store"} and default is \code{NULL}.
-\dQuote{numeric} will be converted to \dQuote{double}.}
+If \code{callback} is not \code{NULL} the default action is \code{"callback"} otherwise it is \code{"store"}.}
 
-\item{\code{dest}}{A character string that specifies what field in the list returned
-by \code{parse_args} should \code{optparse} store option values.  Default is
-derived from the long flag in \code{opt_str}.}
+\item{\code{type}}{A character string specifying which data type to store: \code{"logical"}, \code{"integer"}, \code{"double"}, \code{"complex"}, or \code{"character"} (\code{"numeric"} is an alias for \code{"double"}). Defaults:
+\itemize{
+\item if \code{action == "count"} then \code{"integer"}
+\item if \code{action \%in\% c("store_false", "store_true")} then \code{"logical"}
+\item if \code{action == "store"} and \code{default} is not \code{NULL} then \code{typeof(default)}else if \code{default} is \code{NULL} then \code{"character"}
+}}
 
-\item{\code{default}}{The default value \code{optparse} should use if it does not
-find the option on the command line.}
+\item{\code{dest}}{A character string specifying what field in the list returned by \code{\link[=parse_args]{parse_args()}} should \code{optparse} store the option value. Default is derived from the long flag in \code{opt_str}.}
 
-\item{\code{help}}{A character string describing the option to be used by
-\code{print_help} in generating a usage message.  \code{\%default} will be
-substituted by the value of \code{default}.}
+\item{\code{default}}{The default value \code{optparse} should use if it does not find the option on the command line.}
 
-\item{\code{metavar}}{A character string that stands in for the option argument when
-printing help text.  Default is the value of \code{dest}.}
+\item{\code{help}}{A character string describing the option, used by \code{\link[=print_help]{print_help()}} in generating a usage message. \code{"\%default"} will be substituted by the value of \code{default}.}
 
-\item{\code{callback}}{A function that executes after the each option value is fully parsed}
+\item{\code{metavar}}{A character string that stands in for the option argument when printing help text. Default is the value of \code{dest}.}
 
-\item{\code{callback_args}}{Additional arguments that pass to the callback function.}
+\item{\code{callback}}{A function that executes after the option value is fully parsed. Its return value is assigned to the option. Arguments are: the option S4 object, the long flag string, the value of the option, the parser S4 object, and \code{...}.}
+
+\item{\code{callback_args}}{A list of additional arguments passed to \code{callback} (via \code{\link[=do.call]{do.call()}}).}
 }}
 
 \seealso{
-\code{\link{make_option}}
+\code{\link[=make_option]{make_option()}}
 }

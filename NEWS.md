@@ -1,6 +1,7 @@
 optparse 1.8.0 (development)
 ============================
 
+* `make_option()` (and `add_option()`) now support `action = "count"`, which counts the number of times a flag is seen and adds it to `default` (treated as `0L` if not supplied). Returns `NULL` if the flag is never seen and no `default` was supplied.
 * `parse_args()` (and `parse_args2()`) now correctly handle a bare `--` separator: all arguments after `--` are treated as positional arguments rather than options.
 * `parse_args()` (and `parse_args2()`) now support abbreviated long flags (e.g. `--verb` matching `--verbose`) when `positional_arguments` is not `FALSE`. Previously abbreviations were only supported when `positional_arguments = FALSE`.
 

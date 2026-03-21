@@ -10,19 +10,19 @@ print_help(object)
 \item{object}{A \code{OptionParser} instance.}
 }
 \value{
-\code{print_help} uses the \code{cat} function to print out a usage
+\code{\link[=print_help]{print_help()}} uses the \code{cat} function to print out a usage
 message.  It returns \code{invisible(NULL)}.
 }
 \description{
-\code{print_help} print an usage message from an OptionParser object, usually
-called by \code{parse_args} when it encounters a help option.
+\code{\link[=print_help]{print_help()}} print an usage message from an OptionParser object, usually
+called by \code{\link[=parse_args]{parse_args()}} when it encounters a help option.
 }
 \references{
 Python's \code{optparse} library, which inspired this package,
 is described here: \url{https://docs.python.org/3/library/optparse.html}
 }
 \seealso{
-\code{{parse_args}} \code{{OptionParser}}
+\code{\link[=parse_args]{parse_args()}} \code{\link[=OptionParser]{OptionParser()}}
 }
 \author{
 Trevor Davis.

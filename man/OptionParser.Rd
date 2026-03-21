@@ -16,27 +16,27 @@ OptionParser(
 }
 \arguments{
 \item{usage}{The program usage message that will printed out if
-\code{parse_args} finds a help option, \code{\%prog} is substituted with the
+\code{\link[=parse_args]{parse_args()}} finds a help option, \verb{\\\%prog} is substituted with the
 value of the \code{prog} argument.}
 
 \item{option_list}{A list of of \code{OptionParserOption} instances that will
-define how \code{parse_args} reacts to command line options.
-\code{OptionParserOption} instances are usually created by \code{make_option}
+define how \code{\link[=parse_args]{parse_args()}} reacts to command line options.
+\code{OptionParserOption} instances are usually created by \code{\link[=make_option]{make_option()}}
 and can also be added to an existing \code{OptionParser} instance via the
-\code{add_option} function.}
+\code{\link[=add_option]{add_option()}} function.}
 
 \item{add_help_option}{Whether a standard help option should be automatically
 added to the \code{OptionParser} instance.}
 
-\item{prog}{Program name to be substituted for \code{\%prog} in the usage
+\item{prog}{Program name to be substituted for \verb{\\\%prog} in the usage
 message (including description and epilogue if present),
 the default is to use the actual Rscript file name if called by an
-Rscript file and otherwise keep \code{\%prog}.}
+Rscript file and otherwise keep \verb{\\\%prog}.}
 
-\item{description}{Additional text for \code{print_help} to print out between
+\item{description}{Additional text for \code{\link[=print_help]{print_help()}} to print out between
 usage statement and options statement}
 
-\item{epilogue}{Additional text for \code{print_help} to print out after
+\item{epilogue}{Additional text for \code{\link[=print_help]{print_help()}} to print out after
 the options statement}
 
 \item{formatter}{A function that formats usage text.
@@ -49,7 +49,7 @@ An instance of the \code{OptionParser} class.
 }
 \description{
 This function is used to create an instance of a parser object
-which when combined with the \code{parse_args}, \code{make_option}, and \code{add_option}
+which when combined with the \code{\link[=parse_args]{parse_args()}}, \code{\link[=make_option]{make_option()}}, and \code{\link[=add_option]{add_option()}}
 methods is very useful for parsing options from the command line.
 }
 \references{
@@ -57,8 +57,7 @@ Python's \code{optparse} library, which inspired this package,
 is described here: \url{https://docs.python.org/3/library/optparse.html}
 }
 \seealso{
-\code{\link{parse_args}} \code{\link{make_option}}
-\code{\link{add_option}}
+\code{\link[=parse_args]{parse_args()}} \code{\link[=make_option]{make_option()}} \code{\link[=add_option]{add_option()}}
 }
 \author{
 Trevor Davis.
