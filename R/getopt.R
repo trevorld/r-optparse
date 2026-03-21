@@ -20,7 +20,8 @@ getopt <- function(
 	opt = NULL,
 	command = get_Rscript_filename(),
 	operand = "after--only",
-	defaults = list()
+	defaults = list(),
+	constants = list()
 ) {
 	operand <- match.arg(operand, c("after--only", "strict"))
 
@@ -88,7 +89,11 @@ getopt <- function(
 		action <- spec[rowmatch, COL_ACTION]
 		dest_name <- spec[rowmatch, COL_DEST]
 
-		if (action == "count") {
+		if (action == "store_const") {
+			result[[dest_name]] <- constants[[long_name]]
+			i <- i + 1L
+			next
+		} else if (action == "count") {
 			result[dest_name] <- (result[[dest_name]] %||% 0L) + 1L
 			i <- i + 1L
 			next
