@@ -3,11 +3,12 @@ optparse 1.8.0 (development)
 
 * `make_option()` (and `add_option()`) now support the following new actions (#22):
 
-  + `action = "append"` which appends each occurrence's value to `default` (or to an empty vector if `default` is `NULL`). Returns `NULL` if the flag is never seen and `default` is `NULL`.
+  + `action = "append"` which appends each occurrence's value to `default`.
+  + `action = "append_const"` which appends `const` to `default` each time the flag is seen.
   + `action = "count"`, which counts the number of times a flag is seen and adds it to `default` (treated as `0L` if not supplied). Returns `NULL` if the flag is never seen and no `default` was supplied.
-  + `action = "store_const"` which stores `const` when the flag is seen and `default` (or `NULL`) otherwise.
+  + `action = "store_const"` which stores `const` when the flag is seen.
 
-* `make_option()` (and `add_option()`) now support a `const` parameter (for new action `"store_const"`)
+* `make_option()` (and `add_option()`) now support a `const` parameter (intended for new actions `"append_const"` and `"store_const"`).
 * `parse_args()` (and `parse_args2()`) now correctly handle a bare `--` separator: all arguments after `--` are treated as positional arguments rather than options.
 * `parse_args()` (and `parse_args2()`) now support abbreviated long flags (e.g. `--verb` matching `--verbose`) when `positional_arguments` is not `FALSE`. Previously abbreviations were only supported when `positional_arguments = FALSE`.
 

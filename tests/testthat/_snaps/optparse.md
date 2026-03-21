@@ -56,6 +56,23 @@
       Error:
       ! positional_arguments must have length 1 or 2
 
+---
+
+    Code
+      capture.output(parse_args(parser, args = c("--help")))
+    Condition
+      Error:
+      ! help requested
+
+---
+
+    Code
+      capture.output(parse_args(parser, args = c("--help"), positional_arguments = c(
+        1, 2)))
+    Condition
+      Error:
+      ! help requested
+
 # Use h option for non-help
 
     Code
@@ -63,4 +80,44 @@
     Condition
       Error in `validObject()`:
       ! invalid class "OptionParser" object: duplicate short flag: -h (did you forget to set `add_help_option = FALSE` in `OptionParser()`?)
+
+# no-argument actions reject --flag=value syntax
+
+    Code
+      parse_args(parser, "--verbose=1")
+    Condition
+      Error:
+      ! long flag "verbose" accepts no arguments
+
+---
+
+    Code
+      parse_args(parser, "--quiet=1")
+    Condition
+      Error:
+      ! long flag "quiet" accepts no arguments
+
+---
+
+    Code
+      parse_args(parser, "--mode=1")
+    Condition
+      Error:
+      ! long flag "mode" accepts no arguments
+
+---
+
+    Code
+      parse_args(parser, "--tag=1")
+    Condition
+      Error:
+      ! long flag "tag" accepts no arguments
+
+---
+
+    Code
+      parse_args(parser, "--count=1")
+    Condition
+      Error:
+      ! long flag "count" accepts no arguments
 

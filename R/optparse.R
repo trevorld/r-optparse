@@ -297,7 +297,7 @@ make_option <- function(
 
 	# default
 	if (
-		!(action %in% c("callback", "store_const")) &&
+		!(action %in% c("callback", "store_const", "append_const")) &&
 			(type != typeof(default)) &&
 			!is.null(default)
 	) {
@@ -344,6 +344,7 @@ infer_type <- function(action, default, const) {
 		store = ifelse(is.null(default), "character", typeof(default)),
 		append = ifelse(is.null(default), "character", typeof(default[[1]])),
 		store_const = typeof(const),
+		append_const = typeof(const),
 		store_false = "logical",
 		store_true = "logical",
 		count = "integer",
@@ -706,7 +707,7 @@ getopt_options <- function(object, args, operand = "after--only") {
 	constants <- list()
 	for (ii in seq_along(object@options)) {
 		option <- object@options[[ii]]
-		if (option@action == "store_const") {
+		if (option@action %in% c("store_const", "append_const")) {
 			constants[[sub("^--", "", option@long_flag)]] <- option@const
 		}
 		if (option@action == "callback" || is.null(option@default)) {
@@ -755,13 +756,7 @@ parse_options <- function(object, opt, convert_hyphens_to_underscores) {
 	for (ii in seq_along(object@options)) {
 		option <- object@options[[ii]]
 		option_value <- opt[[option@dest]]
-		if (option@action == "append") {
-			if (!is.null(options_list[[option@dest]])) {
-				# dest already accumulated by a prior option sharing the same dest; skip
-			} else if (!is.null(option_value)) {
-				options_list[[option@dest]] <- option_value
-			}
-		} else if (option@action == "callback") {
+		if (option@action == "callback") {
 			if (!is.null(option_value)) {
 				options_list[[option@dest]] <- option_value
 				callback_fn <- function(...) {
@@ -803,7 +798,9 @@ parse_args2 <- function(
 convert_to_getopt <- function(object) {
 	short_flag <- sub("^-", "", object@short_flag)
 	long_flag <- sub("^--", "", object@long_flag)
-	action <- if (object@action %in% c("count", "append", "store_false", "store_const")) {
+	action <- if (
+		object@action %in% c("count", "append", "store_false", "store_const", "append_const")
+	) {
 		object@action
 	} else if (option_needs_argument(object)) {
 		"store"

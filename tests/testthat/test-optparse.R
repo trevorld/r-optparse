@@ -527,6 +527,20 @@ test_that("Use h option for non-help", {
 	expect_equal(args, list(mean = -5.0))
 })
 
+test_that("no-argument actions reject --flag=value syntax", {
+	parser <- OptionParser()
+	parser <- add_option(parser, "--verbose", action = "store_true")
+	parser <- add_option(parser, "--quiet", action = "store_false")
+	parser <- add_option(parser, "--mode", action = "store_const", const = "fast")
+	parser <- add_option(parser, "--tag", action = "append_const", const = "x", dest = "tags")
+	parser <- add_option(parser, "--count", action = "count")
+	expect_snapshot(error = TRUE, parse_args(parser, "--verbose=1"))
+	expect_snapshot(error = TRUE, parse_args(parser, "--quiet=1"))
+	expect_snapshot(error = TRUE, parse_args(parser, "--mode=1"))
+	expect_snapshot(error = TRUE, parse_args(parser, "--tag=1"))
+	expect_snapshot(error = TRUE, parse_args(parser, "--count=1"))
+})
+
 test_that("store_const action works", {
 	parser <- OptionParser()
 	parser <- add_option(parser, c("-v", "--verbose"), action = "store_const", const = 42L)
@@ -542,6 +556,27 @@ test_that("store_const action works", {
 	)
 	expect_equal(parse_args(parser2, c())$verbose, 0L)
 	expect_equal(parse_args(parser2, c("--verbose"))$verbose, 42L)
+})
+
+test_that("append_const action works", {
+	parser <- OptionParser()
+	parser <- add_option(parser, "--foo", action = "append_const", const = "foo", dest = "items")
+	parser <- add_option(parser, "--bar", action = "append_const", const = "bar", dest = "items")
+	expect_null(parse_args(parser, c())$items)
+	expect_equal(parse_args(parser, c("--foo"))$items, "foo")
+	expect_equal(parse_args(parser, c("--foo", "--bar"))$items, c("foo", "bar"))
+	expect_equal(parse_args(parser, c("--bar", "--foo", "--bar"))$items, c("bar", "foo", "bar"))
+	parser2 <- OptionParser()
+	parser2 <- add_option(
+		parser2,
+		"--foo",
+		action = "append_const",
+		const = "foo",
+		dest = "items",
+		default = "default"
+	)
+	expect_equal(parse_args(parser2, c())$items, "default")
+	expect_equal(parse_args(parser2, c("--foo"))$items, c("default", "foo"))
 })
 
 test_that("multiple append options sharing a dest accumulate in command line order", {
