@@ -59,6 +59,41 @@ setClass(
 	)
 )
 
+setValidity("OptionParser", function(object) {
+	long_flags <- vapply(object@options, \(o) o@long_flag, character(1L))
+	if (anyDuplicated(long_flags)) {
+		dup <- long_flags[duplicated(long_flags)][1L]
+		msg <- paste0("duplicate long flag: ", dup)
+		if (dup == "--help") {
+			msg <- paste0(
+				msg,
+				" (did you forget to set `add_help_option = FALSE` in `OptionParser()`?)"
+			)
+		}
+		return(msg)
+	}
+	short_flags <- na_omit(vapply(object@options, \(o) o@short_flag, character(1L)))
+	if (anyDuplicated(short_flags)) {
+		dup <- short_flags[duplicated(short_flags)][1L]
+		msg <- paste0("duplicate short flag: ", dup)
+		if (dup == "-h") {
+			msg <- paste0(
+				msg,
+				" (did you forget to set `add_help_option = FALSE` in `OptionParser()`?)"
+			)
+		}
+		return(msg)
+	}
+	TRUE
+})
+
+setGeneric("options<-", function(x, value) standardGeneric("options<-"))
+setMethod("options<-", "OptionParser", function(x, value) {
+	x@options <- value
+	validObject(x)
+	x
+})
+
 #' Class to hold information about command-line options
 #'
 #' @slot short_flag String of the desired short flag
@@ -346,9 +381,8 @@ add_option <- function(
 	callback_args = NULL,
 	const = NULL
 ) {
-	options_list <- object@options
-	n_original_options <- length(options_list)
-	options_list[[n_original_options + 1]] <- make_option(
+	opts <- object@options
+	opts[[length(opts) + 1L]] <- make_option(
 		opt_str = opt_str,
 		action = action,
 		type = type,
@@ -360,7 +394,7 @@ add_option <- function(
 		callback = callback,
 		callback_args = callback_args
 	)
-	object@options <- options_list
+	options(object) <- opts
 	return(object)
 }
 
@@ -609,6 +643,8 @@ parse_args_helper <- function(
 	positional_arguments = FALSE,
 	convert_hyphens_to_underscores = FALSE
 ) {
+	validObject(object)
+
 	pal <- should_include_any_args(positional_arguments)
 	include_any_args <- pal$include_any_args
 	positional_arguments <- pal$positional_arguments
@@ -660,24 +696,25 @@ parse_args_helper <- function(
 getopt_options <- function(object, args, operand = "after--only") {
 	# Convert our option specification into ``getopt`` format
 	n_options <- length(object@options)
-	spec <- matrix(NA, nrow = n_options, ncol = 5)
+	spec <- matrix(NA, nrow = n_options, ncol = 6)
 	for (ii in seq_along(object@options)) {
 		spec[ii, ] <- convert_to_getopt(object@options[[ii]])
 	}
 
-	if (length(args)) {
-		opt <- try(getopt(spec = spec, opt = args, operand = operand), silent = TRUE)
-		if (inherits(opt, "try-error")) {
-			if (grepl("redundant short names for flags", opt)) {
-				opt <- paste(
-					opt,
-					"did you forget to set ``add_help_option=FALSE`` in ``OptionParser``"
-				)
-			}
-			stop(opt)
+	# Pre-seed result with defaults; last default wins for shared dest (matching Python's optparse)
+	defaults <- list()
+	for (ii in seq_along(object@options)) {
+		option <- object@options[[ii]]
+		if (option@action == "callback" || is.null(option@default)) {
+			next
 		}
+		defaults[[option@dest]] <- option@default
+	}
+
+	if (length(args)) {
+		opt <- getopt(spec = spec, opt = args, operand = operand, defaults = defaults)
 	} else {
-		opt <- list()
+		opt <- defaults
 	}
 	opt
 }
@@ -707,41 +744,31 @@ parse_options <- function(object, opt, convert_hyphens_to_underscores) {
 	options_list <- list()
 	for (ii in seq_along(object@options)) {
 		option <- object@options[[ii]]
-		option_value <- opt[[sub("^--", "", option@long_flag)]]
-		if (option@action == "count") {
-			if (!is.null(option_value)) {
-				options_list[[option@dest]] <- (option@default %||% 0L) + option_value
-			} else if (!is.null(option@default)) {
-				options_list[[option@dest]] <- option@default
-			}
-		} else if (option@action == "store_const") {
+		option_value <- opt[[option@dest]]
+		if (option@action == "store_const") {
 			if (isTRUE(option_value)) {
 				options_list[[option@dest]] <- option@const
-			} else if (!is.null(option@default)) {
-				options_list[[option@dest]] <- option@default
-			}
-		} else if (option@action == "append") {
-			if (!is.null(option_value)) {
-				options_list[[option@dest]] <- c(option@default, option_value)
-			} else if (!is.null(option@default)) {
-				options_list[[option@dest]] <- option@default
-			}
-		} else if (!is.null(option_value)) {
-			if (option@action == "store_false") {
-				options_list[[option@dest]] <- FALSE
-			} else {
+			} else if (!is.null(option_value)) {
 				options_list[[option@dest]] <- option_value
 			}
-			if (option@action == "callback") {
+		} else if (option@action == "append") {
+			if (!is.null(options_list[[option@dest]])) {
+				# dest already accumulated by a prior option sharing the same dest; skip
+			} else if (!is.null(option_value)) {
+				options_list[[option@dest]] <- option_value
+			}
+		} else if (option@action == "callback") {
+			if (!is.null(option_value)) {
+				options_list[[option@dest]] <- option_value
 				callback_fn <- function(...) {
 					option@callback(option, option@long_flag, option_value, object, ...) # nolint
 				}
 				options_list[[option@dest]] <- do.call(callback_fn, option@callback_args)
-			}
-		} else {
-			if (!is.null(option@default) && is.null(options_list[[option@dest]])) {
+			} else if (!is.null(option@default)) {
 				options_list[[option@dest]] <- option@default
 			}
+		} else if (!is.null(option_value)) {
+			options_list[[option@dest]] <- option_value
 		}
 	}
 	if (convert_hyphens_to_underscores) {
@@ -772,7 +799,7 @@ parse_args2 <- function(
 convert_to_getopt <- function(object) {
 	short_flag <- sub("^-", "", object@short_flag)
 	long_flag <- sub("^--", "", object@long_flag)
-	action <- if (object@action %in% c("count", "append")) {
+	action <- if (object@action %in% c("count", "append", "store_false")) {
 		object@action
 	} else if (option_needs_argument(object)) {
 		"store"
@@ -780,7 +807,7 @@ convert_to_getopt <- function(object) {
 		"store_true"
 	}
 	type <- ifelse(object@type == "NULL", "logical", object@type)
-	return(c(long_flag, short_flag, action, type, object@help))
+	return(c(long_flag, short_flag, action, type, object@help, object@dest))
 }
 option_needs_argument <- function(option) {
 	option_needs_argument_helper(option@action, option@type)
