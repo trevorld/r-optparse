@@ -25,11 +25,11 @@ parse_args2(
 
 \item{args}{A character vector containing command line options to be parsed.
 Default is everything after the Rscript program in the command line. If
-\code{positional_arguments} is not \code{FALSE} then \code{parse_args} will
+\code{positional_arguments} is not \code{FALSE} then \code{\link[=parse_args]{parse_args()}} will
 look for positional arguments at the end of this vector.}
 
-\item{print_help_and_exit}{Whether \code{parse_args} should call
-\code{print_help} to print out a usage message and exit the program.  Default
+\item{print_help_and_exit}{Whether \code{\link[=parse_args]{parse_args()}} should call
+\code{\link[=print_help]{print_help()}} to print out a usage message and exit the program.  Default
 is \code{TRUE}.}
 
 \item{positional_arguments}{Number of \emph{positional} arguments.  A numeric
@@ -52,8 +52,8 @@ positional arguments.  For backward compatibility, if and only if
 option values.
 }
 \description{
-\code{parse_args} parses command line options using an \code{OptionParser}
-instance for guidance. \code{parse_args2} is a wrapper to \code{parse_args}
+\code{\link[=parse_args]{parse_args()}} parses command line options using an \code{OptionParser}
+instance for guidance. \code{\link[=parse_args2]{parse_args2()}} is a wrapper to \code{\link[=parse_args]{parse_args()}}
 setting the options \code{positional_arguments} and \code{convert_hyphens_to_underscores}
 to \code{TRUE}.
 }
@@ -107,7 +107,7 @@ Python's \code{optparse} library, which inspired this package,
 is described here: \url{https://docs.python.org/3/library/optparse.html}
 }
 \seealso{
-\code{\link{OptionParser}} \code{\link{print_help}}
+\code{\link[=OptionParser]{OptionParser()}} \code{\link[=print_help]{print_help()}}
 }
 \author{
 Trevor Davis.

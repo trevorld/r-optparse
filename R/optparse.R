@@ -30,22 +30,22 @@
 #' Option Parser
 #'
 #' @slot usage The program usage message that will printed out if
-#'     \code{parse_args} finds a help option, \code{\%prog} is substituted with the
-#'     value of the \code{prog} argument.
-#' @slot options A list of of \code{OptionParserOption} instances that will
-#'     define how \code{parse_args} reacts to command line options.
-#'     \code{OptionParserOption} instances are usually created by \code{make_option}
-#'     and can also be added to an existing \code{OptionParser} instance via the
-#'     \code{add_option} function.
-#' @slot description  Additional text for \code{print_help} to print out between
+#'     [parse_args()] finds a help option, `\%prog` is substituted with the
+#'     value of the `prog` argument.
+#' @slot options A list of of `OptionParserOption` instances that will
+#'     define how [parse_args()] reacts to command line options.
+#'     `OptionParserOption` instances are usually created by [make_option()]
+#'     and can also be added to an existing `OptionParser` instance via the
+#'     [add_option()] function.
+#' @slot description  Additional text for [print_help()] to print out between
 #'     usage statement and options statement
-#' @slot epilogue  Additional text for \code{print_help} to print out after
+#' @slot epilogue  Additional text for [print_help()] to print out after
 #'     the options statement
-#' @slot formatter  A function that \code{print_help} will use to print out after
+#' @slot formatter  A function that [print_help()] will use to print out after
 #'     the options statement.  Default is [IndentedHelpFormatter()].  This
 #'     package also provides the builtin formatter [TitledHelpFormatter()].
 #' @author Trevor Davis.
-#' @seealso \code{\link{OptionParserOption}}
+#' @seealso [OptionParserOption]
 #' @import methods
 #' @exportClass OptionParser
 setClass(
@@ -65,33 +65,15 @@ setClass(
 #'     comprised of the \dQuote{-} followed by a letter.
 #' @slot long_flag String of the desired long flag comprised of \dQuote{--}
 #'     followed by a letter and then a sequence of alphanumeric characters.
-#' @slot action A character string that describes the action \code{optparse}
-#'     should take when it encounters an option, either \dQuote{store},
-#'     \dQuote{store_true}, or \dQuote{store_false}.  The default is \dQuote{store}
-#'     which signifies that \code{optparse} should store the specified following
-#'     value if the option is found on the command string.  \dQuote{store_true}
-#'     stores \code{TRUE} if the option is found and \dQuote{store_false} stores
-#'     \code{FALSE} if the option is found.
-#' @slot type A character string that describes specifies which data type
-#'     should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
-#'     \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
-#'     \code{action \%in\% c("store_true", store_false)}, \code{typeof(default)} if
-#'     \code{action == "store"} and default is not \code{NULL} and
-#'     \dQuote{character} if \code{action == "store"} and default is \code{NULL}.
-#'     \dQuote{numeric} will be converted to \dQuote{double}.
-#' @slot dest A character string that specifies what field in the list returned
-#'     by \code{parse_args} should \code{optparse} store option values.  Default is
-#'     derived from the long flag in \code{opt_str}.
-#' @slot default The default value \code{optparse} should use if it does not
-#'     find the option on the command line.
-#' @slot help A character string describing the option to be used by
-#'     \code{print_help} in generating a usage message.  \code{\%default} will be
-#'     substituted by the value of \code{default}.
-#' @slot metavar A character string that stands in for the option argument when
-#'     printing help text.  Default is the value of \code{dest}.
-#' @slot callback A function that executes after the each option value is fully parsed
-#' @slot callback_args Additional arguments that pass to the callback function.
-#' @seealso \code{\link{make_option}}
+#' @slot action `r ro_action`
+#' @slot type `r ro_type`
+#' @slot dest `r ro_dest`
+#' @slot default `r ro_default`
+#' @slot help `r ro_help`
+#' @slot metavar `r ro_metavar`
+#' @slot callback `r ro_callback`
+#' @slot callback_args `r ro_callback_args`
+#' @seealso [make_option()]
 #' @exportClass OptionParserOption
 #' @export OptionParserOption
 OptionParserOption <- setClass(
@@ -113,37 +95,36 @@ OptionParserOption <- setClass(
 #' A function to create an instance of a parser object
 #'
 #' This function is used to create an instance of a parser object
-#' which when combined with the \code{parse_args}, \code{make_option}, and \code{add_option}
+#' which when combined with the [parse_args()], [make_option()], and [add_option()]
 #' methods is very useful for parsing options from the command line.
 #'
 #' @param usage The program usage message that will printed out if
-#'     \code{parse_args} finds a help option, \code{\%prog} is substituted with the
-#'     value of the \code{prog} argument.
-#' @param option_list A list of of \code{OptionParserOption} instances that will
-#'     define how \code{parse_args} reacts to command line options.
-#'     \code{OptionParserOption} instances are usually created by \code{make_option}
-#'     and can also be added to an existing \code{OptionParser} instance via the
-#'     \code{add_option} function.
+#'     [parse_args()] finds a help option, `\%prog` is substituted with the
+#'     value of the `prog` argument.
+#' @param option_list A list of of `OptionParserOption` instances that will
+#'     define how [parse_args()] reacts to command line options.
+#'     `OptionParserOption` instances are usually created by [make_option()]
+#'     and can also be added to an existing `OptionParser` instance via the
+#'     [add_option()] function.
 #' @param add_help_option Whether a standard help option should be automatically
-#'     added to the \code{OptionParser} instance.
-#' @param prog Program name to be substituted for \code{\%prog} in the usage
+#'     added to the `OptionParser` instance.
+#' @param prog Program name to be substituted for `\%prog` in the usage
 #'     message (including description and epilogue if present),
 #'     the default is to use the actual Rscript file name if called by an
-#'     Rscript file and otherwise keep \code{\%prog}.
-#' @param description  Additional text for \code{print_help} to print out between
+#'     Rscript file and otherwise keep `\%prog`.
+#' @param description  Additional text for [print_help()] to print out between
 #'     usage statement and options statement
-#' @param epilogue  Additional text for \code{print_help} to print out after
+#' @param epilogue  Additional text for [print_help()] to print out after
 #'     the options statement
 #' @param formatter A function that formats usage text.
 #'                  The function should take only one argument (an `OptionParser()` object).
 #'                  Default is [IndentedHelpFormatter()].
 #'                  The other builtin formatter provided by this package is [TitledHelpFormatter()].
-#' @return An instance of the \code{OptionParser} class.
+#' @return An instance of the `OptionParser` class.
 #' @author Trevor Davis.
 #'
-#' @seealso \code{\link{parse_args}} \code{\link{make_option}}
-#'     \code{\link{add_option}}
-#' @references Python's \code{optparse} library, which inspired this package,
+#' @seealso [parse_args()] [make_option()] [add_option()]
+#' @references Python's `optparse` library, which inspired this package,
 #'    is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @importFrom getopt getopt getoperand
 #' @export
@@ -191,56 +172,32 @@ OptionParser <- function(
 #' Functions to enable our OptionParser to recognize specific command line
 #' options.
 #'
-#' \code{add_option} adds a option to a prexisting \code{OptionParser} instance
-#' whereas \code{make_option} is used to create a list of
-#' \code{OptionParserOption} instances that will be used in the
-#' \code{option_list} argument of the \code{OptionParser} function to create a
-#' new \code{OptionParser} instance.
+#' [add_option()] adds a option to a prexisting `OptionParser` instance
+#' whereas [make_option()] is used to create a list of
+#' `OptionParserOption` instances that will be used in the
+#' `option_list` argument of the `OptionParser` function to create a
+#' new `OptionParser` instance.
 #'
 #' @rdname add_make_option
-#' @param object An instance of the \code{OptionParser} class
+#' @param object An instance of the `OptionParser` class
 #' @param opt_str A character vector containing the string of the desired long
 #'     flag comprised of \dQuote{--} followed by a letter and then a sequence of
 #'     alphanumeric characters and optionally a string of the desired short flag
 #'     comprised of the \dQuote{-} followed by a letter.
-#' @param action A character string that describes the action \code{optparse}
-#'     should take when it encounters an option, either \dQuote{store},
-#'     \dQuote{store_true}, \dQuote{store_false}, or \dQuote{callback}.
-#'     An action of \dQuote{store} signifies that \code{optparse}
-#'      should store the specified following value if the option is found on the command string.
-#'     \dQuote{store_true} stores \code{TRUE} if the option is found
-#'      and \dQuote{store_false} stores \code{FALSE} if the option is found.
-#'     \dQuote{callback} stores the return value produced by the function
-#'     specified in the \code{callback} argument.
-#'     If \code{callback} is not \code{NULL} then the default is \dQuote{callback} else \dQuote{store}.
-#' @param type A character string that describes specifies which data type
-#'     should be stored, either \dQuote{logical}, \dQuote{integer}, \dQuote{double},
-#'     \dQuote{complex}, or \dQuote{character}.  Default is \dQuote{logical} if
-#'     \code{action \%in\% c("store_true", store_false)}, \code{typeof(default)} if
-#'     \code{action == "store"} and default is not \code{NULL} and
-#'     \dQuote{character} if \code{action == "store"} and default is \code{NULL}.
-#'     \dQuote{numeric} will be converted to \dQuote{double}.
-#' @param dest A character string that specifies what field in the list returned
-#'     by \code{parse_args} should \code{optparse} store option values.  Default is
-#'     derived from the long flag in \code{opt_str}.
-#' @param default The default value \code{optparse} should use if it does not
-#'     find the option on the command line.
-#' @param help A character string describing the option to be used by
-#'     \code{print_help} in generating a usage message.  \code{\%default} will be
-#'     substituted by the value of \code{default}.
-#' @param metavar A character string that stands in for the option argument when
-#'     printing help text.  Default is the value of \code{dest}.
-#' @param callback A function that executes after the each option value is fully
-#'     parsed.  It's value is assigned to the option and its arguments are
-#'     the option S4 object, the long flag string, the value of the option,
-#'     the parser S4 object, and \code{...}.
-#' @param callback_args A list of additional arguments passed to callback function (via \code{do.call}).
-#' @return Both \code{make_option} and \code{add_option} return instances of
-#'     class \code{OptionParserOption}.
+#' @param action `r ro_action`
+#' @param type `r ro_type`
+#' @param dest `r ro_dest`
+#' @param default `r ro_default`
+#' @param help `r ro_help`
+#' @param metavar `r ro_metavar`
+#' @param callback `r ro_callback`
+#' @param callback_args `r ro_callback_args`
+#' @return Both [make_option()] and [add_option()] return instances of
+#'     class `OptionParserOption`.
 #' @author Trevor Davis.
 #'
-#' @seealso \code{\link{parse_args}} \code{\link{OptionParser}}
-#' @references Python's \code{optparse} library, which inspires this package,
+#' @seealso [parse_args()] [OptionParser()]
+#' @references Python's `optparse` library, which inspires this package,
 #'     is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @examples
 #'
@@ -348,6 +305,7 @@ infer_type <- function(action, default) {
 		store = ifelse(is.null(default), "character", typeof(default)),
 		store_false = "logical",
 		store_true = "logical",
+		count = "integer",
 		callback = "NULL"
 	)
 }
@@ -400,16 +358,16 @@ add_option <- function(
 
 #' Printing an usage message from an OptionParser object
 #'
-#' \code{print_help} print an usage message from an OptionParser object, usually
-#' called by \code{parse_args} when it encounters a help option.
+#' [print_help()] print an usage message from an OptionParser object, usually
+#' called by [parse_args()] when it encounters a help option.
 #'
-#' @param object A \code{OptionParser} instance.
-#' @return \code{print_help} uses the \code{cat} function to print out a usage
-#' message.  It returns \code{invisible(NULL)}.
+#' @param object A `OptionParser` instance.
+#' @return [print_help()] uses the `cat` function to print out a usage
+#' message.  It returns `invisible(NULL)`.
 #' @author Trevor Davis.
 #'
-#' @seealso \code{{parse_args}} \code{{OptionParser}}
-#' @references Python's \code{optparse} library, which inspired this package,
+#' @seealso [parse_args()] [OptionParser()]
+#' @references Python's `optparse` library, which inspired this package,
 #'     is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @export
 print_help <- function(object) {
@@ -516,33 +474,33 @@ as_string <- function(default) {
 
 #' Parse command line options.
 #'
-#' \code{parse_args} parses command line options using an \code{OptionParser}
-#' instance for guidance. \code{parse_args2} is a wrapper to \code{parse_args}
-#' setting the options \code{positional_arguments} and \code{convert_hyphens_to_underscores}
-#' to \code{TRUE}.
+#' [parse_args()] parses command line options using an `OptionParser`
+#' instance for guidance. [parse_args2()] is a wrapper to [parse_args()]
+#' setting the options `positional_arguments` and `convert_hyphens_to_underscores`
+#' to `TRUE`.
 #'
-#' @param object An \code{OptionParser} instance.
+#' @param object An `OptionParser` instance.
 #' @param args A character vector containing command line options to be parsed.
 #'     Default is everything after the Rscript program in the command line. If
-#'     \code{positional_arguments} is not \code{FALSE} then \code{parse_args} will
+#'     `positional_arguments` is not `FALSE` then [parse_args()] will
 #'     look for positional arguments at the end of this vector.
-#' @param print_help_and_exit Whether \code{parse_args} should call
-#'     \code{print_help} to print out a usage message and exit the program.  Default
-#'     is \code{TRUE}.
+#' @param print_help_and_exit Whether [parse_args()] should call
+#'     [print_help()] to print out a usage message and exit the program.  Default
+#'     is `TRUE`.
 #' @param positional_arguments Number of \emph{positional} arguments.  A numeric
 #'     denoting the exact number of supported arguments, or a numeric vector of
 #'     length two denoting the minimum and maximum number of arguments
-#'     (\code{Inf} for no limit).  The value \code{TRUE} is equivalent to
-#'     \code{c(0, Inf)}.  The default \code{FALSE} is
+#'     (`Inf` for no limit).  The value `TRUE` is equivalent to
+#'     `c(0, Inf)`.  The default `FALSE` is
 #'     supported for backward compatibility only, as it alters
 #'     the format of the return value.
 #' @param convert_hyphens_to_underscores If the names in the returned list of options
-#'      contains hyphens then convert them to underscores.  The default \code{FALSE} is
+#'      contains hyphens then convert them to underscores.  The default `FALSE` is
 #'      supported for backward compatibility reasons as it alters the format of the return value
-#' @return Returns a list with field \code{options} containing our option values
-#'     as well as another field \code{args} which contains a vector of
+#' @return Returns a list with field `options` containing our option values
+#'     as well as another field `args` which contains a vector of
 #'     positional arguments.  For backward compatibility, if and only if
-#'     \code{positional_arguments} is \code{FALSE}, returns a list containing
+#'     `positional_arguments` is `FALSE`, returns a list containing
 #'     option values.
 #' @section Acknowledgement:
 #'     A big thanks to Steve Lianoglou for a bug report and patch;
@@ -554,8 +512,8 @@ as_string <- function(default) {
 #'     Kirill \enc{Müller}{Muller} for patches; Steve Humburg for patch.
 #' @author Trevor Davis.
 #'
-#' @seealso \code{\link{OptionParser}} \code{\link{print_help}}
-#' @references Python's \code{optparse} library, which inspired this package,
+#' @seealso [OptionParser()] [print_help()]
+#' @references Python's `optparse` library, which inspired this package,
 #'      is described here: \url{https://docs.python.org/3/library/optparse.html}
 #' @encoding latin1
 #' @examples
@@ -743,7 +701,13 @@ parse_options <- function(object, opt, convert_hyphens_to_underscores) {
 	for (ii in seq_along(object@options)) {
 		option <- object@options[[ii]]
 		option_value <- opt[[sub("^--", "", option@long_flag)]]
-		if (!is.null(option_value)) {
+		if (option@action == "count") {
+			if (!is.null(option_value)) {
+				options_list[[option@dest]] <- (option@default %||% 0L) + option_value
+			} else if (!is.null(option@default)) {
+				options_list[[option@dest]] <- option@default
+			}
+		} else if (!is.null(option_value)) {
 			if (option@action == "store_false") {
 				options_list[[option@dest]] <- FALSE
 			} else {
@@ -783,11 +747,19 @@ parse_args2 <- function(
 	)
 }
 
+`%||%` <- function(x, y) if (is.null(x)) y else x
+
 # Converts our representation of options to format getopt can understand
 convert_to_getopt <- function(object) {
 	short_flag <- sub("^-", "", object@short_flag)
 	long_flag <- sub("^--", "", object@long_flag)
-	action <- if (option_needs_argument(object)) "store" else "store_true"
+	action <- if (object@action == "count") {
+		"count"
+	} else if (option_needs_argument(object)) {
+		"store"
+	} else {
+		"store_true"
+	}
 	type <- ifelse(object@type == "NULL", "logical", object@type)
 	return(c(long_flag, short_flag, action, type, object@help))
 }
