@@ -206,6 +206,37 @@ test_that("`parse_args()` works as expected", {
 	}
 })
 
+test_that("bare -- separator treats everything after it as positional arguments", {
+	parser <- OptionParser()
+	parser <- add_option(parser, c("-v", "--verbose"), action = "store_true")
+	expect_equal(
+		sort_list(parse_args(
+			parser,
+			c("--verbose", "--", "--not-a-flag", "-x"),
+			positional_arguments = TRUE
+		)),
+		sort_list(list(
+			options = list(verbose = TRUE, help = FALSE),
+			args = c("--not-a-flag", "-x")
+		))
+	)
+	expect_equal(
+		sort_list(parse_args(parser, c("--", "--verbose"), positional_arguments = TRUE)),
+		sort_list(list(options = list(help = FALSE), args = c("--verbose")))
+	)
+	expect_equal(
+		sort_list(parse_args(parser, c("--", "-v"), positional_arguments = TRUE)),
+		sort_list(list(options = list(help = FALSE), args = c("-v")))
+	)
+})
+
+test_that("positional argument with positional_arguments = FALSE raises an error", {
+	parser <- OptionParser()
+	parser <- add_option(parser, c("-v", "--verbose"), action = "store_true")
+	expect_snapshot(error = TRUE, parse_args(parser, c("file.txt")))
+	expect_snapshot(error = TRUE, parse_args(parser, c("--verbose", "file.txt")))
+})
+
 # Patch from Gyu Jin Choi.
 test_that("callback works as expected", {
 	power <- function(x, n = 2) x^n
@@ -594,6 +625,7 @@ test_that("append action works", {
 	parser <- add_option(parser, c("-f", "--file"), action = "append")
 	expect_null(parse_args(parser, c())$file)
 	expect_equal(parse_args(parser, c("--file", "a.txt"))$file, "a.txt")
+	expect_equal(parse_args(parser, c("--file=a.txt"))$file, "a.txt")
 	expect_equal(parse_args(parser, c("--file", "a.txt", "-f", "b.txt"))$file, c("a.txt", "b.txt"))
 	parser2 <- add_option(
 		OptionParser(),

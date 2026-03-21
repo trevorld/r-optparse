@@ -108,11 +108,11 @@ getopt <- function(
 			i <- i + 1L
 			next
 		} else if (action == "count") {
-			result[dest_name] <- (result[[dest_name]] %||% 0L) + 1L
+			result[[dest_name]] <- (result[[dest_name]] %||% 0L) + 1L
 			i <- i + 1L
 			next
 		} else if (action %in% c("store_true", "store_false")) {
-			result[dest_name] <- action != "store_false"
+			result[[dest_name]] <- action != "store_false"
 			i <- i + 1L
 			next
 		} else {
@@ -137,7 +137,6 @@ getopt <- function(
 				stop(paste0('flag `', this_flag, '` requires an argument'))
 			}
 		}
-		i <- i + 1L
 	}
 
 	for (j in seq_len(nrow(spec))) {
@@ -215,7 +214,7 @@ prev_takes_argument <- function(prev, spec) {
 	} else {
 		return(FALSE)
 	}
-	actions <- c("append", "store", "store_optional")
+	actions <- c("append", "store")
 	!is.na(rowmatch) && spec[rowmatch, COL_ACTION] %in% actions
 }
 
