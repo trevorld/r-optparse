@@ -703,8 +703,12 @@ getopt_options <- function(object, args, operand = "after--only") {
 
 	# Pre-seed result with defaults; last default wins for shared dest (matching Python's optparse)
 	defaults <- list()
+	constants <- list()
 	for (ii in seq_along(object@options)) {
 		option <- object@options[[ii]]
+		if (option@action == "store_const") {
+			constants[[sub("^--", "", option@long_flag)]] <- option@const
+		}
 		if (option@action == "callback" || is.null(option@default)) {
 			next
 		}
@@ -712,7 +716,13 @@ getopt_options <- function(object, args, operand = "after--only") {
 	}
 
 	if (length(args)) {
-		opt <- getopt(spec = spec, opt = args, operand = operand, defaults = defaults)
+		opt <- getopt(
+			spec = spec,
+			opt = args,
+			operand = operand,
+			defaults = defaults,
+			constants = constants
+		)
 	} else {
 		opt <- defaults
 	}
@@ -745,13 +755,7 @@ parse_options <- function(object, opt, convert_hyphens_to_underscores) {
 	for (ii in seq_along(object@options)) {
 		option <- object@options[[ii]]
 		option_value <- opt[[option@dest]]
-		if (option@action == "store_const") {
-			if (isTRUE(option_value)) {
-				options_list[[option@dest]] <- option@const
-			} else if (!is.null(option_value)) {
-				options_list[[option@dest]] <- option_value
-			}
-		} else if (option@action == "append") {
+		if (option@action == "append") {
 			if (!is.null(options_list[[option@dest]])) {
 				# dest already accumulated by a prior option sharing the same dest; skip
 			} else if (!is.null(option_value)) {
@@ -799,7 +803,7 @@ parse_args2 <- function(
 convert_to_getopt <- function(object) {
 	short_flag <- sub("^-", "", object@short_flag)
 	long_flag <- sub("^--", "", object@long_flag)
-	action <- if (object@action %in% c("count", "append", "store_false")) {
+	action <- if (object@action %in% c("count", "append", "store_false", "store_const")) {
 		object@action
 	} else if (option_needs_argument(object)) {
 		"store"

@@ -30,6 +30,7 @@ Suggests:
     knitr (>= 1.15.19),
     stringr,
     testthat
+Config/testthat/edition: 3
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3

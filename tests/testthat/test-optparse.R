@@ -65,7 +65,7 @@ test_that("`make_option()` works as expected", {
 		make_option("--logical", default = TRUE)
 	)
 	expect_equal(make_option("--filename")@type, "character")
-	expect_that(make_option("badflag"), throws_error())
+	expect_snapshot(error = TRUE, make_option("badflag"))
 	expect_error(make_option("-cd"), "must only be")
 })
 
@@ -152,9 +152,9 @@ test_that("`parse_args()` works as expected", {
 		sort_list(parse_args2(parser, args = c("--add-numbers"))),
 		sort_list(list(options = list(add_numbers = TRUE, help = FALSE), args = character(0)))
 	)
-	expect_error(
-		parse_args(parser, args = c("-add-numbers", "example.txt")),
-		positional_arguments = FALSE
+	expect_snapshot(
+		error = TRUE,
+		parse_args(parser, args = c("-add-numbers", "example.txt"), positional_arguments = FALSE)
 	)
 	expect_error(parse_args(
 		parser,
@@ -176,35 +176,32 @@ test_that("`parse_args()` works as expected", {
 			args = c("example.txt")
 		))
 	)
-	expect_that(
-		parse_args(parser, args = c("-add-numbers", "example.txt"), positional_arguments = c(0, 1)),
-		throws_error()
+	expect_snapshot(
+		error = TRUE,
+		parse_args(parser, args = c("-add-numbers", "example.txt"), positional_arguments = c(0, 1))
 	)
-	expect_that(
-		parse_args(parser, args = c("example.txt"), positional_arguments = c(2, Inf)),
-		throws_error()
+	expect_snapshot(
+		error = TRUE,
+		parse_args(parser, args = c("example.txt"), positional_arguments = c(2, Inf))
 	)
-	expect_that(
-		parse_args(parser, args = c("example.txt"), positional_arguments = 2),
-		throws_error()
+	expect_snapshot(
+		error = TRUE,
+		parse_args(parser, args = c("example.txt"), positional_arguments = 2)
 	)
-	expect_that(
-		parse_args(parser, args = c("example.txt"), positional_arguments = "any"),
-		throws_error("must be logical or numeric")
+	expect_snapshot(
+		error = TRUE,
+		parse_args(parser, args = c("example.txt"), positional_arguments = "any")
 	)
-	expect_that(
-		parse_args(parser, args = c("example.txt"), positional_arguments = 1:3),
-		throws_error("must have length 1 or 2")
+	expect_snapshot(
+		error = TRUE,
+		parse_args(parser, args = c("example.txt"), positional_arguments = 1:3)
 	)
 
 	if (interactive()) {
-		expect_that(
-			capture.output(parse_args(parser, args = c("--help"))),
-			throws_error("help requested")
-		)
-		expect_that(
-			capture.output(parse_args(parser, args = c("--help"), positional_arguments = c(1, 2))),
-			throws_error("help requested")
+		expect_snapshot(error = TRUE, capture.output(parse_args(parser, args = c("--help"))))
+		expect_snapshot(
+			error = TRUE,
+			capture.output(parse_args(parser, args = c("--help"), positional_arguments = c(1, 2)))
 		)
 	}
 })
@@ -300,12 +297,12 @@ test_that("test bug of multiple '=' signs", {
 	optparser <- OptionParser(option_list = optlist)
 	opt <- parse_args(optparser, c("-s", "FOO=bar"))
 	opt_alt <- parse_args(optparser, c("--substitutions=FOO=bar"))
-	expect_that(opt, equals(opt_alt))
+	expect_equal(opt, opt_alt)
 
 	# also check when positional_arguments is set to true, like later bug unit test
 	opt <- parse_args(optparser, c("-s", "FOO=bar"), positional_arguments = TRUE)
 	opt_alt <- parse_args(optparser, c("--substitutions=FOO=bar"), positional_arguments = TRUE)
-	expect_that(opt, equals(opt_alt))
+	expect_equal(opt, opt_alt)
 })
 
 # Bug found by Jim Nikelski
@@ -513,7 +510,7 @@ test_that("Can parse empty string", {
 
 # Use h flag for non-help (Reported by Jeff Bruce)
 test_that("Use h option for non-help", {
-	local_edition(3)
+	local_reproducible_output()
 	option_list_neg <- list(make_option(c("-h", "--mean"), default = 0.0))
 	expect_snapshot(
 		error = TRUE,
