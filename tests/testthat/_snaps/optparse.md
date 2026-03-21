@@ -56,22 +56,21 @@
       Error:
       ! positional_arguments must have length 1 or 2
 
+# positional argument with positional_arguments = FALSE raises an error
+
+    Code
+      parse_args(parser, c("file.txt"))
+    Condition
+      Error:
+      ! "file.txt" is not a valid option, or does not support an argument
+
 ---
 
     Code
-      capture.output(parse_args(parser, args = c("--help")))
+      parse_args(parser, c("--verbose", "file.txt"))
     Condition
       Error:
-      ! help requested
-
----
-
-    Code
-      capture.output(parse_args(parser, args = c("--help"), positional_arguments = c(
-        1, 2)))
-    Condition
-      Error:
-      ! help requested
+      ! "file.txt" is not a valid option, or does not support an argument
 
 # Use h option for non-help
 

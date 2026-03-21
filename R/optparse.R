@@ -505,13 +505,13 @@ TitledHelpFormatter <- function(object) {
 # Turn default values into a string we can cat, handles NA's and NULL's
 as_string <- function(default) {
 	if (is.null(default)) {
-		default_str <- "NULL"
+		"NULL"
 	} else if (!length(default)) {
-		default_str <- paste0(typeof(default), "(0)")
+		paste0(typeof(default), "(0)")
 	} else if (is.na(default)) {
-		default_str <- "NA"
+		"NA"
 	} else {
-		default_str <- as.character(default)
+		as.character(default)
 	}
 }
 
@@ -791,8 +791,6 @@ parse_args2 <- function(
 		convert_hyphens_to_underscores = TRUE
 	)
 }
-
-`%||%` <- function(x, y) if (is.null(x)) y else x
 
 # Converts our representation of options to format getopt can understand
 convert_to_getopt <- function(object) {
