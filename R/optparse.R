@@ -69,6 +69,7 @@ setClass(
 #' @slot type `r ro_type`
 #' @slot dest `r ro_dest`
 #' @slot default `r ro_default`
+#' @slot const `r ro_const`
 #' @slot help `r ro_help`
 #' @slot metavar `r ro_metavar`
 #' @slot callback `r ro_callback`
@@ -88,7 +89,8 @@ OptionParserOption <- setClass(
 		help = "character",
 		metavar = "character",
 		callback = "ANY",
-		callback_args = "ANY"
+		callback_args = "ANY",
+		const = "ANY"
 	)
 )
 
@@ -188,6 +190,7 @@ OptionParser <- function(
 #' @param type `r ro_type`
 #' @param dest `r ro_dest`
 #' @param default `r ro_default`
+#' @param const `r ro_const`
 #' @param help `r ro_help`
 #' @param metavar `r ro_metavar`
 #' @param callback `r ro_callback`
@@ -231,7 +234,8 @@ make_option <- function(
 	help = "",
 	metavar = NULL,
 	callback = NULL,
-	callback_args = NULL
+	callback_args = NULL,
+	const = NULL
 ) {
 	action <- ifelse(is.null(action), ifelse(is.null(callback), "store", "callback"), action)
 
@@ -251,7 +255,7 @@ make_option <- function(
 
 	# type
 	if (is.null(type)) {
-		type <- infer_type(action, default)
+		type <- infer_type(action, default, const)
 	}
 	if (type == "numeric") {
 		type <- "double"
@@ -259,7 +263,7 @@ make_option <- function(
 
 	# default
 	if (
-		(action != "callback") &&
+		!(action %in% c("callback", "store_const")) &&
 			(type != typeof(default)) &&
 			!is.null(default)
 	) {
@@ -292,6 +296,7 @@ make_option <- function(
 		type = type,
 		dest = dest,
 		default = default,
+		const = const,
 		help = help,
 		metavar = metavar,
 		callback = callback,
@@ -299,10 +304,12 @@ make_option <- function(
 	))
 }
 
-infer_type <- function(action, default) {
+infer_type <- function(action, default, const) {
 	switch(
 		action,
 		store = ifelse(is.null(default), "character", typeof(default)),
+		append = ifelse(is.null(default), "character", typeof(default[[1]])),
+		store_const = typeof(const),
 		store_false = "logical",
 		store_true = "logical",
 		count = "integer",
@@ -337,7 +344,8 @@ add_option <- function(
 	help = "",
 	metavar = NULL,
 	callback = NULL,
-	callback_args = NULL
+	callback_args = NULL,
+	const = NULL
 ) {
 	options_list <- object@options
 	n_original_options <- length(options_list)
@@ -347,6 +355,7 @@ add_option <- function(
 		type = type,
 		dest = dest,
 		default = default,
+		const = const,
 		help = help,
 		metavar = metavar,
 		callback = callback,
@@ -707,6 +716,18 @@ parse_options <- function(object, opt, convert_hyphens_to_underscores) {
 			} else if (!is.null(option@default)) {
 				options_list[[option@dest]] <- option@default
 			}
+		} else if (option@action == "store_const") {
+			if (isTRUE(option_value)) {
+				options_list[[option@dest]] <- option@const
+			} else if (!is.null(option@default)) {
+				options_list[[option@dest]] <- option@default
+			}
+		} else if (option@action == "append") {
+			if (!is.null(option_value)) {
+				options_list[[option@dest]] <- c(option@default, option_value)
+			} else if (!is.null(option@default)) {
+				options_list[[option@dest]] <- option@default
+			}
 		} else if (!is.null(option_value)) {
 			if (option@action == "store_false") {
 				options_list[[option@dest]] <- FALSE
@@ -753,8 +774,8 @@ parse_args2 <- function(
 convert_to_getopt <- function(object) {
 	short_flag <- sub("^-", "", object@short_flag)
 	long_flag <- sub("^--", "", object@long_flag)
-	action <- if (object@action == "count") {
-		"count"
+	action <- if (object@action %in% c("count", "append")) {
+		object@action
 	} else if (option_needs_argument(object)) {
 		"store"
 	} else {
@@ -767,5 +788,5 @@ option_needs_argument <- function(option) {
 	option_needs_argument_helper(option@action, option@type)
 }
 option_needs_argument_helper <- function(action, type) {
-	switch(action, store = TRUE, callback = !(type == "NULL"), FALSE)
+	switch(action, store = TRUE, append = TRUE, callback = !(type == "NULL"), FALSE)
 }

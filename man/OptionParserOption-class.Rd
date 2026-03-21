@@ -19,9 +19,11 @@ followed by a letter and then a sequence of alphanumeric characters.}
 
 \item{\code{action}}{A character string describing the action \code{optparse} should take when it encounters an option. One of:
 \itemize{
+\item \code{"append"}: appends each occurrence's value to \code{default} (or to an empty vector if \code{default} is \code{NULL}). Returns \code{NULL} if never seen and \code{default} is \code{NULL}.
 \item \code{"callback"}: stores the return value of the \code{callback} function.
 \item \code{"count"}: counts the number of times the flag is seen and adds it to \code{default} (treated as \code{0L} if not supplied). Returns \code{NULL} if never seen and no \code{default} was supplied.
 \item \code{"store"} (default): stores the specified following value.
+\item \code{"store_const"}: stores \code{const} if the flag is seen, otherwise \code{default}. Returns \code{NULL} if the flag is not seen and \code{default} is \code{NULL}.
 \item \code{"store_true"}: stores \code{TRUE} if the option is found.
 \item \code{"store_false"}: stores \code{FALSE} if the option is found.
 }
@@ -38,6 +40,8 @@ If \code{callback} is not \code{NULL} the default action is \code{"callback"} ot
 \item{\code{dest}}{A character string specifying what field in the list returned by \code{\link[=parse_args]{parse_args()}} should \code{optparse} store the option value. Default is derived from the long flag in \code{opt_str}.}
 
 \item{\code{default}}{The default value \code{optparse} should use if it does not find the option on the command line.}
+
+\item{\code{const}}{The value to store when \code{action = "store_const"} and the flag is seen. Ignored for all other actions.}
 
 \item{\code{help}}{A character string describing the option, used by \code{\link[=print_help]{print_help()}} in generating a usage message. \code{"\%default"} will be substituted by the value of \code{default}.}
 

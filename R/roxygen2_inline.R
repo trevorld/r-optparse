@@ -5,9 +5,11 @@
 
 ro_action <- r"(A character string describing the action `optparse` should take when it encounters an option. One of:
 
+* `"append"`: appends each occurrence's value to `default` (or to an empty vector if `default` is `NULL`). Returns `NULL` if never seen and `default` is `NULL`.
 * `"callback"`: stores the return value of the `callback` function.
 * `"count"`: counts the number of times the flag is seen and adds it to `default` (treated as `0L` if not supplied). Returns `NULL` if never seen and no `default` was supplied.
 * `"store"` (default): stores the specified following value.
+* `"store_const"`: stores `const` if the flag is seen, otherwise `default`. Returns `NULL` if the flag is not seen and `default` is `NULL`.
 * `"store_true"`: stores `TRUE` if the option is found.
 * `"store_false"`: stores `FALSE` if the option is found.
 
@@ -24,6 +26,8 @@ ro_type <- r"(A character string specifying which data type to store: `"logical"
 ro_dest <- r"(A character string specifying what field in the list returned by [parse_args()] should `optparse` store the option value. Default is derived from the long flag in `opt_str`.)"
 
 ro_default <- r"(The default value `optparse` should use if it does not find the option on the command line.)"
+
+ro_const <- r"(The value to store when `action = "store_const"` and the flag is seen. Ignored for all other actions.)"
 
 ro_help <- r"(A character string describing the option, used by [print_help()] in generating a usage message. `"%default"` will be substituted by the value of `default`.)"
 
