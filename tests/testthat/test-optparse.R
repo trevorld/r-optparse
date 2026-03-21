@@ -444,7 +444,7 @@ test_that("description and epilogue work as expected", {
 		),
 		make_option(c("--int"), type = "integer", default = 42, help = "int default is %default"),
 		make_option(
-			c("--int"),
+			c("--dbl"),
 			type = "double",
 			default = 11.11,
 			help = "double default is %default"
@@ -513,9 +513,12 @@ test_that("Can parse empty string", {
 
 # Use h flag for non-help (Reported by Jeff Bruce)
 test_that("Use h option for non-help", {
+	local_edition(3)
 	option_list_neg <- list(make_option(c("-h", "--mean"), default = 0.0))
-	parser <- OptionParser(usage = "\\%prog [options] file", option_list = option_list_neg)
-	expect_error(parse_args(parser, args = c("-h", "-5.0")), "redundant short names")
+	expect_snapshot(
+		error = TRUE,
+		OptionParser(usage = "\\%prog [options] file", option_list = option_list_neg)
+	)
 
 	option_list_neg <- list(make_option(c("-h", "--mean"), default = 0.0))
 	parser <- OptionParser(
@@ -542,6 +545,16 @@ test_that("store_const action works", {
 	)
 	expect_equal(parse_args(parser2, c())$verbose, 0L)
 	expect_equal(parse_args(parser2, c("--verbose"))$verbose, 42L)
+})
+
+test_that("multiple append options sharing a dest accumulate in command line order", {
+	parser <- OptionParser()
+	parser <- add_option(parser, "--file", action = "append", dest = "inputs")
+	parser <- add_option(parser, "--dir", action = "append", dest = "inputs")
+	expect_equal(
+		parse_args(parser, c("--dir", "mydir", "--file", "a.txt"))$inputs,
+		c("mydir", "a.txt")
+	)
 })
 
 test_that("append action works", {
