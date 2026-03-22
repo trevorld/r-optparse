@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: optparse
 Type: Package
 Title: Command Line Option Parser
-Version: 1.7.6-1
+Version: 1.8.0-2
 Authors@R: c(person("Trevor L.", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")),
@@ -28,9 +28,10 @@ Imports:
     methods
 Suggests:
     knitr (>= 1.15.19),
+    rmarkdown,
     stringr,
     testthat
 Config/testthat/edition: 3
-VignetteBuilder: knitr
+VignetteBuilder: knitr, rmarkdown
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3

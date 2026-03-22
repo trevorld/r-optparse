@@ -16,15 +16,14 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 suppressPackageStartupMessages(library("optparse"))
 
-option_list <- list(
-	make_option(
-		c("-n", "--add_numbers"),
-		action = "store_true",
-		default = FALSE,
-		help = "Print line number at the beginning of each line [default]"
-	)
+parser <- OptionParser(usage = "%prog [options] file")
+parser <- add_option(
+	parser,
+	c("-n", "--add_numbers"),
+	action = "store_true",
+	default = FALSE,
+	help = "Print line number at the beginning of each line [default]"
 )
-parser <- OptionParser(usage = "%prog [options] file", option_list = option_list)
 
 arguments <- parse_args(parser, positional_arguments = 1)
 opt <- arguments$options

@@ -17,6 +17,10 @@ optparse: Command line optional argument parser
     :target: https://cran.r-project.org/package=optparse
     :alt: RStudio CRAN mirror downloads
 
+.. image:: https://tinyverse.netlify.app/badge/optparse
+    :target: https://tinyverse.netlify.app/
+    :alt: Dependencies
+
 .. raw:: html
 
    <img src="man/figures/logo.png" align="right" width="200px" alt="optparse hex sticker">
@@ -38,37 +42,24 @@ To install the development version use the following command:
     install.packages("remotes")
     remotes::install_github("trevorld/r-optparse")
 
-dependencies
-------------
-
-This package depends on the R package ``getopt``.
-
-To run the unit tests you will need the suggested R package ``testthat`` and in
-order to build the vignette you will need the suggested R package ``knitr`` 
-which in turn probably requires the system tool ``pandoc``:
-
-.. code:: bash
-
-    sudo apt install pandoc
-
 examples
 --------
 
 A simple example:
 
 
-.. code:: r
+.. sourcecode:: r
     
 
         library("optparse")
-        parser <- OptionParser()
-        parser <- add_option(parser, c("-v", "--verbose"), action="store_true", 
-                        default=TRUE, help="Print extra output [default]")
-        parser <- add_option(parser, c("-q", "--quietly"), action="store_false", 
-                            dest="verbose", help="Print little output")
-        parser <- add_option(parser, c("-c", "--count"), type="integer", default=5, 
-                        help="Number of random normals to generate [default %default]",
-                        metavar="number")
+        parser <- OptionParser() |>
+            add_option(c("-v", "--verbose"), action = "store_true",
+                       default = TRUE, help = "Print extra output [default]") |>
+            add_option(c("-q", "--quietly"), action = "store_false",
+                       dest = "verbose", help = "Print little output") |>
+            add_option(c("-c", "--count"), type = "integer", default = 5,
+                       help = "Number of random normals to generate [default %default]",
+                       metavar = "number")
         parse_args(parser, args = c("--quietly", "--count=15"))
 
 
@@ -89,39 +80,6 @@ A simple example:
 Note that the ``args`` argument of ``parse_args`` default is ``commandArgs(trailing=TRUE)``
 so it typically doesn't need to be explicitly set if writing an Rscript.
 
-One can also equivalently make options in a list:
-
-
-.. code:: r
-    
-
-    library("optparse")
-    option_list <- list( 
-        make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
-            help="Print extra output [default]"),
-        make_option(c("-q", "--quietly"), action="store_false", 
-            dest="verbose", help="Print little output"),
-        make_option(c("-c", "--count"), type="integer", default=5, 
-            help="Number of random normals to generate [default %default]",
-            metavar="number")
-        )
-                                        
-    parse_args(OptionParser(option_list=option_list), args = c("--verbose", "--count=11"))
-
-
-::
-
-    ## $verbose
-    ## [1] TRUE
-    ## 
-    ## $count
-    ## [1] 11
-    ## 
-    ## $help
-    ## [1] FALSE
-
-
-
 ``optparse`` automatically creates a help option:
 
 .. code:: r
@@ -131,18 +89,18 @@ One can also equivalently make options in a list:
 ::
 
     Usage: %prog [options]
-    
-    
+
+
     Options:
     	-h, --help
     		Show this help message and exit
-    
+
     	-v, --verbose
     		Print extra output [default]
-    
+
     	-q, --quietly
     		Print little output
-    
+
     	-c NUMBER, --count=NUMBER
     		Number of random normals to generate [default 5]
 
@@ -155,7 +113,7 @@ Note by default when ``optparse::parse_args`` sees a ``--help`` flag it will fir
 have richer positional argument support:
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     parse_args(parser, args = c("-vc", "25", "75", "22"), positional_arguments = TRUE)
@@ -182,7 +140,7 @@ have richer positional argument support:
 The function ``parse_args2`` wraps ``parse_args`` while setting ``positional_arguments=TRUE`` and ``convert_hyphens_to_underscores=TRUE``:
 
 
-.. code:: r
+.. sourcecode:: r
     
 
         parse_args2(parser, args = c("-vc", "25", "75", "22"))
