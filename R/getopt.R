@@ -174,13 +174,18 @@ get_Rscript_filename <- function() {
 		args <- args[seq_len(args_idx - 1L)]
 	}
 	prog <- sub("--file=", "", grep("^--file=", args, value = TRUE)[1L])
-	if (.Platform$OS.type == "windows") {
+	if (is.na(prog)) {
+		prog <- littler_script_path()
+	}
+	if (!is.na(prog) && .Platform$OS.type == "windows") {
 		prog <- gsub("\\\\", "\\\\\\\\", prog)
 	}
 	prog
 }
 
 command_args <- function() commandArgs()
+
+littler_script_path <- function() Sys.getenv("LITTLER_SCRIPT_PATH", unset = NA_character_)
 
 is_negative_number <- function(x) {
 	regexpr("^-[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$", x) > 0L
