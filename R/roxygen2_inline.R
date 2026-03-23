@@ -36,3 +36,8 @@ ro_metavar <- r"(A character string that stands in for the option argument when 
 ro_callback <- r"(A function that executes after the option value is fully parsed. Its return value is assigned to the option. Arguments are: the option S4 object, the long flag string, the value of the option, the parser S4 object, and `...`.)"
 
 ro_callback_args <- r"(A list of additional arguments passed to `callback` (via [do.call()]).)"
+
+ro_required <- r"(If `TRUE`, [parse_args()] will throw an error if this option is not provided on the command line.
+**Note:** Required options are generally considered bad form because users
+expect *options* to be *optional*, and thus they should be avoided when possible.
+)"

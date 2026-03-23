@@ -43,6 +43,10 @@ If \code{callback} is not \code{NULL} the default action is \code{"callback"} ot
 
 \item{\code{const}}{The value to store when \code{action = "store_const"} and the flag is seen. Ignored for all other actions.}
 
+\item{\code{required}}{If \code{TRUE}, \code{\link[=parse_args]{parse_args()}} will throw an error if this option is not provided on the command line.
+\strong{Note:} Required options are generally considered bad form because users
+expect \emph{options} to be \emph{optional}, and thus they should be avoided when possible.}
+
 \item{\code{help}}{A character string describing the option, used by \code{\link[=print_help]{print_help()}} in generating a usage message. \code{"\%default"} will be substituted by the value of \code{default}.}
 
 \item{\code{metavar}}{A character string that stands in for the option argument when printing help text. Default is the value of \code{dest}.}

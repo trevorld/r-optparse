@@ -105,6 +105,7 @@ setMethod("options<-", "OptionParser", function(x, value) {
 #' @slot dest `r ro_dest`
 #' @slot default `r ro_default`
 #' @slot const `r ro_const`
+#' @slot required `r ro_required`
 #' @slot help `r ro_help`
 #' @slot metavar `r ro_metavar`
 #' @slot callback `r ro_callback`
@@ -125,7 +126,8 @@ OptionParserOption <- setClass(
 		metavar = "character",
 		callback = "ANY",
 		callback_args = "ANY",
-		const = "ANY"
+		const = "ANY",
+		required = "logical"
 	)
 )
 
@@ -225,6 +227,7 @@ OptionParser <- function(
 #' @param dest `r ro_dest`
 #' @param default `r ro_default`
 #' @param const `r ro_const`
+#' @param required `r ro_required`
 #' @param help `r ro_help`
 #' @param metavar `r ro_metavar`
 #' @param callback `r ro_callback`
@@ -269,7 +272,8 @@ make_option <- function(
 	metavar = NULL,
 	callback = NULL,
 	callback_args = NULL,
-	const = NULL
+	const = NULL,
+	required = FALSE
 ) {
 	action <- ifelse(is.null(action), ifelse(is.null(callback), "store", "callback"), action)
 
@@ -331,6 +335,7 @@ make_option <- function(
 		dest = dest,
 		default = default,
 		const = const,
+		required = required,
 		help = help,
 		metavar = metavar,
 		callback = callback,
@@ -380,7 +385,8 @@ add_option <- function(
 	metavar = NULL,
 	callback = NULL,
 	callback_args = NULL,
-	const = NULL
+	const = NULL,
+	required = FALSE
 ) {
 	opts <- object@options
 	opts[[length(opts) + 1L]] <- make_option(
@@ -390,6 +396,7 @@ add_option <- function(
 		dest = dest,
 		default = default,
 		const = const,
+		required = required,
 		help = help,
 		metavar = metavar,
 		callback = callback,
@@ -670,6 +677,19 @@ parse_args_helper <- function(
 				quit(status = 0)
 			}
 		}
+	}
+
+	missing_required <- character(0)
+	for (option in object@options) {
+		if (isTRUE(option@required) && is.null(options_list[[option@dest]])) {
+			missing_required <- c(missing_required, option@long_flag)
+		}
+	}
+	if (length(missing_required)) {
+		stop(paste(
+			"the following arguments are required:",
+			paste(missing_required, collapse = ", ")
+		))
 	}
 
 	if (length(arguments_positional) < min(positional_arguments)) {

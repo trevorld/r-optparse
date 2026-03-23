@@ -16,7 +16,8 @@ make_option(
   metavar = NULL,
   callback = NULL,
   callback_args = NULL,
-  const = NULL
+  const = NULL,
+  required = FALSE
 )
 
 add_option(
@@ -30,7 +31,8 @@ add_option(
   metavar = NULL,
   callback = NULL,
   callback_args = NULL,
-  const = NULL
+  const = NULL,
+  required = FALSE
 )
 }
 \arguments{
@@ -72,6 +74,10 @@ If \code{callback} is not \code{NULL} the default action is \code{"callback"} ot
 \item{callback_args}{A list of additional arguments passed to \code{callback} (via \code{\link[=do.call]{do.call()}}).}
 
 \item{const}{The value to store when \code{action = "store_const"} and the flag is seen. Ignored for all other actions.}
+
+\item{required}{If \code{TRUE}, \code{\link[=parse_args]{parse_args()}} will throw an error if this option is not provided on the command line.
+\strong{Note:} Required options are generally considered bad form because users
+expect \emph{options} to be \emph{optional}, and thus they should be avoided when possible.}
 
 \item{object}{An instance of the \code{OptionParser} class}
 }
