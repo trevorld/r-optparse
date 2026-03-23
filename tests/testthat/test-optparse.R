@@ -80,6 +80,20 @@ test_that("`add_option()` works as expected", {
 	expect_equal(get_long_flags(parser1), get_long_flags(parser2))
 })
 
+test_that("`required` argument works as expected", {
+	parser <- OptionParser()
+	parser <- add_option(parser, "--foo", required = TRUE)
+	expect_snapshot(error = TRUE, parse_args(parser, args = character(0)))
+	expect_equal(
+		parse_args(parser, args = "--foo=bar")[["foo"]],
+		"bar"
+	)
+	parser2 <- OptionParser()
+	parser2 <- add_option(parser2, "--foo", required = TRUE)
+	parser2 <- add_option(parser2, "--bar", required = TRUE)
+	expect_snapshot(error = TRUE, parse_args(parser2, args = character(0)))
+})
+
 test_that("`parse_args()` works as expected", {
 	# option_list took outside test_that
 	option_list2 <- list(

@@ -6,6 +6,22 @@
       Error in `make_option()`:
       ! We require a long flag option
 
+# `required` argument works as expected
+
+    Code
+      parse_args(parser, args = character(0))
+    Condition
+      Error:
+      ! the following arguments are required: --foo
+
+---
+
+    Code
+      parse_args(parser2, args = character(0))
+    Condition
+      Error:
+      ! the following arguments are required: --foo, --bar
+
 # `parse_args()` works as expected
 
     Code

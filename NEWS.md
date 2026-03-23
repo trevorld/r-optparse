@@ -13,6 +13,9 @@ New features
 
 * `make_option()` (and `add_option()`) now support a `const` parameter (intended for new actions `"append_const"` and `"store_const"`).
 
+* `make_option()` (and `add_option()`) now support a `required` argument.
+  If `TRUE`, `parse_args()` will throw an error if the option is not provided on the command line (#17).
+
 Bug fixes and minor improvements
 --------------------------------
 
