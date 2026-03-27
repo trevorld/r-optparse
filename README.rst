@@ -25,9 +25,15 @@ optparse: Command line optional argument parser
 
    <img src="man/figures/logo.png" align="right" width="200px" alt="optparse hex sticker">
 
-A pure R language command line parser inspired by Python's 'optparse' library to
-be used with Rscript to write "#!" shebang scripts that accept short and
+A pure R language command line parser inspired by Python's `optparse <https://docs.python.org/3/library/optparse.html>`__ library to
+be used with ``Rscript`` to write ``#!`` shebang scripts that accept short and
 long flag/options.
+
+.. _argparse: https://github.com/trevorld/r-argparse
+
+.. _getopt: https://github.com/trevorld/r-getopt
+
+.. _optparse: https://github.com/trevorld/r-optparse
 
 To install the last version released on CRAN use the following command:
 
@@ -77,10 +83,10 @@ A simple example:
 
 
 
-Note that the ``args`` argument of ``parse_args`` default is ``commandArgs(trailing=TRUE)``
+Note that the ``args`` argument of ``parse_args()`` default is ``commandArgs(trailing=TRUE)``
 so it typically doesn't need to be explicitly set if writing an Rscript.
 
-``optparse`` automatically creates a help option:
+optparse_ automatically creates a help option:
 
 .. code:: r
 
@@ -107,10 +113,10 @@ so it typically doesn't need to be explicitly set if writing an Rscript.
 
     Error in parse_args(parser, args = c("--help")) : help requested
 
-Note by default when ``optparse::parse_args`` sees a ``--help`` flag it will first print out a usage message and then either throw an error in interactive use or call ``quit`` in non-interactive use (i.e. when used within an Rscript called by a shell).  To disable the error/quit set the argument ``print_help_and_exit`` to ``FALSE`` in ``parse_args`` and to simply print out the usage string one can also use the function ``print_usage``.
+Note by default when ``optparse::parse_args()`` sees a ``--help`` flag it will first print out a usage message and then either throw an error in interactive use or call ``quit()`` in non-interactive use (i.e. when used within an ``Rscript`` called by a shell).  To disable the error/quit set ``print_help_and_exit = FALSE`` in ``parse_args()`` and to simply print out the usage string one can also use the function ``print_usage()``.
 
-``optparse`` has limited positional argument support, other command-line parsers for R such as ``argparse``
-have richer positional argument support:
+optparse_ has limited positional argument support,
+other command-line parsers for R such as argparse_ have richer positional argument support:
 
 
 .. sourcecode:: r
@@ -163,3 +169,34 @@ The function ``parse_args2`` wraps ``parse_args`` while setting ``positional_arg
     ## [1] "75" "22"
 
 
+
+other R packages
+----------------
+
+* When optparse_ was originally written in 2009 the only option parsing package on CRAN was the comparatively low-level getopt_ package but as of 2026 there are *at least* 13 R `R Argument/Option Parser Packages <https://github.com/trevorld/r-cli-pkgs>`__.
+* Personally I use optparse_ for most scripts I write:
+
+  + It supports the most important features in an argument/option parsing packages with a reasonably high-level interface.
+  + It is well-tested with `high code coverage <https://app.codecov.io/github/trevorld/r-optparse?branch=master>`_ and lots of users with millions of cumulative downloads over the past 15+ years.
+  + It has no dependencies.
+  + It features a stable API with a semantic version number greater than 1.0.
+
+* Occasionally I'll also use the argparse_ package when I need advanced features unsupported by optparse_ like sub parsers and named positional arguments:
+
+  + In general argparse_ supports more advanced features than optparse_ but depends on Python and three R packages whereas optparse_ is a pure R package with no dependencies.
+  + However, unlike argparse_, optparse_ does support a callback action and also allows writing custom help usage formatters.
+
+acknowledgements
+----------------
+
+A big thanks to:
+
+* Steve Lianoglou for a bug report and patch
+* Juan Carlos Borrás for a bug report
+* Jim Nikelski for a bug report and patch
+* Ino de Brujin and Benjamin Tyner for a bug report
+* Jonas Zimmermann for a bug report
+* Miroslav Posta for bug reports
+* Stefan Seemayer for a bug report and patch
+* Kirill Müller for patches
+* Steve Humburg for a patch
