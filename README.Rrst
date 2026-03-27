@@ -129,18 +129,3 @@ other R packages
 
   + In general argparse_ supports more advanced features than optparse_ but depends on Python and three R packages whereas optparse_ is a pure R package with no dependencies.
   + However, unlike argparse_, optparse_ does support a callback action and also allows writing custom help usage formatters.
-
-acknowledgements
-----------------
-
-A big thanks to:
-
-* Steve Lianoglou for a bug report and patch
-* Juan Carlos Borrás for a bug report
-* Jim Nikelski for a bug report and patch
-* Ino de Brujin and Benjamin Tyner for a bug report
-* Jonas Zimmermann for a bug report
-* Miroslav Posta for bug reports
-* Stefan Seemayer for a bug report and patch
-* Kirill Müller for patches
-* Steve Humburg for a patch
