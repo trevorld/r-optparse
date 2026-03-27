@@ -69,7 +69,7 @@ setValidity("OptionParser", function(object) {
 				" (did you forget to set `add_help_option = FALSE` in `OptionParser()`?)"
 			)
 		}
-		return(msg)
+		option_conflict_error_stop(msg)
 	}
 	short_flags <- na_omit(vapply(object@options, \(o) o@short_flag, character(1L)))
 	if (anyDuplicated(short_flags)) {
@@ -81,7 +81,7 @@ setValidity("OptionParser", function(object) {
 				" (did you forget to set `add_help_option = FALSE` in `OptionParser()`?)"
 			)
 		}
-		return(msg)
+		option_conflict_error_stop(msg)
 	}
 	TRUE
 })
@@ -205,6 +205,18 @@ OptionParser <- function(
 	))
 }
 
+option_error_stop <- function(msg, call = sys.call(-1)) {
+	stop(errorCondition(msg, class = "optparse_option_error", call = call))
+}
+
+option_conflict_error_stop <- function(msg, call = sys.call(-1)) {
+	stop(errorCondition(
+		msg,
+		class = c("optparse_option_conflict_error", "optparse_option_error"),
+		call = call
+	))
+}
+
 #' Functions to enable our OptionParser to recognize specific command line
 #' options.
 #'
@@ -232,6 +244,13 @@ OptionParser <- function(
 #' @param callback_args `r ro_callback_args`
 #' @return Both [make_option()] and [add_option()] return instances of
 #'     class `OptionParserOption`.
+#' @section Errors:
+#'   The following classed errors may be thrown:
+#'
+#'   - `optparse_option_error`: invalid option definition (bad flag string,
+#'     unrecognized action, etc.).
+#'     - `optparse_option_conflict_error`: duplicate flag detected when
+#'       adding an option to a parser.
 #'
 #' @seealso [parse_args()] [OptionParser()]
 #' @references Python's `optparse` library, which inspires this package,
@@ -280,28 +299,28 @@ make_option <- function(
 		short_flag <- NA_character_
 	} else {
 		if (nchar(short_flag) > 2) {
-			stop(paste(
+			option_error_stop(paste(
 				"Short flag",
 				short_flag,
 				"must only be a '-' and a single non-dash character"
 			))
 		}
 		if (grepl("[[:space:]]", short_flag)) {
-			stop(paste("Short flag", short_flag, "must not contain whitespace"))
+			option_error_stop(paste("Short flag", short_flag, "must not contain whitespace"))
 		}
 		if (grepl("=", short_flag, fixed = TRUE)) {
-			stop(paste("Short flag", short_flag, "must not contain '='"))
+			option_error_stop(paste("Short flag", short_flag, "must not contain '='"))
 		}
 	}
 	long_flag <- opt_str[grepl("^--[^-]", opt_str)]
 	if (length(long_flag) == 0) {
-		stop("We require a long flag option")
+		option_error_stop("We require a long flag option")
 	}
 	if (grepl("=", long_flag, fixed = TRUE)) {
-		stop(paste("Long flag", long_flag, "must not contain '='"))
+		option_error_stop(paste("Long flag", long_flag, "must not contain '='"))
 	}
 	if (grepl("[[:space:]]", long_flag)) {
-		stop(paste("Long flag", long_flag, "must not contain whitespace"))
+		option_error_stop(paste("Long flag", long_flag, "must not contain whitespace"))
 	}
 
 	# type
@@ -564,14 +583,17 @@ as_string <- function(default) {
 #'     positional arguments.  For backward compatibility, if and only if
 #'     `positional_arguments` is `FALSE`, returns a list containing
 #'     option values.
-#' @section Acknowledgement:
-#'     A big thanks to Steve Lianoglou for a bug report and patch;
-#'     Juan Carlos \enc{Borrás}{Borras} for a bug report;
-#'     Jim Nikelski for a bug report and patch;
-#'     Ino de Brujin and Benjamin Tyner for a bug report;
-#'     Jonas Zimmermann for bug report; Miroslav Posta for bug reports;
-#'     Stefan Seemayer for bug report and patch;
-#'     Kirill \enc{Müller}{Muller} for patches; Steve Humburg for patch.
+#' @section Errors:
+#'   The following classed errors may be thrown:
+#'
+#'   - `optparse_parse_error`: base class for all parse-time errors.
+#'     - `optparse_bad_option_error`: unrecognized, misused, or
+#'       argument-requiring option.
+#'       - `optparse_ambiguous_option_error`: ambiguous abbreviated long
+#'         flag.
+#'     - `optparse_bad_positional_arguments_error`: wrong number of
+#'       positional arguments supplied.
+#'     - `optparse_missing_required_error`: a required option was not supplied.
 #'
 #' @seealso [OptionParser()] [print_help()]
 #' @references Python's `optparse` library, which inspired this package,
@@ -634,13 +656,51 @@ quieter_error_handler <- function(e) {
 	quit('no', status = 1, runLast = FALSE)
 }
 
+bad_option_error_stop <- function(msg) {
+	stop(errorCondition(
+		msg,
+		class = c("optparse_bad_option_error", "optparse_parse_error"),
+		call = NULL
+	))
+}
+
+ambiguous_option_error_stop <- function(msg) {
+	stop(errorCondition(
+		msg,
+		class = c(
+			"optparse_ambiguous_option_error",
+			"optparse_bad_option_error",
+			"optparse_parse_error"
+		),
+		call = NULL
+	))
+}
+
+missing_required_error_stop <- function(msg) {
+	stop(errorCondition(
+		msg,
+		class = c("optparse_missing_required_error", "optparse_parse_error"),
+		call = NULL
+	))
+}
+
+bad_positional_arguments_error_stop <- function(msg) {
+	stop(errorCondition(
+		msg,
+		class = c("optparse_bad_positional_arguments_error", "optparse_parse_error"),
+		call = NULL
+	))
+}
+
 pa_stop <- function(object, e) {
+	extra_classes <- setdiff(class(e), c("simpleError", "error", "condition"))
+	classes <- unique(c(extra_classes, "optparse_parse_error"))
 	cnd <- errorCondition(
 		e$message,
 		call = "optparse::parse_args_helper()",
-		class = "optparse_parse_error"
+		class = classes
 	)
-	if (interactive()) {
+	if (is_interactive()) {
 		stop(cnd)
 	} else {
 		signalCondition(cnd)
@@ -682,7 +742,7 @@ parse_args_helper <- function(
 	if (any(grepl("^help$", names(options_list)))) {
 		if (options_list[["help"]] && print_help_and_exit) {
 			print_help(object)
-			if (interactive()) {
+			if (is_interactive()) {
 				stop("help requested")
 			} else {
 				quit(status = 0)
@@ -697,21 +757,21 @@ parse_args_helper <- function(
 		}
 	}
 	if (length(missing_required)) {
-		stop(paste(
+		missing_required_error_stop(paste(
 			"the following arguments are required:",
 			paste(missing_required, collapse = ", ")
 		))
 	}
 
 	if (length(arguments_positional) < min(positional_arguments)) {
-		stop(sprintf(
+		bad_positional_arguments_error_stop(sprintf(
 			"required at least %g positional arguments, got %g",
 			min(positional_arguments),
 			length(arguments_positional)
 		))
 	}
 	if (length(arguments_positional) > max(positional_arguments)) {
-		stop(sprintf(
+		bad_positional_arguments_error_stop(sprintf(
 			"required at most %g positional arguments, got %g",
 			max(positional_arguments),
 			length(arguments_positional)

@@ -107,3 +107,18 @@ The function ``parse_args2`` wraps ``parse_args`` while setting ``positional_arg
 
     parse_args2(parser, args = c("-vc", "25", "75", "22"))
 .. ..
+
+acknowledgements
+----------------
+
+A big thanks to:
+
+* Steve Lianoglou for a bug report and patch
+* Juan Carlos Borrás for a bug report
+* Jim Nikelski for a bug report and patch
+* Ino de Brujin and Benjamin Tyner for a bug report
+* Jonas Zimmermann for a bug report
+* Miroslav Posta for bug reports
+* Stefan Seemayer for a bug report and patch
+* Kirill Müller for patches
+* Steve Humburg for a patch

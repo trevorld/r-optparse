@@ -1,3 +1,10 @@
+test_that("flag that requires an argument raises optparse_bad_option_error", {
+	parser <- OptionParser()
+	parser <- add_option(parser, c("-n", "--number"), type = "integer")
+	expect_error(parse_args(parser, c("--number")), class = "optparse_bad_option_error")
+	expect_error(parse_args(parser, c("-n")), class = "optparse_bad_option_error")
+})
+
 test_that("negative-number-looking bundle is passed as argument or expanded to short flags", {
 	parser <- OptionParser()
 	parser <- add_option(parser, c("-m", "--mean"), type = "double")
@@ -8,8 +15,10 @@ test_that("negative-number-looking bundle is passed as argument or expanded to s
 	# long flag with = preceding negative number bundle: = already consumed value,
 	# so prev_takes_argument() falls to else (line 215) and -3.14 is expanded → error
 	expect_snapshot(error = TRUE, parse_args(parser, c("--mean=5", "-3.14")))
+	expect_error(parse_args(parser, c("--mean=5", "-3.14")), class = "optparse_bad_option_error")
 	# standalone: expanded to -1, -2 which are invalid short flags
 	expect_snapshot(error = TRUE, parse_args(parser, c("-12")))
+	expect_error(parse_args(parser, c("-12")), class = "optparse_bad_option_error")
 })
 
 test_that("type coercion warns when value cannot be converted to expected type", {
@@ -27,6 +36,9 @@ test_that("abbreviated long flag matching two options raises ambiguous error", {
 	parser <- add_option(parser, "--verbose", action = "store_true")
 	parser <- add_option(parser, "--verbosity", type = "integer")
 	expect_snapshot(error = TRUE, parse_args(parser, c("--verb")))
+	expect_error(parse_args(parser, c("--verb")), class = "optparse_ambiguous_option_error")
+	expect_error(parse_args(parser, c("--verb")), class = "optparse_bad_option_error")
+	expect_error(parse_args(parser, c("--verb")), class = "optparse_parse_error")
 })
 
 test_that("get_Rscript_filename() ignores --file= after --args", {

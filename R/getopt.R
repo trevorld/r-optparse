@@ -73,7 +73,11 @@ getopt <- function(
 					action %in%
 						c("append_const", "count", "store_const", "store_false", "store_true")
 				) {
-					stop(paste0('long flag "', this_flag, '" accepts no arguments'))
+					bad_option_error_stop(paste0(
+						'long flag "',
+						this_flag,
+						'" accepts no arguments'
+					))
 				} else if (action == "append") {
 					result[[dest_name]] <- c(result[[dest_name]], this_argument)
 					i <- i + 1L
@@ -92,7 +96,7 @@ getopt <- function(
 			i <- i + 1L
 			next
 		} else {
-			stop(paste0('"', optstring, '" is not a valid option, or does not support an argument'))
+			bad_option_error_stop(paste0('"', optstring, '" is not a valid option'))
 		}
 
 		long_name <- spec[rowmatch, COL_LONG_NAME]
@@ -134,7 +138,13 @@ getopt <- function(
 				}
 			}
 			if (action %in% c("store", "append")) {
-				stop(paste0('flag `', this_flag, '` requires an argument'))
+				flag_kind <- ifelse(is_long_flag(opt[i]), "long", "short")
+				bad_option_error_stop(paste0(
+					flag_kind,
+					' flag "',
+					this_flag,
+					'" requires an argument'
+				))
 			}
 		}
 	}
@@ -184,6 +194,8 @@ get_Rscript_filename <- function() {
 }
 
 command_args <- function() commandArgs()
+
+is_interactive <- function() interactive()
 
 littler_script_path <- function() Sys.getenv("LITTLER_SCRIPT_PATH", unset = NA_character_)
 
@@ -245,17 +257,17 @@ get_rowmatch <- function(spec, long = NULL, short = NULL) {
 	if (!is.null(long)) {
 		rowmatch <- grep(long, spec[, COL_LONG_NAME], fixed = TRUE)
 		if (length(rowmatch) == 0L) {
-			stop(paste0('long flag "', long, '" is invalid'))
+			bad_option_error_stop(paste0('long flag "', long, '" is invalid'))
 		} else if (length(rowmatch) > 1L) {
 			rowmatch <- which(long == spec[, COL_LONG_NAME])
 			if (length(rowmatch) == 0L) {
-				stop(paste0('long flag "', long, '" is ambiguous'))
+				ambiguous_option_error_stop(paste0('long flag "', long, '" is ambiguous'))
 			}
 		}
 	} else {
 		rowmatch <- grep(short, spec[, COL_SHORT_NAME], fixed = TRUE)
 		if (length(rowmatch) == 0L) {
-			stop(paste0('short flag "', short, '" is invalid'))
+			bad_option_error_stop(paste0('short flag "', short, '" is invalid'))
 		}
 	}
 	rowmatch
