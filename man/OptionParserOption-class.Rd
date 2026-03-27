@@ -12,10 +12,10 @@ Class to hold information about command-line options
 
 \describe{
 \item{\code{short_flag}}{String of the desired short flag
-comprised of the \dQuote{-} followed by a letter.}
+comprised of the \code{-} followed by a single non-dash character (but not \code{=} or a whitespace character).}
 
-\item{\code{long_flag}}{String of the desired long flag comprised of \dQuote{--}
-followed by a letter and then a sequence of alphanumeric characters.}
+\item{\code{long_flag}}{String of the desired long flag comprised of \verb{--}
+followed by a non-dash character and then (optionally) more characters (but not any \code{=} or whitespace characters).}
 
 \item{\code{action}}{A character string describing the action \code{optparse} should take when it encounters an option. One of:
 \itemize{

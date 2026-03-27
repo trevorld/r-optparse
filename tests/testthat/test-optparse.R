@@ -67,6 +67,13 @@ test_that("`make_option()` works as expected", {
 	expect_equal(make_option("--filename")@type, "character")
 	expect_snapshot(error = TRUE, make_option("badflag"))
 	expect_error(make_option("-cd"), "must only be")
+	expect_equal(make_option(c("-1", "--one"))@short_flag, "-1")
+	expect_equal(make_option("--1flag")@long_flag, "--1flag")
+	expect_equal(make_option("--add-numbers")@long_flag, "--add-numbers")
+	expect_snapshot(error = TRUE, make_option("- "))
+	expect_snapshot(error = TRUE, make_option("-="))
+	expect_snapshot(error = TRUE, make_option("--fo=o"))
+	expect_snapshot(error = TRUE, make_option("--fo o"))
 })
 
 get_long_flags <- function(parser) {

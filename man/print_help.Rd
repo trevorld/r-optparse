@@ -24,6 +24,3 @@ is described here: \url{https://docs.python.org/3/library/optparse.html}
 \seealso{
 \code{\link[=parse_args]{parse_args()}} \code{\link[=OptionParser]{OptionParser()}}
 }
-\author{
-Trevor Davis.
-}

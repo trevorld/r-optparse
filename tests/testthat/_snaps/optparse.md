@@ -6,6 +6,38 @@
       Error in `make_option()`:
       ! We require a long flag option
 
+---
+
+    Code
+      make_option("- ")
+    Condition
+      Error in `make_option()`:
+      ! Short flag -  must not contain whitespace
+
+---
+
+    Code
+      make_option("-=")
+    Condition
+      Error in `make_option()`:
+      ! Short flag -= must not contain '='
+
+---
+
+    Code
+      make_option("--fo=o")
+    Condition
+      Error in `make_option()`:
+      ! Long flag --fo=o must not contain '='
+
+---
+
+    Code
+      make_option("--fo o")
+    Condition
+      Error in `make_option()`:
+      ! Long flag --fo o must not contain whitespace
+
 # `required` argument works as expected
 
     Code
