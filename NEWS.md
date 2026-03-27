@@ -34,6 +34,7 @@ Bug fixes and minor improvements
 
 * `parse_args()` (and `parse_args2()`) now correctly handle a bare `--` separator: all arguments after `--` are treated as positional arguments rather than options.
 * `parse_args()` (and `parse_args2()`) now support abbreviated long flags (e.g. `--verb` matching `--verbose`) when `positional_arguments` is not `FALSE`. Previously abbreviations were only supported when `positional_arguments = FALSE`.
+* `make_option()` now throws a classed `optparse_option_error` for invalid `action` or `type` arguments instead of a confusing error later at parse time.
 * `OptionParser()` now also checks the `LITTLER_SCRIPT_PATH` environment variable for the script name when performing `%prog` on the `usage` argument so it works when called from `littler`.
 
 optparse 1.7.5

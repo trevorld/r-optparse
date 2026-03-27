@@ -3,23 +3,31 @@
     Code
       make_option("badflag")
     Condition
-      Error in `make_option()`:
+      Error:
       ! We require a long flag option
 
 ---
 
     Code
-      make_option("- ")
+      make_option(c("-cd", "--foo"))
     Condition
-      Error in `make_option()`:
+      Error:
+      ! Short flag -cd must only be a '-' and a single non-dash character
+
+---
+
+    Code
+      make_option(c("- ", "--foo"))
+    Condition
+      Error:
       ! Short flag -  must not contain whitespace
 
 ---
 
     Code
-      make_option("-=")
+      make_option(c("-=", "--foo"))
     Condition
-      Error in `make_option()`:
+      Error:
       ! Short flag -= must not contain '='
 
 ---
@@ -27,7 +35,7 @@
     Code
       make_option("--fo=o")
     Condition
-      Error in `make_option()`:
+      Error:
       ! Long flag --fo=o must not contain '='
 
 ---
@@ -35,8 +43,24 @@
     Code
       make_option("--fo o")
     Condition
-      Error in `make_option()`:
+      Error:
       ! Long flag --fo o must not contain whitespace
+
+---
+
+    Code
+      make_option("--foo", action = "storr")
+    Condition
+      Error:
+      ! "storr" is not a valid action; must be one of: "append", "append_const", "callback", "count", "store", "store_const", "store_false", "store_true"
+
+---
+
+    Code
+      make_option("--foo", type = "int")
+    Condition
+      Error:
+      ! "int" is not a valid type; must be one of: "character", "complex", "double", "integer", "logical", "NULL"
 
 # `required` argument works as expected
 

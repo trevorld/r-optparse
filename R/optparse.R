@@ -130,6 +130,98 @@ OptionParserOption <- setClass(
 	)
 )
 
+check_action <- function(action) {
+	valid_actions <- c(
+		"append",
+		"append_const",
+		"callback",
+		"count",
+		"store",
+		"store_const",
+		"store_false",
+		"store_true"
+	)
+	if (!action %in% valid_actions) {
+		option_error_stop(
+			paste0(
+				'"',
+				action,
+				'" is not a valid action; ',
+				"must be one of: ",
+				paste(paste0('"', valid_actions, '"'), collapse = ", ")
+			),
+			call = NULL
+		)
+	}
+}
+
+check_type <- function(type) {
+	valid_types <- c("character", "complex", "double", "integer", "logical", "NULL")
+	if (length(type) == 1L && !type %in% valid_types) {
+		option_error_stop(
+			paste0(
+				'"',
+				type,
+				'" is not a valid type; ',
+				"must be one of: ",
+				paste(paste0('"', valid_types, '"'), collapse = ", ")
+			),
+			call = NULL
+		)
+	}
+}
+
+check_short <- function(short_flag) {
+	if (is.na(short_flag)) {
+		return(invisible(NULL))
+	}
+	if (nchar(short_flag) > 2) {
+		option_error_stop(
+			paste("Short flag", short_flag, "must only be a '-' and a single non-dash character"),
+			call = NULL
+		)
+	}
+	if (grepl("[[:space:]]", short_flag)) {
+		option_error_stop(
+			paste("Short flag", short_flag, "must not contain whitespace"),
+			call = NULL
+		)
+	}
+	if (grepl("=", short_flag, fixed = TRUE)) {
+		option_error_stop(
+			paste("Short flag", short_flag, "must not contain '='"),
+			call = NULL
+		)
+	}
+}
+
+check_long <- function(long_flag) {
+	if (length(long_flag) == 0) {
+		option_error_stop("We require a long flag option", call = NULL)
+	}
+	if (grepl("=", long_flag, fixed = TRUE)) {
+		option_error_stop(
+			paste("Long flag", long_flag, "must not contain '='"),
+			call = NULL
+		)
+	}
+	if (grepl("[[:space:]]", long_flag)) {
+		option_error_stop(
+			paste("Long flag", long_flag, "must not contain whitespace"),
+			call = NULL
+		)
+	}
+}
+
+# Currently redundant since these are called by `make_option()`
+# setValidity("OptionParserOption", function(object) {
+# 	check_short(object@short_flag)
+# 	check_long(object@long_flag)
+# 	check_action(object@action)
+# 	check_type(object@type)
+# 	TRUE
+# })
+
 #' A function to create an instance of a parser object
 #'
 #' This function is used to create an instance of a parser object
@@ -298,30 +390,12 @@ make_option <- function(
 	if (length(short_flag) == 0) {
 		short_flag <- NA_character_
 	} else {
-		if (nchar(short_flag) > 2) {
-			option_error_stop(paste(
-				"Short flag",
-				short_flag,
-				"must only be a '-' and a single non-dash character"
-			))
-		}
-		if (grepl("[[:space:]]", short_flag)) {
-			option_error_stop(paste("Short flag", short_flag, "must not contain whitespace"))
-		}
-		if (grepl("=", short_flag, fixed = TRUE)) {
-			option_error_stop(paste("Short flag", short_flag, "must not contain '='"))
-		}
+		check_short(short_flag)
 	}
 	long_flag <- opt_str[grepl("^--[^-]", opt_str)]
-	if (length(long_flag) == 0) {
-		option_error_stop("We require a long flag option")
-	}
-	if (grepl("=", long_flag, fixed = TRUE)) {
-		option_error_stop(paste("Long flag", long_flag, "must not contain '='"))
-	}
-	if (grepl("[[:space:]]", long_flag)) {
-		option_error_stop(paste("Long flag", long_flag, "must not contain whitespace"))
-	}
+	check_long(long_flag)
+
+	check_action(action)
 
 	# type
 	if (is.null(type)) {
@@ -330,6 +404,7 @@ make_option <- function(
 	if (type == "numeric") {
 		type <- "double"
 	}
+	check_type(type)
 
 	# default
 	if (
