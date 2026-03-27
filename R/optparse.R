@@ -44,7 +44,6 @@
 #' @slot formatter  A function that [print_help()] will use to print out after
 #'     the options statement.  Default is [IndentedHelpFormatter()].  This
 #'     package also provides the builtin formatter [TitledHelpFormatter()].
-#' @author Trevor Davis.
 #' @seealso [OptionParserOption]
 #' @import methods
 #' @exportClass OptionParser
@@ -97,9 +96,9 @@ setMethod("options<-", "OptionParser", function(x, value) {
 #' Class to hold information about command-line options
 #'
 #' @slot short_flag String of the desired short flag
-#'     comprised of the \dQuote{-} followed by a letter.
-#' @slot long_flag String of the desired long flag comprised of \dQuote{--}
-#'     followed by a letter and then a sequence of alphanumeric characters.
+#'     comprised of the `-` followed by a single non-dash character (but not `=` or a whitespace character).
+#' @slot long_flag String of the desired long flag comprised of `--`
+#'     followed by a non-dash character and then (optionally) more characters (but not any `=` or whitespace characters).
 #' @slot action `r ro_action`
 #' @slot type `r ro_type`
 #' @slot dest `r ro_dest`
@@ -160,7 +159,6 @@ OptionParserOption <- setClass(
 #'                  Default is [IndentedHelpFormatter()].
 #'                  The other builtin formatter provided by this package is [TitledHelpFormatter()].
 #' @return An instance of the `OptionParser` class.
-#' @author Trevor Davis.
 #'
 #' @seealso [parse_args()] [make_option()] [add_option()]
 #' @references Python's `optparse` library, which inspired this package,
@@ -219,9 +217,9 @@ OptionParser <- function(
 #' @rdname add_make_option
 #' @param object An instance of the `OptionParser` class
 #' @param opt_str A character vector containing the string of the desired long
-#'     flag comprised of \dQuote{--} followed by a letter and then a sequence of
-#'     alphanumeric characters and optionally a string of the desired short flag
-#'     comprised of the \dQuote{-} followed by a letter.
+#'     flag comprised of `--` followed by a non-dash character (and optionally more characters), and
+#'     optionally a string of the desired short flag comprised of the
+#'     `-` followed by a single non-dash character.  We don't allow `=` or whitespace characters in flags.
 #' @param action `r ro_action`
 #' @param type `r ro_type`
 #' @param dest `r ro_dest`
@@ -234,7 +232,6 @@ OptionParser <- function(
 #' @param callback_args `r ro_callback_args`
 #' @return Both [make_option()] and [add_option()] return instances of
 #'     class `OptionParserOption`.
-#' @author Trevor Davis.
 #'
 #' @seealso [parse_args()] [OptionParser()]
 #' @references Python's `optparse` library, which inspires this package,
@@ -278,17 +275,33 @@ make_option <- function(
 	action <- ifelse(is.null(action), ifelse(is.null(callback), "store", "callback"), action)
 
 	# flags
-	short_flag <- opt_str[grepl("^-[[:alpha:]]", opt_str)]
+	short_flag <- opt_str[grepl("^-[^-]", opt_str)]
 	if (length(short_flag) == 0) {
 		short_flag <- NA_character_
 	} else {
 		if (nchar(short_flag) > 2) {
-			stop(paste("Short flag", short_flag, "must only be a '-' and a single letter"))
+			stop(paste(
+				"Short flag",
+				short_flag,
+				"must only be a '-' and a single non-dash character"
+			))
+		}
+		if (grepl("[[:space:]]", short_flag)) {
+			stop(paste("Short flag", short_flag, "must not contain whitespace"))
+		}
+		if (grepl("=", short_flag, fixed = TRUE)) {
+			stop(paste("Short flag", short_flag, "must not contain '='"))
 		}
 	}
-	long_flag <- opt_str[grepl("^--[[:alpha:]]", opt_str)]
+	long_flag <- opt_str[grepl("^--[^-]", opt_str)]
 	if (length(long_flag) == 0) {
 		stop("We require a long flag option")
+	}
+	if (grepl("=", long_flag, fixed = TRUE)) {
+		stop(paste("Long flag", long_flag, "must not contain '='"))
+	}
+	if (grepl("[[:space:]]", long_flag)) {
+		stop(paste("Long flag", long_flag, "must not contain whitespace"))
 	}
 
 	# type
@@ -414,7 +427,6 @@ add_option <- function(
 #' @param object A `OptionParser` instance.
 #' @return [print_help()] uses the `cat` function to print out a usage
 #' message.  It returns `invisible(NULL)`.
-#' @author Trevor Davis.
 #'
 #' @seealso [parse_args()] [OptionParser()]
 #' @references Python's `optparse` library, which inspired this package,
@@ -560,7 +572,6 @@ as_string <- function(default) {
 #'     Jonas Zimmermann for bug report; Miroslav Posta for bug reports;
 #'     Stefan Seemayer for bug report and patch;
 #'     Kirill \enc{Müller}{Muller} for patches; Steve Humburg for patch.
-#' @author Trevor Davis.
 #'
 #' @seealso [OptionParser()] [print_help()]
 #' @references Python's `optparse` library, which inspired this package,

@@ -34,6 +34,3 @@ package also provides the builtin formatter \code{\link[=TitledHelpFormatter]{Ti
 \seealso{
 \link{OptionParserOption}
 }
-\author{
-Trevor Davis.
-}

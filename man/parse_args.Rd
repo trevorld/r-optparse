@@ -109,6 +109,3 @@ is described here: \url{https://docs.python.org/3/library/optparse.html}
 \seealso{
 \code{\link[=OptionParser]{OptionParser()}} \code{\link[=print_help]{print_help()}}
 }
-\author{
-Trevor Davis.
-}

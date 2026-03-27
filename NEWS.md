@@ -4,16 +4,18 @@ optparse 1.8.0 (development)
 New features
 ------------
 
-* `make_option()` (and `add_option()`) now support the following new actions (#22):
+* `add_option()` (and `make_option()`) now support the following new actions (#22):
 
   + `action = "append"` which appends each occurrence's value to `default`.
   + `action = "append_const"` which appends `const` to `default` each time the flag is seen.
   + `action = "count"`, which counts the number of times a flag is seen and adds it to `default` (treated as `0L` if not supplied). Returns `NULL` if the flag is never seen and no `default` was supplied.
   + `action = "store_const"` which stores `const` when the flag is seen.
 
-* `make_option()` (and `add_option()`) now support a `const` parameter (intended for new actions `"append_const"` and `"store_const"`).
+* `add_option()` (and `make_option()`) now support a `const` parameter (intended for new actions `"append_const"` and `"store_const"`).
 
-* `make_option()` (and `add_option()`) now support a `required` argument.
+* `add_option()` (and `make_option()`) now allow non-letter characters in short flags (e.g., `-1`) and at the beginning of long flags (e.g., `--1flag`), following Python's `optparse` convention. However long and short flags may not contain `=` or whitespace (or begin with hyphens).
+
+* `add_option()` (and `make_option()`) now support a `required` argument.
   If `TRUE`, `parse_args()` will throw an error if the option is not provided on the command line (#17).
 
 Bug fixes and minor improvements

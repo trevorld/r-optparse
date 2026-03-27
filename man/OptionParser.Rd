@@ -59,6 +59,3 @@ is described here: \url{https://docs.python.org/3/library/optparse.html}
 \seealso{
 \code{\link[=parse_args]{parse_args()}} \code{\link[=make_option]{make_option()}} \code{\link[=add_option]{add_option()}}
 }
-\author{
-Trevor Davis.
-}

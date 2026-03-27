@@ -37,9 +37,9 @@ add_option(
 }
 \arguments{
 \item{opt_str}{A character vector containing the string of the desired long
-flag comprised of \dQuote{--} followed by a letter and then a sequence of
-alphanumeric characters and optionally a string of the desired short flag
-comprised of the \dQuote{-} followed by a letter.}
+flag comprised of \verb{--} followed by a non-dash character (and optionally more characters), and
+optionally a string of the desired short flag comprised of the
+\code{-} followed by a single non-dash character.  We don't allow \code{=} or whitespace characters in flags.}
 
 \item{action}{A character string describing the action \code{optparse} should take when it encounters an option. One of:
 \itemize{
@@ -121,7 +121,4 @@ is described here: \url{https://docs.python.org/3/library/optparse.html}
 }
 \seealso{
 \code{\link[=parse_args]{parse_args()}} \code{\link[=OptionParser]{OptionParser()}}
-}
-\author{
-Trevor Davis.
 }
