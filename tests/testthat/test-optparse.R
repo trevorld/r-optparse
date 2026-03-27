@@ -67,6 +67,8 @@ test_that("`make_option()` works as expected", {
 	expect_equal(make_option("--filename")@type, "character")
 	expect_snapshot(error = TRUE, make_option("badflag"))
 	expect_error(make_option("-cd"), "must only be")
+	expect_error(make_option("badflag"), class = "optparse_option_error")
+	expect_error(make_option("-cd"), class = "optparse_option_error")
 	expect_equal(make_option(c("-1", "--one"))@short_flag, "-1")
 	expect_equal(make_option("--1flag")@long_flag, "--1flag")
 	expect_equal(make_option("--add-numbers")@long_flag, "--add-numbers")
@@ -91,6 +93,7 @@ test_that("`required` argument works as expected", {
 	parser <- OptionParser()
 	parser <- add_option(parser, "--foo", required = TRUE)
 	expect_snapshot(error = TRUE, parse_args(parser, args = character(0)))
+	expect_error(parse_args(parser, args = character(0)), class = "optparse_missing_required_error")
 	expect_equal(
 		parse_args(parser, args = "--foo=bar")[["foo"]],
 		"bar"
@@ -177,6 +180,10 @@ test_that("`parse_args()` works as expected", {
 		error = TRUE,
 		parse_args(parser, args = c("-add-numbers", "example.txt"), positional_arguments = FALSE)
 	)
+	expect_error(
+		parse_args(parser, args = c("-add-numbers", "example.txt"), positional_arguments = FALSE),
+		class = "optparse_bad_option_error"
+	)
 	expect_error(parse_args(
 		parser,
 		args = c("-add-numbers", "example.txt"),
@@ -205,9 +212,17 @@ test_that("`parse_args()` works as expected", {
 		error = TRUE,
 		parse_args(parser, args = c("example.txt"), positional_arguments = c(2, Inf))
 	)
+	expect_error(
+		parse_args(parser, args = c("example.txt"), positional_arguments = c(2, Inf)),
+		class = "optparse_bad_positional_arguments_error"
+	)
 	expect_snapshot(
 		error = TRUE,
 		parse_args(parser, args = c("example.txt"), positional_arguments = 2)
+	)
+	expect_error(
+		parse_args(parser, args = c("example.txt"), positional_arguments = 2),
+		class = "optparse_bad_positional_arguments_error"
 	)
 	expect_snapshot(
 		error = TRUE,
@@ -217,14 +232,35 @@ test_that("`parse_args()` works as expected", {
 		error = TRUE,
 		parse_args(parser, args = c("example.txt"), positional_arguments = 1:3)
 	)
+})
 
-	if (interactive()) {
-		expect_snapshot(error = TRUE, capture.output(parse_args(parser, args = c("--help"))))
-		expect_snapshot(
-			error = TRUE,
-			capture.output(parse_args(parser, args = c("--help"), positional_arguments = c(1, 2)))
+test_that("--help raises an error in interactive mode", {
+	parser <- OptionParser(
+		usage = "%prog [options] file",
+		option_list = list(
+			make_option(c("-n", "--add-numbers"), action = "store_true", default = FALSE)
 		)
-	}
+	)
+	local_mocked_bindings(is_interactive = function() TRUE)
+	capture.output(expect_error(parse_args(parser, args = c("--help")), "help requested"))
+	capture.output(expect_error(
+		parse_args(parser, args = c("--help"), positional_arguments = c(1, 2)),
+		"help requested"
+	))
+})
+
+test_that("parse errors raise classed errors in interactive and non-interactive mode", {
+	parser <- OptionParser()
+	local_mocked_bindings(is_interactive = function() TRUE)
+	expect_error(
+		parse_args(parser, c("file.txt")),
+		class = "optparse_bad_option_error"
+	)
+	local_mocked_bindings(is_interactive = function() FALSE)
+	capture.output(
+		expect_error(parse_args(parser, c("file.txt")), class = "optparse_bad_option_error"),
+		type = "message"
+	)
 })
 
 test_that("bare -- separator treats everything after it as positional arguments", {
@@ -568,6 +604,14 @@ test_that("Use h option for non-help", {
 		error = TRUE,
 		OptionParser(usage = "\\%prog [options] file", option_list = option_list_neg)
 	)
+	expect_error(
+		OptionParser(usage = "\\%prog [options] file", option_list = option_list_neg),
+		class = "optparse_option_conflict_error"
+	)
+	expect_error(
+		OptionParser(usage = "\\%prog [options] file", option_list = option_list_neg),
+		class = "optparse_option_error"
+	)
 
 	option_list_neg <- list(make_option(c("-h", "--mean"), default = 0.0))
 	parser <- OptionParser(
@@ -591,6 +635,7 @@ test_that("no-argument actions reject --flag=value syntax", {
 	expect_snapshot(error = TRUE, parse_args(parser, "--mode=1"))
 	expect_snapshot(error = TRUE, parse_args(parser, "--tag=1"))
 	expect_snapshot(error = TRUE, parse_args(parser, "--count=1"))
+	expect_error(parse_args(parser, "--verbose=1"), class = "optparse_bad_option_error")
 })
 
 test_that("store_const action works", {

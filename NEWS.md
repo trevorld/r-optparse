@@ -13,6 +13,17 @@ New features
 
 * `add_option()` (and `make_option()`) now support a `const` parameter (intended for new actions `"append_const"` and `"store_const"`).
 
+* Several new classed errors are now thrown, mirroring Python's `optparse` exception hierarchy:
+
+  + `optparse_option_error`: invalid option definition in `make_option()` or `add_option()`.
+    - `optparse_option_conflict_error`: duplicate flag in `OptionParser()` or `add_option()`.
+
+  + `optparse_parse_error`: existing base class for all parse-time errors from `parse_args()`.
+    - `optparse_bad_option_error`: unrecognized, misused, or argument-requiring option.
+      * `optparse_ambiguous_option_error`: ambiguous abbreviated long flag.
+    - `optparse_bad_positional_arguments_error`: wrong number of positional arguments supplied.
+    - `optparse_missing_required_error`: a required option was not supplied.
+
 * `add_option()` (and `make_option()`) now allow non-letter characters in short flags (e.g., `-1`) and at the beginning of long flags (e.g., `--1flag`), following Python's `optparse` convention. However long and short flags may not contain `=` or whitespace (or begin with hyphens).
 
 * `add_option()` (and `make_option()`) now support a `required` argument.

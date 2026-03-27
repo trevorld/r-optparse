@@ -92,6 +92,19 @@ whereas \code{\link[=make_option]{make_option()}} is used to create a list of
 \code{option_list} argument of the \code{OptionParser} function to create a
 new \code{OptionParser} instance.
 }
+\section{Errors}{
+
+The following classed errors may be thrown:
+\itemize{
+\item \code{optparse_option_error}: invalid option definition (bad flag string,
+unrecognized action, etc.).
+\itemize{
+\item \code{optparse_option_conflict_error}: duplicate flag detected when
+adding an option to a parser.
+}
+}
+}
+
 \examples{
 
    make_option("--longflag")

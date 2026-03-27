@@ -57,15 +57,23 @@ instance for guidance. \code{\link[=parse_args2]{parse_args2()}} is a wrapper to
 setting the options \code{positional_arguments} and \code{convert_hyphens_to_underscores}
 to \code{TRUE}.
 }
-\section{Acknowledgement}{
+\section{Errors}{
 
-A big thanks to Steve Lianoglou for a bug report and patch;
-Juan Carlos \enc{Borrás}{Borras} for a bug report;
-Jim Nikelski for a bug report and patch;
-Ino de Brujin and Benjamin Tyner for a bug report;
-Jonas Zimmermann for bug report; Miroslav Posta for bug reports;
-Stefan Seemayer for bug report and patch;
-Kirill \enc{Müller}{Muller} for patches; Steve Humburg for patch.
+The following classed errors may be thrown:
+\itemize{
+\item \code{optparse_parse_error}: base class for all parse-time errors.
+\itemize{
+\item \code{optparse_bad_option_error}: unrecognized, misused, or
+argument-requiring option.
+\itemize{
+\item \code{optparse_ambiguous_option_error}: ambiguous abbreviated long
+flag.
+}
+\item \code{optparse_bad_positional_arguments_error}: wrong number of
+positional arguments supplied.
+\item \code{optparse_missing_required_error}: a required option was not supplied.
+}
+}
 }
 
 \examples{

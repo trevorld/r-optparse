@@ -110,7 +110,7 @@
       parse_args(parser, c("file.txt"))
     Condition
       Error:
-      ! "file.txt" is not a valid option, or does not support an argument
+      ! "file.txt" is not a valid option
 
 ---
 
@@ -118,15 +118,15 @@
       parse_args(parser, c("--verbose", "file.txt"))
     Condition
       Error:
-      ! "file.txt" is not a valid option, or does not support an argument
+      ! "file.txt" is not a valid option
 
 # Use h option for non-help
 
     Code
       OptionParser(usage = "\\%prog [options] file", option_list = option_list_neg)
     Condition
-      Error in `validObject()`:
-      ! invalid class "OptionParser" object: duplicate short flag: -h (did you forget to set `add_help_option = FALSE` in `OptionParser()`?)
+      Error in `validityMethod()`:
+      ! duplicate short flag: -h (did you forget to set `add_help_option = FALSE` in `OptionParser()`?)
 
 # no-argument actions reject --flag=value syntax
 
