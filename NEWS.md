@@ -1,5 +1,5 @@
-optparse 1.8.0 (development)
-============================
+optparse 1.8.1
+==============
 
 New features
 ------------

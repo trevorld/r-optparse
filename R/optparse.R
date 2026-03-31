@@ -59,7 +59,7 @@ setClass(
 )
 
 setValidity("OptionParser", function(object) {
-	long_flags <- vapply(object@options, \(o) o@long_flag, character(1L))
+	long_flags <- vapply(object@options, function(o) o@long_flag, character(1L))
 	if (anyDuplicated(long_flags)) {
 		dup <- long_flags[duplicated(long_flags)][1L]
 		msg <- paste0("duplicate long flag: ", dup)
@@ -71,7 +71,7 @@ setValidity("OptionParser", function(object) {
 		}
 		option_conflict_error_stop(msg)
 	}
-	short_flags <- na_omit(vapply(object@options, \(o) o@short_flag, character(1L)))
+	short_flags <- na_omit(vapply(object@options, function(o) o@short_flag, character(1L)))
 	if (anyDuplicated(short_flags)) {
 		dup <- short_flags[duplicated(short_flags)][1L]
 		msg <- paste0("duplicate short flag: ", dup)

@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: optparse
 Type: Package
 Title: Command Line Option Parser
-Version: 1.8.0-8
+Version: 1.8.1
 Authors@R: c(person("Trevor L.", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")),
@@ -19,7 +19,7 @@ Description: A command line parser inspired by Python's 'optparse' library to
     long flag/options.
 License: GPL (>= 2)
 Copyright: See file (inst/)COPYRIGHTS.
-URL: https://github.com/trevorld/r-optparse, https://trevorldavis.com/R/optparse
+URL: https://github.com/trevorld/r-optparse, https://trevorldavis.com/R/optparse/
 BugReports: https://github.com/trevorld/r-optparse/issues
 LazyLoad: yes
 Depends:
