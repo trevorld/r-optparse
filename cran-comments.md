@@ -10,10 +10,21 @@ Status: OK
 
 ## revdepcheck results
 
-We checked 25 reverse dependencies (7 from CRAN + 18 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
+We checked 24 reverse dependencies (11 from CRAN + 13 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
 
- * We saw 0 new problems
+ * We saw 1 new problems
  * We failed to check 0 packages
+
+Issues with CRAN packages are summarised below.
+
+### New problems
+
+* W4MRUtils
+
+  + They had a couple bugs that got triggered by this update.
+  + More than two weeks ago I supplied a PR fixing these
+    for both the current CRAN version of {optparse} and this update:
+    https://github.com/workflow4metabolomics/W4MRUtils/pull/3
 
 ## Nota benes
 
